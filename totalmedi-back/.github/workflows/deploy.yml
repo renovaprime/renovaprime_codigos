@@ -1,0 +1,57 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Copiar arquivos via SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "."
+        target: "/home/bitnami/backend/totalmedi-back"
+
+    - name: Instalar e Reiniciar PM2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # Adiciona os binários do Node/Bitnami ao PATH desta sessão
+          export PATH="/home/bitnami/.npm-global/bin:$PATH"
+          
+          cd /home/bitnami/backend/totalmedi-back
+          
+          # Instala dependências
+          npm install
+          
+          # Como garantimos o PATH acima, o comando pm2 agora deve funcionar
+          pm2 restart totalmedi-back || pm2 start src/index.js --name "totalmedi-back"
+          pm2 save
+
+    - name: Notificação de Sucesso no Discord
+      if: success()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: info
+        details: '✅ Backend Totalmedi deploy realizado com sucesso!'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Notificação de Falha no Discord
+      if: failure()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: error
+        details: '🚨 Falha na pipeline do Backend! Verifique os logs no GitHub.'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
