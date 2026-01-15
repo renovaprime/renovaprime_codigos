@@ -1,0 +1,67 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Instalar Dependências
+      run: npm install
+
+    - name: Build (Vite)
+      run: npx vite build --emptyOutDir
+
+    - name: Deploy via SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "dist/*"
+        target: "/home/bitnami/deploy-temp" 
+    - name: Mover arquivos para Nginx
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # Limpa a pasta atual do Nginx
+          sudo rm -rf /opt/bitnami/nginx/html/*
+
+          # Move os arquivos novos da pasta dist temporária para o Nginx
+          sudo mv /home/bitnami/deploy-temp/dist/* /opt/bitnami/nginx/html/
+
+          # Remove a pasta temporária
+          rm -rf /home/bitnami/deploy-temp
+
+          # Reinicia Nginx
+          sudo /opt/bitnami/ctlscript.sh restart nginx
+
+    - name: Notificação de Sucesso no Discord
+      if: success()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: info
+        details: '✅ Frontend Totalmedi deploy realizado com sucesso!'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Notificação de Falha no Discord
+      if: failure()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: error
+        details: '🚨 Falha na pipeline! Verifique os logs.'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}

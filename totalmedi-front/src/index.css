@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+@layer components {
+  /* Apply visible borders to form elements */
+  input, select, textarea {
+    @apply border border-gray-300;
+  }
+}
