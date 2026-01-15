@@ -1,0 +1,58 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Copiar arquivos via SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "."
+        target: "/home/bitnami/backend/totalmedi-back"
+        exclude: "node_modules,.git,.github,.env"
+
+    - name: Instalar e Reiniciar PM2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # CRÍTICO: Exportar PATH para o GitHub Actions encontrar o PM2/Node
+          export PATH="/home/bitnami/.npm-global/bin:/opt/bitnami/node/bin:$PATH"
+          
+          cd /home/bitnami/backend/totalmedi-back
+          
+          # Instala dependências
+          npm install
+          
+          # Reinicia ou Inicia o PM2
+          pm2 restart totalmedi-back || pm2 start ecosystem.config.js
+          pm2 save
+
+    - name: Notificação Discord (Sucesso)
+      if: success()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: info
+        details: '✅ Frontend Deploy realizado com sucesso!'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+    - name: Notificação Discord (Falha)
+      if: failure()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: error
+        details: '🚨 Falha no Deploy Frontend.'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
