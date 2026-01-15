@@ -1,0 +1,70 @@
+name: Deploy Frontend to AWS S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o código do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Configura o ambiente Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3. Cria o arquivo .env a partir dos Secrets do GitHub
+      - name: Create .env file
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+
+      # 4. Limpa o cache, instala dependências e gera os arquivos de build
+      - name: Install dependencies and build
+        run: |
+          npm cache clean --force
+          npm install
+          npm run build
+
+      # 5. Configura as credenciais da AWS para o deploy
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # 6. Sincroniza os arquivos de build com o bucket S3
+      - name: Deploy to S3
+        run: |
+          aws s3 sync ./dist s3://front-totaldoctor --delete
+
+      # 7. Invalidar Cache do CloudFront
+      - name: Invalidar Cache do CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'global'
+
+      - name: Notificação Discord (Sucesso)
+        if: success()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: '✅ Frontend Deploy realizado com sucesso!'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notificação Discord (Falha)
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: '🚨 Falha no Deploy Frontend.'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
