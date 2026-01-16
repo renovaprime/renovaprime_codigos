@@ -208,23 +208,6 @@ export function ProfissionalDisponibilidade() {
           </div>
         </div>
 
-        {/* Aviso: Backend não implementado */}
-        {backendNotReady && !error && (
-          <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg">
-            <div className="flex items-start gap-3">
-              <span className="text-xl">⚠️</span>
-              <div>
-                <p className="font-semibold">Modo de Demonstração</p>
-                <p className="text-sm mt-1">
-                  Os endpoints do backend ainda não foram implementados. Você pode configurar sua disponibilidade, 
-                  mas os dados não serão salvos permanentemente. Esta tela está funcionando em modo de demonstração 
-                  para que você possa testar a interface.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Mensagens de feedback */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">

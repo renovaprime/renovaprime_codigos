@@ -12,3 +12,6 @@ export { ConfirmModal } from './ConfirmModal';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
 export { BeneficiaryFormModal } from './BeneficiaryFormModal';
 export { BeneficiaryDetailsModal } from './BeneficiaryDetailsModal';
+export { ConsultaCard } from './ConsultaCard';
+export { CalendarioMensal } from './CalendarioMensal';
+export { AgendarConsultaModal } from './AgendarConsultaModal';

@@ -148,3 +148,47 @@ export interface BeneficiaryFormData {
   address?: string;
   service_type: ServiceType;
 }
+
+// Appointments
+export type AppointmentType = 'ONLINE' | 'PRESENTIAL';
+export type AppointmentStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'FINISHED' | 'CANCELED';
+
+export interface Appointment {
+  id: number;
+  doctor_id: number;
+  patient_id?: number;
+  beneficiary_id?: number;
+  specialty_id: number;
+  date: string;
+  start_time: string;
+  end_time: string;
+  type: AppointmentType;
+  status: AppointmentStatus;
+  created_at: string;
+  updated_at?: string;
+  
+  // Relacionamentos
+  doctor?: {
+    id: number;
+    name: string;
+    photo_url?: string;
+  };
+  specialty?: Specialty;
+  teleconsult_room?: {
+    id: number;
+    patient_link: string;
+  };
+}
+
+export interface AvailableSlot {
+  time: string;         // "08:00:00"
+  doctor_id: number;
+  duration: number;     // minutos
+}
+
+export interface CreateAppointmentData {
+  specialty_id: number;
+  date: string;         // YYYY-MM-DD
+  start_time: string;   // HH:MM:SS
+  beneficiary_id?: number;
+}
