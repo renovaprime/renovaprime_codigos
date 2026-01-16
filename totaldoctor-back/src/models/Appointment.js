@@ -13,7 +13,7 @@ const Appointment = sequelize.define('Appointment', {
   },
   patient_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   specialty_id: {
     type: DataTypes.INTEGER,
@@ -31,17 +31,32 @@ const Appointment = sequelize.define('Appointment', {
     type: DataTypes.TIME,
     allowNull: false
   },
+  type: {
+    type: DataTypes.ENUM('ONLINE', 'PRESENTIAL'),
+    defaultValue: 'ONLINE',
+    allowNull: false
+  },
   status: {
     type: DataTypes.ENUM('SCHEDULED', 'IN_PROGRESS', 'FINISHED', 'CANCELED'),
     defaultValue: 'SCHEDULED'
   },
+  beneficiary_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
   created_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updated_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   }
 }, {
   tableName: 'appointments',
-  timestamps: false
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at'
 });
 
 module.exports = Appointment;

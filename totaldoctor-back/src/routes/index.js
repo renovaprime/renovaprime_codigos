@@ -13,7 +13,7 @@ const siteRoutes = require('./siteRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/doctors', doctorRoutes);
-router.use('/patients', patientRoutes);
+router.use('/patient', patientRoutes);
 router.use('/appointments', appointmentRoutes);
 router.use('/teleconsult', teleconsultRoutes);
 router.use('/prescriptions', prescriptionRoutes);
