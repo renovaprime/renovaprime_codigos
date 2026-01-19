@@ -1,10 +1,29 @@
+import { useState } from 'react';
 import { Check, Star } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { siteConfig, plans } from '../../config/content';
 import Card from '../Card';
 import Button from '../Button';
+import CheckoutModal from '../CheckoutModal';
+
+interface SelectedPlan {
+  id: number;
+  name: string;
+  price: number;
+}
 
 export default function Plans() {
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
+
+  const handleSelectPlan = (plan: typeof plans[0]) => {
+    setSelectedPlan({
+      id: plan.id,
+      name: plan.name,
+      price: plan.price
+    });
+    setIsCheckoutOpen(true);
+  };
+
   return (
     <section className="py-16 md:py-24" style={{ backgroundColor: siteConfig.colors.background }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,14 +97,13 @@ export default function Plans() {
                 ))}
               </ul>
 
-              <Link to="/planos" className="block">
-                <Button
-                  variant={plan.recommended ? 'primary' : 'outline'}
-                  className="w-full"
-                >
-                  Ver detalhes
-                </Button>
-              </Link>
+              <Button
+                variant={plan.recommended ? 'primary' : 'outline'}
+                className="w-full"
+                onClick={() => handleSelectPlan(plan)}
+              >
+                Assinar agora
+              </Button>
             </Card>
           ))}
         </div>
@@ -103,6 +121,18 @@ export default function Plans() {
           </p>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      {selectedPlan && (
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => {
+            setIsCheckoutOpen(false);
+            setSelectedPlan(null);
+          }}
+          plan={selectedPlan}
+        />
+      )}
     </section>
   );
 }
