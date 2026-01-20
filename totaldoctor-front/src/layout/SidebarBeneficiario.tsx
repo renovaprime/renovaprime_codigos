@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Calendar,
+  History,
   FileText,
   User,
   LogOut,
@@ -16,6 +17,7 @@ interface SidebarBeneficiarioProps {
 
 const navigation = [
   { id: 'nav-beneficiary-appointments', name: 'Minhas consultas', href: '/beneficiario/consultas', icon: Calendar },
+  { id: 'nav-beneficiary-history', name: 'Historico', href: '/beneficiario/historico', icon: History },
   { id: 'nav-beneficiary-prescriptions', name: 'Minhas receitas', href: '/beneficiario/receitas', icon: FileText },
   { id: 'nav-beneficiary-profile', name: 'Meu Perfil', href: '/beneficiario/perfil', icon: User },
 ];

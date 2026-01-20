@@ -1,21 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Layout } from '../layout';
-import { ConfirmModal } from '../components/ConfirmModal';
-import { specialtyService } from '../services/specialtyService';
+import { Layout } from '../../layout';
+import { specialtyService } from '../../services/specialtyService';
 import {
   AdminAppointmentsFilters,
   AdminAppointmentCard,
   AdminAppointmentDetailsModal,
   adminAppointmentsService,
-} from '../modules/adminAppointments';
+} from '../../modules/adminAppointments';
 import type {
   AdminAppointmentItem,
   AdminAppointmentsFiltersParams,
-} from '../modules/adminAppointments';
-import type { Specialty } from '../types/api';
-import { HistoryEmptyState, HistoryPagination } from '../modules/appointmentsHistory';
+} from '../../modules/adminAppointments';
+import type { Specialty } from '../../types/api';
+import { HistoryEmptyState, HistoryPagination } from '../../modules/appointmentsHistory';
 
-export function Consultas() {
+export function AdminHistoricoAtendimentos() {
   const [appointments, setAppointments] = useState<AdminAppointmentItem[]>([]);
   const [specialties, setSpecialties] = useState<Specialty[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,15 +27,12 @@ export function Consultas() {
   // Modal states
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<number | null>(null);
-  const [cancelModalOpen, setCancelModalOpen] = useState(false);
-  const [appointmentToCancel, setAppointmentToCancel] = useState<AdminAppointmentItem | null>(null);
-  const [isCanceling, setIsCanceling] = useState(false);
 
   const loadAppointments = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await adminAppointmentsService.listAppointments({
+      const result = await adminAppointmentsService.listHistory({
         ...filters,
         page,
         limit,
@@ -44,7 +40,7 @@ export function Consultas() {
       setAppointments(result.items);
       setTotal(result.total);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erro ao carregar consultas';
+      const message = err instanceof Error ? err.message : 'Erro ao carregar historico';
       setError(message);
       console.error(err);
     } finally {
@@ -91,28 +87,6 @@ export function Consultas() {
     setDetailsModalOpen(true);
   };
 
-  const handleCancelClick = (appointment: AdminAppointmentItem) => {
-    setAppointmentToCancel(appointment);
-    setCancelModalOpen(true);
-  };
-
-  const handleConfirmCancel = async () => {
-    if (!appointmentToCancel) return;
-
-    setIsCanceling(true);
-    try {
-      await adminAppointmentsService.cancel(appointmentToCancel.id);
-      setCancelModalOpen(false);
-      setAppointmentToCancel(null);
-      await loadAppointments();
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erro ao cancelar consulta';
-      setError(message);
-    } finally {
-      setIsCanceling(false);
-    }
-  };
-
   const hasFilters = Object.values(filters).some((v) => v !== undefined);
 
   return (
@@ -120,9 +94,11 @@ export function Consultas() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-display font-bold text-foreground">Consultas</h1>
+          <h1 className="text-3xl font-display font-bold text-foreground">
+            Historico de Atendimentos
+          </h1>
           <p className="text-muted-foreground mt-1">
-            Gerencie as consultas agendadas e em andamento
+            Visualize consultas finalizadas e canceladas
           </p>
         </div>
 
@@ -132,8 +108,8 @@ export function Consultas() {
           specialties={specialties}
           statusOptions={[
             { value: '', label: 'Todos' },
-            { value: 'SCHEDULED', label: 'Agendadas' },
-            { value: 'IN_PROGRESS', label: 'Em andamento' },
+            { value: 'FINISHED', label: 'Finalizadas' },
+            { value: 'CANCELED', label: 'Canceladas' },
           ]}
         />
 
@@ -158,7 +134,7 @@ export function Consultas() {
           <>
             {/* Results count */}
             <p className="text-sm text-muted-foreground mb-4">
-              {total} {total === 1 ? 'consulta encontrada' : 'consultas encontradas'}
+              {total} {total === 1 ? 'atendimento encontrado' : 'atendimentos encontrados'}
             </p>
 
             {/* Appointments grid */}
@@ -168,7 +144,7 @@ export function Consultas() {
                   key={appointment.id}
                   appointment={appointment}
                   onViewDetails={handleViewDetails}
-                  onCancel={handleCancelClick}
+                  isHistory
                 />
               ))}
             </div>
@@ -191,21 +167,6 @@ export function Consultas() {
             setDetailsModalOpen(false);
             setSelectedAppointmentId(null);
           }}
-        />
-
-        {/* Cancel Confirmation Modal */}
-        <ConfirmModal
-          isOpen={cancelModalOpen}
-          title="Cancelar Consulta"
-          description="Deseja cancelar esta consulta? Essa acao nao pode ser desfeita."
-          confirmText={isCanceling ? 'Cancelando...' : 'Sim, cancelar'}
-          cancelText="Nao"
-          onConfirm={handleConfirmCancel}
-          onClose={() => {
-            setCancelModalOpen(false);
-            setAppointmentToCancel(null);
-          }}
-          variant="danger"
         />
       </div>
     </Layout>

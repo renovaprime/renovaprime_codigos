@@ -1,4 +1,5 @@
 import { Calendar, Clock, Video, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Card } from './Card';
 import { Badge } from './Badge';
 import { Button } from './Button';
@@ -108,6 +109,15 @@ export function ConsultaCard({ appointment, onCancel, onDetails }: ConsultaCardP
 
         {/* Ações */}
         <div className="flex flex-col items-end justify-end w-full gap-2 pt-2">
+          {appointment.status === 'IN_PROGRESS' && appointment.type === 'ONLINE' && (
+            <Link
+              to={`/beneficiario/teleconsulta/${appointment.id}`}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors"
+            >
+              <Video className="w-4 h-4" />
+              Entrar na Teleconsulta
+            </Link>
+          )}
 
           {appointment.status === 'SCHEDULED' && (
             <Button

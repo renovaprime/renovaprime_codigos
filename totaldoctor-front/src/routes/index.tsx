@@ -15,6 +15,7 @@ import {
   GestaoSite,
   Configuracoes,
   Beneficiarios,
+  AdminPerfil,
   ProfissionalDashboard,
   ProfissionalConsultas,
   ProfissionalDisponibilidade,
@@ -23,9 +24,11 @@ import {
   ProfissionalPerfil,
   LoginBeneficiario,
   BeneficiarioConsultas,
+  BeneficiarioHistorico,
   BeneficiarioReceitas,
   BeneficiarioPerfil,
 } from '../pages';
+import { TeleconsultaMedico, TeleconsultaPaciente } from '../modules/teleconsult';
 
 export const router = createBrowserRouter([
   {
@@ -140,6 +143,14 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: '/admin/perfil',
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <AdminPerfil />
+      </ProtectedRoute>
+    ),
+  },
   // Rotas do Profissional
   {
     path: '/profissional/login',
@@ -207,6 +218,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: '/beneficiario/historico',
+    element: (
+      <ProtectedRoute allowedRoles={['paciente']}>
+        <BeneficiarioHistorico />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: '/beneficiario/receitas',
     element: (
       <ProtectedRoute allowedRoles={['paciente']}>
@@ -219,6 +238,23 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['paciente']}>
         <BeneficiarioPerfil />
+      </ProtectedRoute>
+    ),
+  },
+  // Rotas de Teleconsulta
+  {
+    path: '/profissional/teleconsulta/:appointmentId',
+    element: (
+      <ProtectedRoute allowedRoles={['medico']}>
+        <TeleconsultaMedico />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/beneficiario/teleconsulta/:appointmentId',
+    element: (
+      <ProtectedRoute allowedRoles={['paciente']}>
+        <TeleconsultaPaciente />
       </ProtectedRoute>
     ),
   },

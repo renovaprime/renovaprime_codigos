@@ -14,6 +14,7 @@ import {
   X,
   Handshake,
   LogOut,
+  User,
 } from 'lucide-react';
 import logoImage from '../assets/images/logo.png';
 
@@ -34,6 +35,7 @@ const navigation = [
   { id: 'nav-admin-reports', name: 'Relatorios', href: '/relatorios', icon: BarChart3 },
   { id: 'nav-admin-site-management', name: 'Gestao do Site', href: '/gestao-site', icon: Globe },
   { id: 'nav-admin-settings', name: 'Configuracoes', href: '/configuracoes', icon: Settings },
+  { id: 'nav-admin-profile', name: 'Meu Perfil', href: '/admin/perfil', icon: User },
 ];
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {

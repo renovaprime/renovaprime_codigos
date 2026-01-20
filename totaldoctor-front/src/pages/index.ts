@@ -12,6 +12,7 @@ export { Relatorios } from './Relatorios';
 export { GestaoSite } from './GestaoSite';
 export { Configuracoes } from './Configuracoes';
 export { Beneficiarios } from './Beneficiarios';
+export { AdminPerfil } from './AdminPerfil';
 
 // Páginas do Profissional
 export { ProfissionalDashboard } from './profissional/Dashboard';
@@ -24,5 +25,6 @@ export { ProfissionalPerfil } from './profissional/Perfil';
 // Páginas do Beneficiário
 export { LoginBeneficiario } from './LoginBeneficiario';
 export { BeneficiarioConsultas } from './beneficiario/Consultas';
+export { BeneficiarioHistorico } from './beneficiario/Historico';
 export { BeneficiarioReceitas } from './beneficiario/Receitas';
 export { BeneficiarioPerfil } from './beneficiario/Perfil';

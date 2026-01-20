@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import { LayoutBeneficiario } from '../../layout/LayoutBeneficiario';
 import {
   HistoryFilters,
   HistoryList,
@@ -12,7 +12,7 @@ import type {
   AppointmentHistoryFilters,
 } from '../../modules/appointmentsHistory';
 
-export function ProfissionalHistorico() {
+export function BeneficiarioHistorico() {
   const [appointments, setAppointments] = useState<AppointmentHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export function ProfissionalHistorico() {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await appointmentsHistoryService.listDoctorHistory({
+      const result = await appointmentsHistoryService.listPatientHistory({
         ...filters,
         page,
         limit,
@@ -64,7 +64,7 @@ export function ProfissionalHistorico() {
   const hasFilters = Object.values(filters).some((v) => v !== undefined);
 
   return (
-    <LayoutProfissional title="Historico de Consultas">
+    <LayoutBeneficiario title="Historico de Consultas">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -79,7 +79,7 @@ export function ProfissionalHistorico() {
         {/* Filters */}
         <HistoryFilters
           onFilterChange={handleFilterChange}
-          searchPlaceholder="Buscar por nome do paciente..."
+          searchPlaceholder="Buscar por nome do profissional..."
         />
 
         {/* Error message */}
@@ -113,7 +113,7 @@ export function ProfissionalHistorico() {
             {/* Appointments list */}
             <HistoryList
               appointments={appointments}
-              viewType="doctor"
+              viewType="patient"
             />
 
             {/* Pagination */}
@@ -126,6 +126,6 @@ export function ProfissionalHistorico() {
           </>
         )}
       </div>
-    </LayoutProfissional>
+    </LayoutBeneficiario>
   );
 }

@@ -166,17 +166,37 @@ export interface Appointment {
   status: AppointmentStatus;
   created_at: string;
   updated_at?: string;
-  
+
   // Relacionamentos
   doctor?: {
     id: number;
     name: string;
     photo_url?: string;
   };
+  patient?: {
+    id: number;
+    User?: {
+      id: number;
+      name: string;
+      email: string;
+    };
+  };
   specialty?: Specialty;
   teleconsult_room?: {
     id: number;
-    patient_link: string;
+    room_name?: string;
+    doctor_link?: string;
+    patient_link?: string;
+    started_at?: string | null;
+    ended_at?: string | null;
+  };
+  TeleconsultRoom?: {
+    id: number;
+    room_name?: string;
+    doctor_link?: string;
+    patient_link?: string;
+    started_at?: string | null;
+    ended_at?: string | null;
   };
 }
 

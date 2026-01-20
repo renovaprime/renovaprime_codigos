@@ -1,21 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Layout } from '../layout';
-import { ConfirmModal } from '../components/ConfirmModal';
-import { specialtyService } from '../services/specialtyService';
+import { Layout } from '../../layout';
+import { ConfirmModal } from '../../components/ConfirmModal';
+import { specialtyService } from '../../services/specialtyService';
 import {
   AdminAppointmentsFilters,
   AdminAppointmentCard,
   AdminAppointmentDetailsModal,
   adminAppointmentsService,
-} from '../modules/adminAppointments';
+} from '../../modules/adminAppointments';
 import type {
   AdminAppointmentItem,
   AdminAppointmentsFiltersParams,
-} from '../modules/adminAppointments';
-import type { Specialty } from '../types/api';
-import { HistoryEmptyState, HistoryPagination } from '../modules/appointmentsHistory';
+} from '../../modules/adminAppointments';
+import type { Specialty } from '../../types/api';
+import { HistoryEmptyState, HistoryPagination } from '../../modules/appointmentsHistory';
 
-export function Consultas() {
+export function AdminConsultas() {
   const [appointments, setAppointments] = useState<AdminAppointmentItem[]>([]);
   const [specialties, setSpecialties] = useState<Specialty[]>([]);
   const [isLoading, setIsLoading] = useState(true);
