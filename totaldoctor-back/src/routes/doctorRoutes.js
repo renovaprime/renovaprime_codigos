@@ -71,4 +71,13 @@ router.get(
   doctorController.listAppointments
 );
 
+// Appointments history route
+router.get(
+  '/appointments/history',
+  authMiddleware,
+  permissionMiddleware('medico'),
+  doctorApprovedMiddleware,
+  doctorController.listAppointmentsHistory
+);
+
 module.exports = router;

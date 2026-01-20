@@ -385,6 +385,411 @@ class AdminService {
     });
   }
 
+  /**
+   * Lista consultas pendentes/em andamento com filtros e paginação (Admin)
+   */
+  async listAdminAppointments(filters = {}) {
+    // Por padrão, lista SCHEDULED e IN_PROGRESS
+    const statusList = filters.status
+      ? filters.status.split(',')
+      : ['SCHEDULED', 'IN_PROGRESS'];
+
+    const where = {
+      status: { [Op.in]: statusList }
+    };
+
+    // Filtro por intervalo de datas
+    if (filters.startDate && filters.endDate) {
+      where.date = { [Op.between]: [filters.startDate, filters.endDate] };
+    } else if (filters.startDate) {
+      where.date = { [Op.gte]: filters.startDate };
+    } else if (filters.endDate) {
+      where.date = { [Op.lte]: filters.endDate };
+    }
+
+    // Filtro por especialidade
+    if (filters.specialtyId) {
+      where.specialty_id = filters.specialtyId;
+    }
+
+    // Filtro por médico
+    if (filters.doctorId) {
+      where.doctor_id = filters.doctorId;
+    }
+
+    // Filtro por beneficiário
+    if (filters.beneficiaryId) {
+      where.beneficiary_id = filters.beneficiaryId;
+    }
+
+    // Filtro por tipo
+    if (filters.type) {
+      where.type = filters.type;
+    }
+
+    // Paginação
+    const page = parseInt(filters.page) || 1;
+    const limit = parseInt(filters.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // Query base
+    const queryOptions = {
+      where,
+      include: [
+        { model: Specialty, attributes: ['id', 'name'] },
+        {
+          model: Doctor,
+          attributes: ['id', 'photo_url'],
+          include: [{ model: User, attributes: ['name'] }]
+        },
+        { model: Beneficiary, attributes: ['id', 'name', 'cpf'] }
+      ],
+      order: [['date', 'ASC'], ['start_time', 'ASC']],
+      limit,
+      offset
+    };
+
+    // Filtro por busca (nome do médico ou beneficiário)
+    if (filters.search) {
+      const searchConditions = [];
+
+      // Busca no nome do beneficiário
+      queryOptions.include[2].where = {
+        name: { [Op.like]: `%${filters.search}%` }
+      };
+      queryOptions.include[2].required = false;
+
+      // Para buscar também no nome do médico, precisamos de uma subquery
+      // Por simplicidade, vamos buscar apenas no beneficiário ou fazer OR
+      // Usando subquery para buscar no nome do médico também
+      const doctorIds = await Doctor.findAll({
+        include: [{
+          model: User,
+          where: { name: { [Op.like]: `%${filters.search}%` } },
+          attributes: []
+        }],
+        attributes: ['id'],
+        raw: true
+      });
+
+      const beneficiaryIds = await Beneficiary.findAll({
+        where: { name: { [Op.like]: `%${filters.search}%` } },
+        attributes: ['id'],
+        raw: true
+      });
+
+      if (doctorIds.length > 0 || beneficiaryIds.length > 0) {
+        where[Op.or] = [];
+        if (doctorIds.length > 0) {
+          where[Op.or].push({ doctor_id: { [Op.in]: doctorIds.map(d => d.id) } });
+        }
+        if (beneficiaryIds.length > 0) {
+          where[Op.or].push({ beneficiary_id: { [Op.in]: beneficiaryIds.map(b => b.id) } });
+        }
+      } else {
+        // Nenhum resultado encontrado
+        return { items: [], page, limit, total: 0 };
+      }
+
+      // Remover o where do include pois já estamos filtrando pelo where principal
+      delete queryOptions.include[2].where;
+      delete queryOptions.include[2].required;
+    }
+
+    const { count, rows } = await Appointment.findAndCountAll(queryOptions);
+
+    // Formatar resposta
+    const items = rows.map(appointment => ({
+      id: appointment.id,
+      status: appointment.status,
+      type: appointment.type,
+      date: appointment.date,
+      start_time: appointment.start_time,
+      end_time: appointment.end_time,
+      specialty: appointment.Specialty ? {
+        id: appointment.Specialty.id,
+        name: appointment.Specialty.name
+      } : null,
+      doctor: appointment.Doctor ? {
+        id: appointment.Doctor.id,
+        name: appointment.Doctor.User ? appointment.Doctor.User.name : null,
+        photo_url: appointment.Doctor.photo_url
+      } : null,
+      beneficiary: appointment.Beneficiary ? {
+        id: appointment.Beneficiary.id,
+        name: appointment.Beneficiary.name,
+        cpf: appointment.Beneficiary.cpf
+      } : null
+    }));
+
+    return {
+      items,
+      page,
+      limit,
+      total: count
+    };
+  }
+
+  /**
+   * Lista histórico de consultas (FINISHED/CANCELED) com filtros e paginação (Admin)
+   */
+  async listAdminAppointmentsHistory(filters = {}) {
+    // Por padrão, lista FINISHED e CANCELED
+    const validStatuses = ['FINISHED', 'CANCELED'];
+    const statusList = filters.status && validStatuses.includes(filters.status)
+      ? [filters.status]
+      : validStatuses;
+
+    const where = {
+      status: { [Op.in]: statusList }
+    };
+
+    // Filtro por intervalo de datas
+    if (filters.startDate && filters.endDate) {
+      where.date = { [Op.between]: [filters.startDate, filters.endDate] };
+    } else if (filters.startDate) {
+      where.date = { [Op.gte]: filters.startDate };
+    } else if (filters.endDate) {
+      where.date = { [Op.lte]: filters.endDate };
+    }
+
+    // Filtro por especialidade
+    if (filters.specialtyId) {
+      where.specialty_id = filters.specialtyId;
+    }
+
+    // Filtro por médico
+    if (filters.doctorId) {
+      where.doctor_id = filters.doctorId;
+    }
+
+    // Filtro por beneficiário
+    if (filters.beneficiaryId) {
+      where.beneficiary_id = filters.beneficiaryId;
+    }
+
+    // Filtro por tipo
+    if (filters.type) {
+      where.type = filters.type;
+    }
+
+    // Paginação
+    const page = parseInt(filters.page) || 1;
+    const limit = parseInt(filters.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // Query base
+    const queryOptions = {
+      where,
+      include: [
+        { model: Specialty, attributes: ['id', 'name'] },
+        {
+          model: Doctor,
+          attributes: ['id', 'photo_url'],
+          include: [{ model: User, attributes: ['name'] }]
+        },
+        { model: Beneficiary, attributes: ['id', 'name', 'cpf'] }
+      ],
+      order: [['date', 'DESC'], ['start_time', 'DESC']],
+      limit,
+      offset
+    };
+
+    // Filtro por busca
+    if (filters.search) {
+      const doctorIds = await Doctor.findAll({
+        include: [{
+          model: User,
+          where: { name: { [Op.like]: `%${filters.search}%` } },
+          attributes: []
+        }],
+        attributes: ['id'],
+        raw: true
+      });
+
+      const beneficiaryIds = await Beneficiary.findAll({
+        where: { name: { [Op.like]: `%${filters.search}%` } },
+        attributes: ['id'],
+        raw: true
+      });
+
+      if (doctorIds.length > 0 || beneficiaryIds.length > 0) {
+        where[Op.or] = [];
+        if (doctorIds.length > 0) {
+          where[Op.or].push({ doctor_id: { [Op.in]: doctorIds.map(d => d.id) } });
+        }
+        if (beneficiaryIds.length > 0) {
+          where[Op.or].push({ beneficiary_id: { [Op.in]: beneficiaryIds.map(b => b.id) } });
+        }
+      } else {
+        return { items: [], page, limit, total: 0 };
+      }
+    }
+
+    const { count, rows } = await Appointment.findAndCountAll(queryOptions);
+
+    // Buscar logs para obter finished_at e canceled_at
+    const appointmentIds = rows.map(a => a.id);
+    const logs = await AppointmentLog.findAll({
+      where: {
+        appointment_id: { [Op.in]: appointmentIds },
+        action: { [Op.in]: ['FINISHED', 'CANCELED'] }
+      },
+      order: [['created_at', 'DESC']]
+    });
+
+    // Mapear logs por appointment_id
+    const logsMap = {};
+    logs.forEach(log => {
+      if (!logsMap[log.appointment_id]) {
+        logsMap[log.appointment_id] = {};
+      }
+      if (log.action === 'FINISHED') {
+        logsMap[log.appointment_id].finished_at = log.created_at;
+      } else if (log.action === 'CANCELED') {
+        logsMap[log.appointment_id].canceled_at = log.created_at;
+      }
+    });
+
+    // Formatar resposta
+    const items = rows.map(appointment => {
+      const logData = logsMap[appointment.id] || {};
+      return {
+        id: appointment.id,
+        status: appointment.status,
+        type: appointment.type,
+        date: appointment.date,
+        start_time: appointment.start_time,
+        end_time: appointment.end_time,
+        specialty: appointment.Specialty ? {
+          id: appointment.Specialty.id,
+          name: appointment.Specialty.name
+        } : null,
+        doctor: appointment.Doctor ? {
+          id: appointment.Doctor.id,
+          name: appointment.Doctor.User ? appointment.Doctor.User.name : null,
+          photo_url: appointment.Doctor.photo_url
+        } : null,
+        beneficiary: appointment.Beneficiary ? {
+          id: appointment.Beneficiary.id,
+          name: appointment.Beneficiary.name,
+          cpf: appointment.Beneficiary.cpf
+        } : null,
+        finished_at: logData.finished_at || (appointment.status === 'FINISHED' ? appointment.updated_at : null),
+        canceled_at: logData.canceled_at || (appointment.status === 'CANCELED' ? appointment.updated_at : null)
+      };
+    });
+
+    return {
+      items,
+      page,
+      limit,
+      total: count
+    };
+  }
+
+  /**
+   * Obter detalhes de uma consulta com logs (Admin)
+   */
+  async getAdminAppointmentById(appointmentId) {
+    const appointment = await Appointment.findByPk(appointmentId, {
+      include: [
+        { model: Specialty, attributes: ['id', 'name'] },
+        {
+          model: Doctor,
+          attributes: ['id', 'photo_url'],
+          include: [{ model: User, attributes: ['id', 'name', 'email'] }]
+        },
+        { model: Beneficiary },
+        {
+          model: AppointmentLog,
+          include: [{
+            model: User,
+            as: 'performer',
+            attributes: ['id', 'name']
+          }],
+          order: [['created_at', 'ASC']]
+        }
+      ]
+    });
+
+    if (!appointment) {
+      throw new Error('Appointment not found');
+    }
+
+    // Formatar resposta
+    return {
+      id: appointment.id,
+      status: appointment.status,
+      type: appointment.type,
+      date: appointment.date,
+      start_time: appointment.start_time,
+      end_time: appointment.end_time,
+      created_at: appointment.created_at,
+      updated_at: appointment.updated_at,
+      specialty: appointment.Specialty ? {
+        id: appointment.Specialty.id,
+        name: appointment.Specialty.name
+      } : null,
+      doctor: appointment.Doctor ? {
+        id: appointment.Doctor.id,
+        name: appointment.Doctor.User ? appointment.Doctor.User.name : null,
+        email: appointment.Doctor.User ? appointment.Doctor.User.email : null,
+        photo_url: appointment.Doctor.photo_url
+      } : null,
+      beneficiary: appointment.Beneficiary ? {
+        id: appointment.Beneficiary.id,
+        name: appointment.Beneficiary.name,
+        cpf: appointment.Beneficiary.cpf,
+        email: appointment.Beneficiary.email,
+        phone: appointment.Beneficiary.phone
+      } : null,
+      logs: (appointment.AppointmentLogs || []).map(log => ({
+        id: log.id,
+        action: log.action,
+        performed_by: log.performer ? {
+          id: log.performer.id,
+          name: log.performer.name
+        } : null,
+        created_at: log.created_at
+      }))
+    };
+  }
+
+  /**
+   * Cancelar consulta (Admin) - Apenas SCHEDULED
+   */
+  async cancelAdminAppointment(appointmentId, adminId) {
+    const transaction = await sequelize.transaction();
+
+    try {
+      const appointment = await Appointment.findByPk(appointmentId);
+
+      if (!appointment) {
+        throw new Error('Appointment not found');
+      }
+
+      if (appointment.status !== 'SCHEDULED') {
+        throw new Error('Only scheduled appointments can be canceled');
+      }
+
+      await appointment.update({ status: 'CANCELED' }, { transaction });
+
+      await AppointmentLog.create({
+        appointment_id: appointmentId,
+        action: 'CANCELED',
+        performed_by: adminId
+      }, { transaction });
+
+      await transaction.commit();
+
+      return { ok: true };
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  }
+
   async createSpecialty(data) {
     return await Specialty.create({
       name: data.name,

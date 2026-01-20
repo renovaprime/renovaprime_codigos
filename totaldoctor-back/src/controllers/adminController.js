@@ -49,6 +49,77 @@ class AdminController {
     }
   }
 
+  async listAdminAppointments(req, res, next) {
+    try {
+      const filters = {
+        status: req.query.status,
+        startDate: req.query.startDate,
+        endDate: req.query.endDate,
+        specialtyId: req.query.specialtyId,
+        doctorId: req.query.doctorId,
+        beneficiaryId: req.query.beneficiaryId,
+        type: req.query.type,
+        search: req.query.search,
+        page: req.query.page,
+        limit: req.query.limit
+      };
+      const result = await adminService.listAdminAppointments(filters);
+      return res.json(successResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async listAdminAppointmentsHistory(req, res, next) {
+    try {
+      const filters = {
+        status: req.query.status,
+        startDate: req.query.startDate,
+        endDate: req.query.endDate,
+        specialtyId: req.query.specialtyId,
+        doctorId: req.query.doctorId,
+        beneficiaryId: req.query.beneficiaryId,
+        type: req.query.type,
+        search: req.query.search,
+        page: req.query.page,
+        limit: req.query.limit
+      };
+      const result = await adminService.listAdminAppointmentsHistory(filters);
+      return res.json(successResponse(result));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAdminAppointmentById(req, res, next) {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const appointment = await adminService.getAdminAppointmentById(appointmentId);
+      return res.json(successResponse(appointment));
+    } catch (error) {
+      if (error.message === 'Appointment not found') {
+        return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
+      }
+      next(error);
+    }
+  }
+
+  async cancelAdminAppointment(req, res, next) {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const result = await adminService.cancelAdminAppointment(appointmentId, req.user.id);
+      return res.json(successResponse(result));
+    } catch (error) {
+      if (error.message === 'Appointment not found') {
+        return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
+      }
+      if (error.message === 'Only scheduled appointments can be canceled') {
+        return res.status(409).json(errorResponse(error.message, 'CONFLICT'));
+      }
+      next(error);
+    }
+  }
+
   async createSpecialty(req, res, next) {
     try {
       const specialty = await adminService.createSpecialty(req.body);

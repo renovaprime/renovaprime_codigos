@@ -167,15 +167,160 @@ class DoctorService {
     return true;
   }
 
-  async listAppointments(doctorId) {
+  async listAppointments(doctorId, filters = {}) {
+    const { Op } = require('sequelize');
+    const { TeleconsultRoom } = require('../models');
+
+    const where = { doctor_id: doctorId };
+
+    // Filtro por data específica
+    if (filters.date) {
+      where.date = filters.date;
+    }
+
+    // Filtro por intervalo de datas
+    if (filters.from && filters.to) {
+      where.date = {
+        [Op.between]: [filters.from, filters.to]
+      };
+    } else if (filters.from) {
+      where.date = {
+        [Op.gte]: filters.from
+      };
+    } else if (filters.to) {
+      where.date = {
+        [Op.lte]: filters.to
+      };
+    }
+
+    // Filtro por status
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
     return await Appointment.findAll({
-      where: { doctor_id: doctorId },
+      where,
       include: [
-        { model: Patient, include: [{ model: User }] },
-        { model: Specialty }
+        {
+          model: Patient,
+          include: [{ model: User, attributes: ['id', 'name', 'email'] }]
+        },
+        { model: Specialty },
+        { model: TeleconsultRoom }
       ],
-      order: [['date', 'DESC'], ['start_time', 'DESC']]
+      order: [['date', 'ASC'], ['start_time', 'ASC']]
     });
+  }
+
+  async listAppointmentsHistory(doctorId, filters = {}) {
+    const { Op } = require('sequelize');
+    const { Beneficiary } = require('../models');
+
+    // Sempre filtra por FINISHED ou CANCELED
+    const where = {
+      doctor_id: doctorId,
+      status: { [Op.in]: ['FINISHED', 'CANCELED'] }
+    };
+
+    // Filtro por status específico (FINISHED ou CANCELED)
+    if (filters.status && ['FINISHED', 'CANCELED'].includes(filters.status)) {
+      where.status = filters.status;
+    }
+
+    // Filtro por intervalo de datas
+    if (filters.startDate && filters.endDate) {
+      where.date = { [Op.between]: [filters.startDate, filters.endDate] };
+    } else if (filters.startDate) {
+      where.date = { [Op.gte]: filters.startDate };
+    } else if (filters.endDate) {
+      where.date = { [Op.lte]: filters.endDate };
+    }
+
+    // Filtro por especialidade
+    if (filters.specialtyId) {
+      where.specialty_id = filters.specialtyId;
+    }
+
+    // Paginação
+    const page = parseInt(filters.page) || 1;
+    const limit = parseInt(filters.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // Query base
+    const queryOptions = {
+      where,
+      include: [
+        { model: Specialty, attributes: ['id', 'name'] },
+        { model: Beneficiary, attributes: ['id', 'name', 'cpf'] }
+      ],
+      order: [['date', 'DESC'], ['start_time', 'DESC']],
+      limit,
+      offset
+    };
+
+    // Filtro por busca (nome do beneficiário)
+    if (filters.search) {
+      queryOptions.include[1].where = {
+        name: { [Op.like]: `%${filters.search}%` }
+      };
+      queryOptions.include[1].required = true;
+    }
+
+    const { count, rows } = await Appointment.findAndCountAll(queryOptions);
+
+    // Buscar logs para obter finished_at e canceled_at
+    const appointmentIds = rows.map(a => a.id);
+    const logs = await AppointmentLog.findAll({
+      where: {
+        appointment_id: { [Op.in]: appointmentIds },
+        action: { [Op.in]: ['FINISHED', 'CANCELED'] }
+      },
+      order: [['created_at', 'DESC']]
+    });
+
+    // Mapear logs por appointment_id
+    const logsMap = {};
+    logs.forEach(log => {
+      if (!logsMap[log.appointment_id]) {
+        logsMap[log.appointment_id] = {};
+      }
+      if (log.action === 'FINISHED') {
+        logsMap[log.appointment_id].finished_at = log.created_at;
+      } else if (log.action === 'CANCELED') {
+        logsMap[log.appointment_id].canceled_at = log.created_at;
+      }
+    });
+
+    // Formatar resposta
+    const items = rows.map(appointment => {
+      const logData = logsMap[appointment.id] || {};
+      return {
+        id: appointment.id,
+        status: appointment.status,
+        type: appointment.type,
+        date: appointment.date,
+        start_time: appointment.start_time,
+        end_time: appointment.end_time,
+        specialty: appointment.Specialty ? {
+          id: appointment.Specialty.id,
+          name: appointment.Specialty.name
+        } : null,
+        beneficiary: appointment.Beneficiary ? {
+          id: appointment.Beneficiary.id,
+          name: appointment.Beneficiary.name,
+          cpf: appointment.Beneficiary.cpf
+        } : null,
+        finished_at: logData.finished_at || (appointment.status === 'FINISHED' ? appointment.updated_at : null),
+        canceled_at: logData.canceled_at || (appointment.status === 'CANCELED' ? appointment.updated_at : null)
+      };
+    });
+
+    return {
+      items,
+      page,
+      limit,
+      total: count
+    };
   }
 }
 

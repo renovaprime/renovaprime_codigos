@@ -80,8 +80,32 @@ class DoctorController {
 
   async listAppointments(req, res, next) {
     try {
-      const appointments = await doctorService.listAppointments(req.doctor.id);
+      const filters = {
+        date: req.query.date,
+        from: req.query.from,
+        to: req.query.to,
+        status: req.query.status
+      };
+      const appointments = await doctorService.listAppointments(req.doctor.id, filters);
       return res.json(successResponse(appointments));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async listAppointmentsHistory(req, res, next) {
+    try {
+      const filters = {
+        status: req.query.status,
+        startDate: req.query.startDate,
+        endDate: req.query.endDate,
+        specialtyId: req.query.specialtyId,
+        search: req.query.search,
+        page: req.query.page,
+        limit: req.query.limit
+      };
+      const result = await doctorService.listAppointmentsHistory(req.doctor.id, filters);
+      return res.json(successResponse(result));
     } catch (error) {
       next(error);
     }

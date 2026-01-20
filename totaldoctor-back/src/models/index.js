@@ -55,6 +55,10 @@ AppointmentLog.belongsTo(User, { foreignKey: 'performed_by', as: 'performer' });
 Beneficiary.belongsTo(Beneficiary, { as: 'titular', foreignKey: 'titular_id' });
 Beneficiary.hasMany(Beneficiary, { as: 'dependents', foreignKey: 'titular_id' });
 
+// Appointment -> Beneficiary relationship
+Beneficiary.hasMany(Appointment, { foreignKey: 'beneficiary_id' });
+Appointment.belongsTo(Beneficiary, { foreignKey: 'beneficiary_id' });
+
 // Beneficiary creator relationship
 User.hasMany(Beneficiary, { foreignKey: 'created_by' });
 Beneficiary.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });

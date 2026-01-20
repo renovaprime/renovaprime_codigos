@@ -1,5 +1,5 @@
 const sequelize = require('../config/database');
-const { Appointment, AppointmentLog, Doctor, DoctorSchedule, DoctorScheduleBlock, DoctorSpecialty } = require('../models');
+const { Appointment, AppointmentLog, Doctor, DoctorSchedule, DoctorScheduleBlock, DoctorSpecialty, TeleconsultRoom } = require('../models');
 const { Op } = require('sequelize');
 
 class AppointmentService {
@@ -124,11 +124,25 @@ class AppointmentService {
         throw new Error('Appointment not found');
       }
 
+      // Validar que o médico logado é o dono da consulta
+      const doctor = await Doctor.findOne({ where: { user_id: userId } });
+      if (!doctor || appointment.doctor_id !== doctor.id) {
+        throw new Error('Access denied: You can only start your own appointments');
+      }
+
       if (appointment.status !== 'SCHEDULED') {
         throw new Error('Only scheduled appointments can be started');
       }
 
       await appointment.update({ status: 'IN_PROGRESS' }, { transaction });
+
+      // Atualizar TeleconsultRoom se existir
+      const teleconsultRoom = await TeleconsultRoom.findOne({
+        where: { appointment_id: appointmentId }
+      });
+      if (teleconsultRoom) {
+        await teleconsultRoom.update({ started_at: new Date() }, { transaction });
+      }
 
       await AppointmentLog.create({
         appointment_id: appointmentId,
@@ -155,11 +169,25 @@ class AppointmentService {
         throw new Error('Appointment not found');
       }
 
+      // Validar que o médico logado é o dono da consulta
+      const doctor = await Doctor.findOne({ where: { user_id: userId } });
+      if (!doctor || appointment.doctor_id !== doctor.id) {
+        throw new Error('Access denied: You can only finish your own appointments');
+      }
+
       if (appointment.status !== 'IN_PROGRESS') {
         throw new Error('Only in-progress appointments can be finished');
       }
 
       await appointment.update({ status: 'FINISHED' }, { transaction });
+
+      // Atualizar TeleconsultRoom se existir
+      const teleconsultRoom = await TeleconsultRoom.findOne({
+        where: { appointment_id: appointmentId }
+      });
+      if (teleconsultRoom) {
+        await teleconsultRoom.update({ ended_at: new Date() }, { transaction });
+      }
 
       await AppointmentLog.create({
         appointment_id: appointmentId,
@@ -186,8 +214,9 @@ class AppointmentService {
         throw new Error('Appointment not found');
       }
 
-      if (appointment.status === 'FINISHED' || appointment.status === 'CANCELED') {
-        throw new Error('Cannot cancel finished or already canceled appointment');
+      // Só pode cancelar consultas agendadas
+      if (appointment.status !== 'SCHEDULED') {
+        throw new Error('Only scheduled appointments can be canceled');
       }
 
       await appointment.update({ status: 'CANCELED' }, { transaction });

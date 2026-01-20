@@ -10,8 +10,10 @@ const prescriptionRoutes = require('./prescriptionRoutes');
 const adminRoutes = require('./adminRoutes');
 const uploadRoutes = require('./uploadRoutes');
 const siteRoutes = require('./siteRoutes');
+const meRoutes = require('./meRoutes');
 
 router.use('/auth', authRoutes);
+router.use('/me', meRoutes);
 router.use('/doctors', doctorRoutes);
 router.use('/patient', patientRoutes);
 router.use('/appointments', appointmentRoutes);

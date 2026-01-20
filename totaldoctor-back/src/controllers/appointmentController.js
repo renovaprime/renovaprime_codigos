@@ -22,6 +22,9 @@ class AppointmentController {
       if (error.message === 'Appointment not found') {
         return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
       }
+      if (error.message.includes('Access denied')) {
+        return res.status(403).json(errorResponse(error.message, 'FORBIDDEN'));
+      }
       if (error.message.includes('scheduled')) {
         return res.status(400).json(errorResponse(error.message, 'INVALID_STATE'));
       }
@@ -36,6 +39,9 @@ class AppointmentController {
     } catch (error) {
       if (error.message === 'Appointment not found') {
         return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
+      }
+      if (error.message.includes('Access denied')) {
+        return res.status(403).json(errorResponse(error.message, 'FORBIDDEN'));
       }
       if (error.message.includes('progress')) {
         return res.status(400).json(errorResponse(error.message, 'INVALID_STATE'));

@@ -33,7 +33,28 @@ router.get(
   '/appointments',
   authMiddleware,
   permissionMiddleware('admin'),
-  adminController.listAppointments
+  adminController.listAdminAppointments
+);
+
+router.get(
+  '/appointments/history',
+  authMiddleware,
+  permissionMiddleware('admin'),
+  adminController.listAdminAppointmentsHistory
+);
+
+router.get(
+  '/appointments/:id',
+  authMiddleware,
+  permissionMiddleware('admin'),
+  adminController.getAdminAppointmentById
+);
+
+router.post(
+  '/appointments/:id/cancel',
+  authMiddleware,
+  permissionMiddleware('admin'),
+  adminController.cancelAdminAppointment
 );
 
 router.get(

@@ -14,6 +14,14 @@ router.get(
   patientController.getMyAppointments
 );
 
+// Patient appointments history route
+router.get(
+  '/appointments/history',
+  authMiddleware,
+  permissionMiddleware('paciente'),
+  patientController.getAppointmentsHistory
+);
+
 router.post(
   '/appointments',
   authMiddleware,

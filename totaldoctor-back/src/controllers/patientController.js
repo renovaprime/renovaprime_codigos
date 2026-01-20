@@ -105,6 +105,28 @@ class PatientController {
       next(error);
     }
   }
+
+  async getAppointmentsHistory(req, res, next) {
+    try {
+      const filters = {
+        beneficiaryId: req.query.beneficiaryId,
+        status: req.query.status,
+        startDate: req.query.startDate,
+        endDate: req.query.endDate,
+        specialtyId: req.query.specialtyId,
+        search: req.query.search,
+        page: req.query.page,
+        limit: req.query.limit
+      };
+      const result = await patientService.getAppointmentsHistory(req.user.id, filters);
+      return res.json(successResponse(result));
+    } catch (error) {
+      if (error.message.includes('FORBIDDEN')) {
+        return res.status(403).json(errorResponse('Beneficiary does not belong to this user', 'FORBIDDEN'));
+      }
+      next(error);
+    }
+  }
 }
 
 module.exports = new PatientController();

@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const siteController = require('../controllers/siteController');
 const uploadController = require('../controllers/uploadController');
+const checkoutController = require('../controllers/checkoutController');
 const validate = require('../validators/validate');
 const { createPendingDoctorSchema } = require('../validators/siteDoctorValidator');
+const { checkoutSchema } = require('../validators/checkoutValidator');
 const multer = require('multer');
 
 // Configurar multer para upload de arquivos
@@ -39,6 +41,13 @@ router.post(
   '/doctors',
   validate(createPendingDoctorSchema),
   siteController.createPendingDoctor
+);
+
+// Checkout - processar pagamento e criar beneficiário
+router.post(
+  '/checkout',
+  validate(checkoutSchema),
+  checkoutController.checkout
 );
 
 module.exports = router;
