@@ -37,7 +37,7 @@ app.use(helmet({
   },
 }));
 app.use(cors({
-  origin: ['https://portal.totalmedi.com.br', 'http://localhost:5173'],
+  origin: ['https://portal.totalmedi.com.br', 'http://localhost:5173', 'https://totalmedi.com.br'],
   credentials: true
 }));
 app.use(express.json());
