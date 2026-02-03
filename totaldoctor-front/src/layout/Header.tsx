@@ -40,9 +40,15 @@ export function Header({ onMenuClick, title }: HeaderProps) {
     navigate('/login');
   };
 
-  const handleSettings = () => {
+  const handleProfile = () => {
     setIsDropdownOpen(false);
-    navigate('/configuracoes');
+    if (user?.role === 'ADMIN') {
+      navigate('/admin/perfil');
+    } else if (user?.role === 'MEDICO') {
+      navigate('/profissional/perfil');
+    } else if (user?.role === 'PACIENTE') {
+      navigate('/beneficiario/perfil');
+    }
   };
 
   return (
@@ -68,15 +74,8 @@ export function Header({ onMenuClick, title }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-            <Search className="w-5 h-5" />
-          </button>
-
-          <button className="relative p-2.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
-          </button>
-
+          
+     
           <div className="w-px h-6 bg-border mx-2 hidden sm:block" />
 
           <div className="relative" ref={dropdownRef}>
@@ -107,11 +106,11 @@ export function Header({ onMenuClick, title }: HeaderProps) {
                 >
                   <div className="p-2">
                     <button
-                      onClick={handleSettings}
+                      onClick={handleProfile}
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
                     >
                       <Settings className="w-4 h-4 text-muted-foreground" />
-                      Configuracoes
+                      Meu Perfil
                     </button>
                     <div className="my-1 border-t border-border" />
                     <button

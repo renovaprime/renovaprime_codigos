@@ -212,3 +212,165 @@ export interface CreateAppointmentData {
   start_time: string;   // HH:MM:SS
   beneficiary_id?: number;
 }
+
+// Partners
+export interface Partner {
+  id: number;
+  name: string;
+  cnpj?: string;
+  email: string;
+  bank_agency?: string;
+  bank_account?: string;
+  bank_digit?: string;
+  pix_key?: string;
+  logo_url?: string;
+  website_url?: string;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+  branches?: PartnerBranch[];
+}
+
+export interface PartnerFormData {
+  name: string;
+  cnpj?: string;
+  email: string;
+  password?: string;
+  bank_agency?: string;
+  bank_account?: string;
+  bank_digit?: string;
+  pix_key?: string;
+  logo_url?: string;
+  website_url?: string;
+}
+
+// Partner Branches (Filiais)
+export interface PartnerBranch {
+  id: number;
+  partner_id: number;
+  name: string;
+  alias?: string;
+  address?: string;
+  email: string;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+  Partner?: { id: number; name: string };
+  resellers?: Reseller[];
+}
+
+export interface BranchFormData {
+  partner_id: number;
+  name: string;
+  alias?: string;
+  address?: string;
+  email: string;
+  password?: string;
+}
+
+// Resellers (Revendedores)
+export interface Reseller {
+  id: number;
+  branch_id: number;
+  name: string;
+  cpf: string;
+  role?: string;
+  email?: string;
+  pix_key?: string;
+  phone?: string;
+  functional_unit?: string;
+  registration_code?: string;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+  PartnerBranch?: {
+    id: number;
+    name: string;
+    partner_id: number;
+    Partner?: { id: number; name: string };
+  };
+}
+
+export interface ResellerFormData {
+  branch_id: number;
+  name: string;
+  cpf: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  role?: string;
+  pix_key?: string;
+  functional_unit?: string;
+  registration_code?: string;
+}
+
+// Doctor Dashboard
+export interface DoctorDashboardAppointment {
+  id: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: AppointmentType;
+  status: AppointmentStatus;
+  beneficiary: {
+    id: number;
+    name: string;
+    cpf: string;
+    phone?: string;
+  } | null;
+  specialty: {
+    id: number;
+    name: string;
+  } | null;
+  teleconsultRoom: {
+    id: number;
+    roomName: string;
+    doctorLink: string;
+  } | null;
+}
+
+export interface DoctorDashboard {
+  today: {
+    total: number;
+    scheduled: number;
+    inProgress: number;
+    finished: number;
+  };
+  currentAppointment: DoctorDashboardAppointment | null;
+  nextAppointment: DoctorDashboardAppointment | null;
+}
+
+// Admin Dashboard
+export interface AdminDashboard {
+  users: {
+    active: number;
+    pending: number;
+    blocked: number;
+  };
+  doctors: {
+    total: number;
+    approved: number;
+    pending: number;
+  };
+  beneficiaries: {
+    active: number;
+    inactive: number;
+  };
+  appointmentsToday: {
+    total: number;
+    scheduled: number;
+    inProgress: number;
+    finished: number;
+  };
+  appointments: {
+    total: number;
+    scheduled: number;
+    inProgress: number;
+    finished: number;
+    canceled: number;
+  };
+  teleconsults: {
+    active: number;
+    finished: number;
+  };
+}

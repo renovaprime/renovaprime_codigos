@@ -1,115 +1,127 @@
 import { useState, useEffect } from 'react';
-import { Handshake, Plus, Search, Edit2, Trash2, Globe, Building2 } from 'lucide-react';
+import { Building2, Plus, Search, Edit2, Trash2, Users } from 'lucide-react';
 import { Layout } from '../layout';
 import { Card, EmptyState, Button, Input, Badge, Switch, ConfirmModal } from '../components';
-import { PartnerFormModal } from '../components/PartnerFormModal';
+import { BranchFormModal } from '../components/BranchFormModal';
+import { branchService } from '../services/branchService';
 import { partnerService } from '../services/partnerService';
-import type { Partner, PartnerFormData } from '../types/api';
+import type { PartnerBranch, BranchFormData, Partner } from '../types/api';
 
-export function Parceiros() {
+export function Filiais() {
+  const [branches, setBranches] = useState<PartnerBranch[]>([]);
+  const [filteredBranches, setFilteredBranches] = useState<PartnerBranch[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
-  const [filteredPartners, setFilteredPartners] = useState<Partner[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [partnerFilter, setPartnerFilter] = useState<string>('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
+  const [editingBranch, setEditingBranch] = useState<PartnerBranch | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [partnerToDelete, setPartnerToDelete] = useState<Partner | null>(null);
+  const [branchToDelete, setBranchToDelete] = useState<PartnerBranch | null>(null);
 
   const [toggleModalOpen, setToggleModalOpen] = useState(false);
-  const [partnerToToggle, setPartnerToToggle] = useState<Partner | null>(null);
+  const [branchToToggle, setBranchToToggle] = useState<PartnerBranch | null>(null);
 
   useEffect(() => {
-    loadPartners();
+    loadData();
   }, []);
 
   useEffect(() => {
-    if (searchTerm.trim() === '') {
-      setFilteredPartners(partners);
-    } else {
-      const filtered = partners.filter(
-        (p) =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (p.cnpj && p.cnpj.includes(searchTerm))
-      );
-      setFilteredPartners(filtered);
-    }
-  }, [searchTerm, partners]);
+    let filtered = branches;
 
-  const loadPartners = async () => {
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(
+        (b) =>
+          b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          b.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (b.alias && b.alias.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    if (partnerFilter) {
+      filtered = filtered.filter((b) => b.partner_id === parseInt(partnerFilter));
+    }
+
+    setFilteredBranches(filtered);
+  }, [searchTerm, partnerFilter, branches]);
+
+  const loadData = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const data = await partnerService.list();
-      setPartners(data);
-      setFilteredPartners(data);
+      const [branchData, partnerData] = await Promise.all([
+        branchService.list(),
+        partnerService.list(),
+      ]);
+      setBranches(branchData);
+      setFilteredBranches(branchData);
+      setPartners(partnerData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao carregar parceiros');
+      setError(err instanceof Error ? err.message : 'Erro ao carregar filiais');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleOpenModal = (partner?: Partner) => {
-    setEditingPartner(partner || null);
+  const handleOpenModal = (branch?: PartnerBranch) => {
+    setEditingBranch(branch || null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setEditingPartner(null);
+    setEditingBranch(null);
   };
 
-  const handleSave = async (data: PartnerFormData) => {
-    if (editingPartner) {
-      await partnerService.update(editingPartner.id, data);
-      showSuccess('Parceiro atualizado com sucesso!');
+  const handleSave = async (data: BranchFormData) => {
+    if (editingBranch) {
+      await branchService.update(editingBranch.id, data);
+      showSuccess('Filial atualizada com sucesso!');
     } else {
-      await partnerService.create(data);
-      showSuccess('Parceiro criado com sucesso!');
+      await branchService.create(data);
+      showSuccess('Filial criada com sucesso!');
     }
-    await loadPartners();
+    await loadData();
   };
 
-  const handleToggle = (partner: Partner) => {
-    setPartnerToToggle(partner);
+  const handleToggle = (branch: PartnerBranch) => {
+    setBranchToToggle(branch);
     setToggleModalOpen(true);
   };
 
   const handleConfirmToggle = async () => {
-    if (!partnerToToggle) return;
+    if (!branchToToggle) return;
     try {
-      await partnerService.toggle(partnerToToggle.id);
-      showSuccess(`Parceiro ${partnerToToggle.active ? 'desativado' : 'ativado'} com sucesso!`);
-      await loadPartners();
+      await branchService.toggle(branchToToggle.id);
+      showSuccess(`Filial ${branchToToggle.active ? 'desativada' : 'ativada'} com sucesso!`);
+      await loadData();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao alterar status');
     } finally {
-      setPartnerToToggle(null);
+      setBranchToToggle(null);
     }
   };
 
-  const handleDeleteClick = (partner: Partner) => {
-    setPartnerToDelete(partner);
+  const handleDeleteClick = (branch: PartnerBranch) => {
+    setBranchToDelete(branch);
     setDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
-    if (!partnerToDelete) return;
+    if (!branchToDelete) return;
     try {
-      await partnerService.delete(partnerToDelete.id);
-      showSuccess('Parceiro excluído com sucesso!');
-      await loadPartners();
+      await branchService.delete(branchToDelete.id);
+      showSuccess('Filial excluída com sucesso!');
+      await loadData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao excluir parceiro');
+      setError(err instanceof Error ? err.message : 'Erro ao excluir filial');
     } finally {
-      setPartnerToDelete(null);
+      setBranchToDelete(null);
     }
   };
 
@@ -119,7 +131,7 @@ export function Parceiros() {
   };
 
   return (
-    <Layout title="Parceiros">
+    <Layout title="Filiais">
       <div className="space-y-6">
         {successMessage && (
           <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-5 fade-in duration-300">
@@ -132,12 +144,12 @@ export function Parceiros() {
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="font-display text-2xl text-foreground">Parceiros</h1>
-            <p className="text-muted-foreground mt-1">Gerencie parceiros da plataforma</p>
+            <h1 className="font-display text-2xl text-foreground">Filiais</h1>
+            <p className="text-muted-foreground mt-1">Gerencie as filiais dos parceiros</p>
           </div>
           <Button onClick={() => handleOpenModal()}>
             <Plus className="w-4 h-4" />
-            Novo Parceiro
+            Nova Filial
           </Button>
         </div>
 
@@ -146,12 +158,22 @@ export function Parceiros() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Buscar por nome, email ou CNPJ..."
+                placeholder="Buscar por nome, email ou apelido..."
                 className="pl-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            <select
+              value={partnerFilter}
+              onChange={(e) => setPartnerFilter(e.target.value)}
+              className="px-4 py-3 rounded-xl bg-card border border-border text-foreground text-sm transition-all duration-200 ease-out hover:border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+            >
+              <option value="">Todos os parceiros</option>
+              {partners.map((p) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
           </div>
         </Card>
 
@@ -167,21 +189,21 @@ export function Parceiros() {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
             </div>
           </Card>
-        ) : filteredPartners.length === 0 ? (
+        ) : filteredBranches.length === 0 ? (
           <Card>
             <EmptyState
-              icon={Handshake}
-              title={searchTerm ? 'Nenhum parceiro encontrado' : 'Nenhum parceiro cadastrado'}
+              icon={Building2}
+              title={searchTerm || partnerFilter ? 'Nenhuma filial encontrada' : 'Nenhuma filial cadastrada'}
               description={
-                searchTerm
-                  ? 'Tente ajustar sua busca'
-                  : 'Adicione parceiros para começar a gerenciar suas integrações.'
+                searchTerm || partnerFilter
+                  ? 'Tente ajustar seus filtros'
+                  : 'Adicione filiais para gerenciar as unidades dos parceiros.'
               }
               action={
-                !searchTerm ? (
+                !searchTerm && !partnerFilter ? (
                   <Button variant="secondary" onClick={() => handleOpenModal()}>
                     <Plus className="w-4 h-4" />
-                    Adicionar Parceiro
+                    Adicionar Filial
                   </Button>
                 ) : undefined
               }
@@ -194,69 +216,66 @@ export function Parceiros() {
                 <thead>
                   <tr className="border-b border-border">
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Nome</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">CNPJ</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Parceiro</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Email</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Filiais</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Revendedores</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
                     <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPartners.map((partner) => (
+                  {filteredBranches.map((branch) => (
                     <tr
-                      key={partner.id}
+                      key={branch.id}
                       className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
                     >
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Handshake className="w-4 h-4 text-primary" />
+                            <Building2 className="w-4 h-4 text-primary" />
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-foreground">{partner.name}</p>
-                            {partner.website_url && (
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <Globe className="w-3 h-3" />
-                                {partner.website_url}
-                              </div>
+                            <p className="text-sm font-medium text-foreground">{branch.name}</p>
+                            {branch.alias && (
+                              <p className="text-xs text-muted-foreground">{branch.alias}</p>
                             )}
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-4 text-sm text-muted-foreground">
-                        {partner.cnpj || '-'}
+                        {branch.Partner?.name || '-'}
                       </td>
                       <td className="py-3 px-4 text-sm text-muted-foreground">
-                        {partner.email}
+                        {branch.email}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-1">
-                          <Building2 className="w-4 h-4 text-muted-foreground" />
+                          <Users className="w-4 h-4 text-muted-foreground" />
                           <span className="text-sm text-muted-foreground">
-                            {partner.branches?.length || 0}
+                            {branch.resellers?.length || 0}
                           </span>
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <Badge variant={partner.active ? 'success' : 'default'}>
-                          {partner.active ? 'Ativo' : 'Inativo'}
+                        <Badge variant={branch.active ? 'success' : 'default'}>
+                          {branch.active ? 'Ativa' : 'Inativa'}
                         </Badge>
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            onClick={() => handleOpenModal(partner)}
+                            onClick={() => handleOpenModal(branch)}
                             className="p-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
                             title="Editar"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <Switch
-                            checked={partner.active}
-                            onCheckedChange={() => handleToggle(partner)}
+                            checked={branch.active}
+                            onCheckedChange={() => handleToggle(branch)}
                           />
                           <button
-                            onClick={() => handleDeleteClick(partner)}
+                            onClick={() => handleDeleteClick(branch)}
                             className="p-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Excluir"
                           >
@@ -273,29 +292,30 @@ export function Parceiros() {
         )}
       </div>
 
-      <PartnerFormModal
+      <BranchFormModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSave={handleSave}
-        editingPartner={editingPartner}
+        editingBranch={editingBranch}
+        partners={partners}
       />
 
       <ConfirmModal
         isOpen={toggleModalOpen}
-        onClose={() => { setToggleModalOpen(false); setPartnerToToggle(null); }}
+        onClose={() => { setToggleModalOpen(false); setBranchToToggle(null); }}
         onConfirm={handleConfirmToggle}
-        title={partnerToToggle?.active ? 'Desativar Parceiro' : 'Ativar Parceiro'}
-        description={`Tem certeza que deseja ${partnerToToggle?.active ? 'desativar' : 'ativar'} o parceiro "${partnerToToggle?.name}"?`}
-        confirmText={partnerToToggle?.active ? 'Desativar' : 'Ativar'}
-        variant={partnerToToggle?.active ? 'danger' : 'warning'}
+        title={branchToToggle?.active ? 'Desativar Filial' : 'Ativar Filial'}
+        description={`Tem certeza que deseja ${branchToToggle?.active ? 'desativar' : 'ativar'} a filial "${branchToToggle?.name}"?`}
+        confirmText={branchToToggle?.active ? 'Desativar' : 'Ativar'}
+        variant={branchToToggle?.active ? 'danger' : 'warning'}
       />
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        onClose={() => { setDeleteModalOpen(false); setPartnerToDelete(null); }}
+        onClose={() => { setDeleteModalOpen(false); setBranchToDelete(null); }}
         onConfirm={handleConfirmDelete}
-        title="Excluir Parceiro"
-        description={`Tem certeza que deseja excluir permanentemente o parceiro "${partnerToDelete?.name}"? Todas as filiais e revendedores associados também serão excluídos. Esta ação não pode ser desfeita.`}
+        title="Excluir Filial"
+        description={`Tem certeza que deseja excluir permanentemente a filial "${branchToDelete?.name}"? Todos os revendedores associados também serão excluídos. Esta ação não pode ser desfeita.`}
         confirmText="Excluir"
         cancelText="Cancelar"
         variant="danger"

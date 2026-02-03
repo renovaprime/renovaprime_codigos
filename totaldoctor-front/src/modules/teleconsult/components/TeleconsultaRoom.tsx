@@ -31,6 +31,7 @@ export function TeleconsultaRoom({
   const peerRef = useRef<Peer | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const callRef = useRef<MediaConnection | null>(null);
+  const initializedRef = useRef(false);
 
   // Cleanup function
   const cleanup = useCallback(() => {
@@ -91,6 +92,9 @@ export function TeleconsultaRoom({
   // Inicializar WebRTC quando roomData estiver disponível
   useEffect(() => {
     if (!roomData) return;
+    if (initializedRef.current) return; // Guard: previne dupla inicialização
+
+    initializedRef.current = true;
 
     const initializeWebRTC = async () => {
       try {
@@ -284,8 +288,9 @@ export function TeleconsultaRoom({
     // Cleanup ao desmontar
     return () => {
       cleanup();
+      // NÃO resetar initializedRef - guard deve persistir para prevenir dupla inicialização no StrictMode
     };
-  }, [roomData, role, cleanup, onError]);
+  }, [roomData, role]); // cleanup e onError são estáveis, não precisam estar nas deps
 
   // Handle beforeunload para médico
   useEffect(() => {

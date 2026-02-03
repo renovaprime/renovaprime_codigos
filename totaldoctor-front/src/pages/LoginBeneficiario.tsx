@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Lock, Mail, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import { ForgotPasswordModal } from '../components/ForgotPasswordModal';
 import { authService } from '../services/authService';
 import logoImage from '../assets/images/logo.png';
 
@@ -13,6 +14,7 @@ export function LoginBeneficiario() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   useEffect(() => {
     // Load saved credentials if remember me was enabled
@@ -68,7 +70,7 @@ export function LoginBeneficiario() {
 
   return (
     <div className="min-h-screen bg-background flex">
-      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-gradient-dark relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-primary-light/10 rounded-full blur-3xl" />
@@ -80,7 +82,7 @@ export function LoginBeneficiario() {
             <img 
               src={logoImage} 
               alt="TotalDoctor" 
-              className="h-12 w-auto"
+              className="h-40 w-auto"
             />
           </div>
 
@@ -90,13 +92,13 @@ export function LoginBeneficiario() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="font-sans text-4xl xl:text-5xl text-white leading-tight mb-6">
+              <h2 className="font-sans text-4xl xl:text-5xl text-gray-900 leading-tight mb-6">
                 Portal do{' '}
-                <span className="bg-gradient-to-r from-primary-light to-white bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary-light to-gray-900 bg-clip-text text-transparent">
                   Beneficiário
                 </span>
               </h2>
-              <p className="text-lg text-white/60 leading-relaxed">
+              <p className="text-lg text-gray-900/60 leading-relaxed">
                 Acesse sua área exclusiva para gerenciar suas consultas, 
                 visualizar receitas e atualizar seu perfil.
               </p>
@@ -110,28 +112,28 @@ export function LoginBeneficiario() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col"
             >
-              <span className="font-display text-3xl text-white">0k+</span>
-              <span className="text-sm text-white/50">Beneficiários</span>
+              <span className="font-display text-3xl text-gray-900">0k+</span>
+              <span className="text-sm text-gray-900/50">Beneficiários</span>
             </motion.div>
-            <div className="w-px h-12 bg-white/10" />
+            <div className="w-px h-12 bg-gray-900/10" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex flex-col"
             >
-              <span className="font-display text-3xl text-white">0k+</span>
-              <span className="text-sm text-white/50">Consultas/mes</span>
+              <span className="font-display text-3xl text-gray-900">0k+</span>
+              <span className="text-sm text-gray-900/50">Consultas/mes</span>
             </motion.div>
-            <div className="w-px h-12 bg-white/10" />
+            <div className="w-px h-12 bg-gray-900/10" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               className="flex flex-col"
             >
-              <span className="font-display text-3xl text-white">24/7</span>
-              <span className="text-sm text-white/50">Atendimento</span>
+                <span className="font-display text-3xl text-gray-900">24/7</span>
+              <span className="text-sm text-gray-900/50">Atendimento</span>
             </motion.div>
           </div>
         </div>
@@ -148,15 +150,15 @@ export function LoginBeneficiario() {
             <img 
               src={logoImage} 
               alt="TotalDoctor" 
-              className="h-10 w-auto"
+              className="h-40 w-auto"
             />
           </div>
 
           <div className="mb-10">
-            <h1 className="font-display text-3xl text-foreground mb-3">
+            <h1 className="font-display text-3xl text-gray-900 mb-3">
               Bem-vindo de volta
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-gray-900/60">
               Acesse sua conta de beneficiário para continuar.
             </p>
           </div>
@@ -170,7 +172,7 @@ export function LoginBeneficiario() {
             )}
 
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-900/60 pointer-events-none" />
               <Input
                 type="email"
                 placeholder="seu@email.com"
@@ -185,7 +187,7 @@ export function LoginBeneficiario() {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-900/60 pointer-events-none" />
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Sua senha"
@@ -200,7 +202,7 @@ export function LoginBeneficiario() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-900/60 hover:text-gray-900 transition-colors focus:outline-none"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -215,18 +217,19 @@ export function LoginBeneficiario() {
                 <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
                   rememberMe ? 'bg-primary' : 'bg-border'
                 }`}>
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out ${
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-gray-900 transition-transform duration-200 ease-in-out ${
                     rememberMe ? 'translate-x-6' : 'translate-x-1'
                   }`} />
                 </div>
-                <span className="text-sm text-muted-foreground">Lembrar-me</span>
+                <span className="text-sm text-gray-900/60">Lembrar-me</span>
               </div>
-              <a
-                href="#"
-                className="text-sm text-primary hover:text-primary-600 font-medium transition-colors"
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
+                className="text-sm text-gray-900 hover:text-gray-900 font-medium transition-colors"
               >
                 Esqueci minha senha
-              </a>
+              </button>
             </div>
 
             <Button
@@ -242,11 +245,11 @@ export function LoginBeneficiario() {
           </form>
 
           <div className="mt-8 pt-8 border-t border-border">
-            <p className="text-center text-sm text-muted-foreground">
+            <p className="text-center text-sm text-gray-900/60">
               Precisa de ajuda?{' '}
               <a
                 href="#"
-                className="text-primary hover:text-primary-600 font-medium transition-colors"
+                className="text-gray-900 hover:text-gray-900 font-medium transition-colors"
               >
                 Entre em contato com o suporte
               </a>
@@ -264,7 +267,7 @@ export function LoginBeneficiario() {
                 <Lock className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">Acesso seguro</p>
+                <p className="text-sm font-medium text-gray-900">Acesso seguro</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   Sua conexao esta protegida com criptografia de ponta a ponta.
                 </p>
@@ -273,6 +276,11 @@ export function LoginBeneficiario() {
           </motion.div>
         </motion.div>
       </div>
+
+      <ForgotPasswordModal
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+      />
     </div>
   );
 }

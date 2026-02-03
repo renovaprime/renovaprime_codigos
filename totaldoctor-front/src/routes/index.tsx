@@ -5,6 +5,8 @@ import {
   LoginProfissional,
   Dashboard,
   Parceiros,
+  Filiais,
+  Revendedores,
   MedicosAtivos,
   CadastroMedico,
   MedicosPendentes,
@@ -13,7 +15,6 @@ import {
   Especialidades,
   Relatorios,
   GestaoSite,
-  Configuracoes,
   Beneficiarios,
   AdminPerfil,
   ProfissionalDashboard,
@@ -52,6 +53,22 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
         <Parceiros />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/filiais',
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <Filiais />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/revendedores',
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <Revendedores />
       </ProtectedRoute>
     ),
   },
@@ -132,14 +149,6 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
         <GestaoSite />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/configuracoes',
-    element: (
-      <ProtectedRoute allowedRoles={['admin', 'medico', 'paciente']}>
-        <Configuracoes />
       </ProtectedRoute>
     ),
   },

@@ -15,3 +15,6 @@ export { BeneficiaryDetailsModal } from './BeneficiaryDetailsModal';
 export { ConsultaCard } from './ConsultaCard';
 export { CalendarioMensal } from './CalendarioMensal';
 export { AgendarConsultaModal } from './AgendarConsultaModal';
+export { PartnerFormModal } from './PartnerFormModal';
+export { BranchFormModal } from './BranchFormModal';
+export { ResellerFormModal } from './ResellerFormModal';

@@ -13,6 +13,8 @@ import {
   Settings,
   X,
   Handshake,
+  Building2,
+  UserPlus,
   LogOut,
   User,
 } from 'lucide-react';
@@ -27,6 +29,8 @@ const navigation = [
   { id: 'nav-admin-dashboard', name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { id: 'nav-admin-beneficiaries', name: 'Beneficiários', href: '/beneficiarios', icon: Users },
   { id: 'nav-admin-partners', name: 'Parceiros', href: '/parceiros', icon: Handshake },
+  { id: 'nav-admin-branches', name: 'Filiais', href: '/filiais', icon: Building2 },
+  { id: 'nav-admin-resellers', name: 'Revendedores', href: '/revendedores', icon: UserPlus },
   { id: 'nav-admin-professionals', name: 'Profissionais', href: '/profissionais', icon: UserCheck },
   { id: 'nav-admin-pending-requests', name: 'Solicitações Pendentes', href: '/solicitacoes-pendentes', icon: Clock },
   { id: 'nav-admin-appointments', name: 'Consultas', href: '/consultas', icon: Calendar },
@@ -34,7 +38,6 @@ const navigation = [
   { id: 'nav-admin-specialties', name: 'Especialidades', href: '/especialidades', icon: Stethoscope },
   { id: 'nav-admin-reports', name: 'Relatorios', href: '/relatorios', icon: BarChart3 },
   { id: 'nav-admin-site-management', name: 'Gestao do Site', href: '/gestao-site', icon: Globe },
-  { id: 'nav-admin-settings', name: 'Configuracoes', href: '/configuracoes', icon: Settings },
   { id: 'nav-admin-profile', name: 'Meu Perfil', href: '/admin/perfil', icon: User },
 ];
 
@@ -50,11 +53,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const sidebarContent = (
     <>
       <div className="flex items-center justify-between px-6 py-6 border-b border-border/50">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center w-full justify-center">
           <img 
             src={logoImage} 
             alt="TotalDoctor" 
-            className="h-10 w-auto"
+            className="h-16 w-auto"
           />
         </div>
         <button

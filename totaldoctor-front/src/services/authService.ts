@@ -67,6 +67,22 @@ class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    const response = await apiClient.post<ApiResponse<{ message: string }>>(
+      '/auth/forgot-password',
+      { email }
+    );
+    return response.data;
+  }
+
+  async resetPassword(email: string, code: string, newPassword: string): Promise<{ message: string }> {
+    const response = await apiClient.post<ApiResponse<{ message: string }>>(
+      '/auth/reset-password',
+      { email, code, newPassword }
+    );
+    return response.data;
+  }
 }
 
 export const authService = new AuthService();

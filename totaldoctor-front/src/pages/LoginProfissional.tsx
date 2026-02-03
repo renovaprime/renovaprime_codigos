@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Lock, Mail, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import { ForgotPasswordModal } from '../components/ForgotPasswordModal';
 import { authService } from '../services/authService';
 import logoImage from '../assets/images/logo.png';
 
@@ -13,6 +14,7 @@ export function LoginProfissional() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   useEffect(() => {
     // Load saved credentials if remember me was enabled
@@ -63,7 +65,7 @@ export function LoginProfissional() {
 
   return (
     <div className="min-h-screen bg-background flex">
-      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-gradient-dark relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-primary-light/10 rounded-full blur-3xl" />
@@ -75,7 +77,7 @@ export function LoginProfissional() {
             <img 
               src={logoImage} 
               alt="TotalDoctor" 
-              className="h-12 w-auto"
+              className="h-40 w-auto"
             />
           </div>
 
@@ -85,13 +87,13 @@ export function LoginProfissional() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="font-sans text-4xl xl:text-5xl text-white leading-tight mb-6">
+              <h2 className="font-sans text-4xl xl:text-5xl text-gray-900 leading-tight mb-6">
                 Portal do{' '}
-                <span className="bg-gradient-to-r from-primary-light to-white bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary-light to-gray-900 bg-clip-text text-transparent">
                   Profissional
                 </span>
               </h2>
-              <p className="text-lg text-white/60 leading-relaxed">
+              <p className="text-lg text-gray-900/60 leading-relaxed">
                 Acesse sua área exclusiva para gerenciar suas consultas, 
                 disponibilidade, receitas e histórico de atendimentos.
               </p>
@@ -105,28 +107,28 @@ export function LoginProfissional() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col"
             >
-              <span className="font-display text-3xl text-white">0k+</span>
-              <span className="text-sm text-white/50">Profissionais</span>
+              <span className="font-display text-3xl text-gray-900">0k+</span>
+              <span className="text-sm text-gray-900/50">Profissionais</span>
             </motion.div>
-            <div className="w-px h-12 bg-white/10" />
+            <div className="w-px h-12 bg-gray-900/10" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex flex-col"
             >
-              <span className="font-display text-3xl text-white">0k+</span>
-              <span className="text-sm text-white/50">Consultas/mes</span>
+              <span className="font-display text-3xl text-gray-900">0k+</span>
+              <span className="text-sm text-gray-900/50">Consultas/mes</span>
             </motion.div>
-            <div className="w-px h-12 bg-white/10" />
+            <div className="w-px h-12 bg-gray-900/10" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               className="flex flex-col"
             >
-              <span className="font-display text-3xl text-white">24/7</span>
-              <span className="text-sm text-white/50">Suporte</span>
+                <span className="font-display text-3xl text-gray-900">24/7</span>
+              <span className="text-sm text-gray-900/50">Suporte</span>
             </motion.div>
           </div>
         </div>
@@ -216,12 +218,13 @@ export function LoginProfissional() {
                 </div>
                 <span className="text-sm text-muted-foreground">Lembrar-me</span>
               </div>
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
                 className="text-sm text-primary hover:text-primary-600 font-medium transition-colors"
               >
                 Esqueci minha senha
-              </a>
+              </button>
             </div>
 
             <Button
@@ -268,6 +271,11 @@ export function LoginProfissional() {
           </motion.div>
         </motion.div>
       </div>
+
+      <ForgotPasswordModal
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+      />
     </div>
   );
 }

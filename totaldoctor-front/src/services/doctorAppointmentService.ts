@@ -1,5 +1,5 @@
 import { apiClient } from './api';
-import type { ApiResponse, Appointment } from '../types/api';
+import type { ApiResponse, Appointment, DoctorDashboard } from '../types/api';
 
 export interface DoctorAppointmentFilters {
   date?: string;
@@ -9,6 +9,11 @@ export interface DoctorAppointmentFilters {
 }
 
 class DoctorAppointmentService {
+  async getDashboard(): Promise<DoctorDashboard> {
+    const response = await apiClient.get<ApiResponse<DoctorDashboard>>('/doctors/dashboard');
+    return response.data;
+  }
+
   async listMyAppointments(filters: DoctorAppointmentFilters = {}): Promise<Appointment[]> {
     const params = new URLSearchParams();
 

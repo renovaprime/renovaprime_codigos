@@ -2,6 +2,8 @@ export { Login } from './Login';
 export { LoginProfissional } from './LoginProfissional';
 export { Dashboard } from './Dashboard';
 export { Parceiros } from './Parceiros';
+export { Filiais } from './Filiais';
+export { Revendedores } from './Revendedores';
 export { MedicosAtivos } from './MedicosAtivos';
 export { CadastroMedico } from './CadastroMedico';
 export { MedicosPendentes } from './MedicosPendentes';
@@ -10,7 +12,6 @@ export { Historico } from './Historico';
 export { Especialidades } from './Especialidades';
 export { Relatorios } from './Relatorios';
 export { GestaoSite } from './GestaoSite';
-export { Configuracoes } from './Configuracoes';
 export { Beneficiarios } from './Beneficiarios';
 export { AdminPerfil } from './AdminPerfil';
 
