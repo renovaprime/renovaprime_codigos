@@ -2,6 +2,15 @@ const adminService = require('../services/adminService');
 const { successResponse, errorResponse } = require('../utils/response');
 
 class AdminController {
+  async getDashboard(req, res, next) {
+    try {
+      const dashboard = await adminService.getDashboard();
+      return res.json(successResponse(dashboard));
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async listPendingDoctors(req, res, next) {
     try {
       const doctors = await adminService.listPendingDoctors();

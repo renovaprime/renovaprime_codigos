@@ -27,7 +27,6 @@ const SCREEN_PERMISSIONS = {
     dashboard: ['ADMIN', 'MEDICO', 'PACIENTE'],
     consultas: ['ADMIN', 'MEDICO', 'PACIENTE'],
     historico: ['ADMIN', 'MEDICO', 'PACIENTE'],
-    configuracoes: ['ADMIN', 'MEDICO', 'PACIENTE'],
   },
 
   // Telas específicas de médico

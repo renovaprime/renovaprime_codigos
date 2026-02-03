@@ -9,6 +9,13 @@ const { createDoctorSchema, updateDoctorSchema } = require('../validators/adminD
 const { createBeneficiarySchema, updateBeneficiarySchema } = require('../validators/beneficiaryValidator');
 
 router.get(
+  '/dashboard',
+  authMiddleware,
+  permissionMiddleware('admin'),
+  adminController.getDashboard
+);
+
+router.get(
   '/doctors/pending',
   authMiddleware,
   permissionMiddleware('admin'),

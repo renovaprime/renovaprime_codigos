@@ -93,6 +93,15 @@ class DoctorController {
     }
   }
 
+  async getDashboard(req, res, next) {
+    try {
+      const dashboard = await doctorService.getDashboard(req.doctor.id);
+      return res.json(successResponse(dashboard));
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async listAppointmentsHistory(req, res, next) {
     try {
       const filters = {

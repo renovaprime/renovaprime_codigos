@@ -11,6 +11,10 @@ const TeleconsultRoom = require('./TeleconsultRoom');
 const Prescription = require('./Prescription');
 const AppointmentLog = require('./AppointmentLog');
 const Beneficiary = require('./Beneficiary');
+const Partner = require('./Partner');
+const PartnerBranch = require('./PartnerBranch');
+const Reseller = require('./Reseller');
+const PasswordResetToken = require('./PasswordResetToken');
 
 Role.hasMany(User, { foreignKey: 'role_id' });
 User.belongsTo(Role, { foreignKey: 'role_id' });
@@ -63,6 +67,17 @@ Appointment.belongsTo(Beneficiary, { foreignKey: 'beneficiary_id' });
 User.hasMany(Beneficiary, { foreignKey: 'created_by' });
 Beneficiary.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
 
+// Partner relationships
+Partner.hasMany(PartnerBranch, { foreignKey: 'partner_id', as: 'branches' });
+PartnerBranch.belongsTo(Partner, { foreignKey: 'partner_id' });
+
+PartnerBranch.hasMany(Reseller, { foreignKey: 'branch_id', as: 'resellers' });
+Reseller.belongsTo(PartnerBranch, { foreignKey: 'branch_id' });
+
+// Password reset tokens
+User.hasMany(PasswordResetToken, { foreignKey: 'user_id' });
+PasswordResetToken.belongsTo(User, { foreignKey: 'user_id' });
+
 module.exports = {
   Role,
   User,
@@ -76,5 +91,9 @@ module.exports = {
   TeleconsultRoom,
   Prescription,
   AppointmentLog,
-  Beneficiary
+  Beneficiary,
+  Partner,
+  PartnerBranch,
+  Reseller,
+  PasswordResetToken
 };

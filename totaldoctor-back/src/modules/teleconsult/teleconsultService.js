@@ -15,6 +15,7 @@ class TeleconsultService {
   /**
    * Registra o peer ID do médico quando ele conecta
    * Salva no campo doctor_link da TeleconsultRoom
+   * Idempotente: se já registrado, retorna sucesso sem erro
    */
   async registerDoctorPeerId(appointmentId, peerId, userId) {
     const doctor = await Doctor.findOne({ where: { user_id: userId } });
@@ -27,14 +28,20 @@ class TeleconsultService {
       throw new Error('Access denied');
     }
 
-    // Atualizar ou criar TeleconsultRoom com o peer ID do médico
+    // Buscar ou criar TeleconsultRoom
     let teleconsultRoom = await TeleconsultRoom.findOne({
       where: { appointment_id: appointmentId }
     });
 
     if (teleconsultRoom) {
+      // Se já existe e já tem doctor_link, operação idempotente - retornar sucesso
+      if (teleconsultRoom.doctor_link) {
+        return { ok: true, message: 'Peer ID already registered' };
+      }
+      // Caso contrário, atualizar com o novo peer ID
       await teleconsultRoom.update({ doctor_link: peerId });
     } else {
+      // Criar novo registro
       teleconsultRoom = await TeleconsultRoom.create({
         appointment_id: appointmentId,
         room_name: `room-${appointmentId}`,

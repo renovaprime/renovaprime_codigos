@@ -1201,6 +1201,60 @@ class AdminService {
 
     return { message: 'Beneficiary deleted successfully' };
   }
+
+  async getDashboard() {
+    const { QueryTypes } = require('sequelize');
+
+    const [dashboardData] = await sequelize.query(
+      'SELECT * FROM vw_admin_dashboard',
+      { type: QueryTypes.SELECT }
+    );
+
+    if (!dashboardData) {
+      return {
+        users: { active: 0, pending: 0, blocked: 0 },
+        doctors: { total: 0, approved: 0, pending: 0 },
+        beneficiaries: { active: 0, inactive: 0 },
+        appointmentsToday: { total: 0, scheduled: 0, inProgress: 0, finished: 0 },
+        appointments: { total: 0, scheduled: 0, inProgress: 0, finished: 0, canceled: 0 },
+        teleconsults: { active: 0, finished: 0 }
+      };
+    }
+
+    return {
+      users: {
+        active: parseInt(dashboardData.users_active) || 0,
+        pending: parseInt(dashboardData.users_pending) || 0,
+        blocked: parseInt(dashboardData.users_blocked) || 0
+      },
+      doctors: {
+        total: parseInt(dashboardData.doctors_total) || 0,
+        approved: parseInt(dashboardData.doctors_approved) || 0,
+        pending: parseInt(dashboardData.doctors_pending) || 0
+      },
+      beneficiaries: {
+        active: parseInt(dashboardData.beneficiaries_active) || 0,
+        inactive: parseInt(dashboardData.beneficiaries_inactive) || 0
+      },
+      appointmentsToday: {
+        total: parseInt(dashboardData.appointments_today_total) || 0,
+        scheduled: parseInt(dashboardData.appointments_today_scheduled) || 0,
+        inProgress: parseInt(dashboardData.appointments_today_in_progress) || 0,
+        finished: parseInt(dashboardData.appointments_today_finished) || 0
+      },
+      appointments: {
+        total: parseInt(dashboardData.appointments_total) || 0,
+        scheduled: parseInt(dashboardData.appointments_scheduled) || 0,
+        inProgress: parseInt(dashboardData.appointments_in_progress) || 0,
+        finished: parseInt(dashboardData.appointments_finished) || 0,
+        canceled: parseInt(dashboardData.appointments_canceled) || 0
+      },
+      teleconsults: {
+        active: parseInt(dashboardData.teleconsults_active) || 0,
+        finished: parseInt(dashboardData.teleconsults_finished) || 0
+      }
+    };
+  }
 }
 
 module.exports = new AdminService();

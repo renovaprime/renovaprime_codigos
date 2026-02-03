@@ -212,6 +212,113 @@ class DoctorService {
     });
   }
 
+  async getDashboard(doctorId) {
+    const { QueryTypes } = require('sequelize');
+    const { Beneficiary, TeleconsultRoom } = require('../models');
+
+    // Busca dados da view do dashboard
+    const [dashboardData] = await sequelize.query(
+      'SELECT * FROM vw_doctor_dashboard WHERE doctor_id = :doctorId',
+      {
+        replacements: { doctorId },
+        type: QueryTypes.SELECT
+      }
+    );
+
+    if (!dashboardData) {
+      return {
+        today: {
+          total: 0,
+          scheduled: 0,
+          inProgress: 0,
+          finished: 0
+        },
+        currentAppointment: null,
+        nextAppointment: null
+      };
+    }
+
+    let currentAppointment = null;
+    let nextAppointment = null;
+
+    // Busca detalhes da consulta em andamento
+    if (dashboardData.current_appointment_id) {
+      currentAppointment = await Appointment.findByPk(dashboardData.current_appointment_id, {
+        include: [
+          { model: Beneficiary, attributes: ['id', 'name', 'cpf', 'phone'] },
+          { model: Specialty, attributes: ['id', 'name'] },
+          { model: TeleconsultRoom }
+        ]
+      });
+    }
+
+    // Busca detalhes da próxima consulta
+    if (dashboardData.next_appointment_id) {
+      nextAppointment = await Appointment.findByPk(dashboardData.next_appointment_id, {
+        include: [
+          { model: Beneficiary, attributes: ['id', 'name', 'cpf', 'phone'] },
+          { model: Specialty, attributes: ['id', 'name'] },
+          { model: TeleconsultRoom }
+        ]
+      });
+    }
+
+    return {
+      today: {
+        total: parseInt(dashboardData.today_total) || 0,
+        scheduled: parseInt(dashboardData.today_scheduled) || 0,
+        inProgress: parseInt(dashboardData.today_in_progress) || 0,
+        finished: parseInt(dashboardData.today_finished) || 0
+      },
+      currentAppointment: currentAppointment ? {
+        id: currentAppointment.id,
+        date: currentAppointment.date,
+        startTime: currentAppointment.start_time,
+        endTime: currentAppointment.end_time,
+        type: currentAppointment.type,
+        status: currentAppointment.status,
+        beneficiary: currentAppointment.Beneficiary ? {
+          id: currentAppointment.Beneficiary.id,
+          name: currentAppointment.Beneficiary.name,
+          cpf: currentAppointment.Beneficiary.cpf,
+          phone: currentAppointment.Beneficiary.phone
+        } : null,
+        specialty: currentAppointment.Specialty ? {
+          id: currentAppointment.Specialty.id,
+          name: currentAppointment.Specialty.name
+        } : null,
+        teleconsultRoom: currentAppointment.TeleconsultRoom ? {
+          id: currentAppointment.TeleconsultRoom.id,
+          roomName: currentAppointment.TeleconsultRoom.room_name,
+          doctorLink: currentAppointment.TeleconsultRoom.doctor_link
+        } : null
+      } : null,
+      nextAppointment: nextAppointment ? {
+        id: nextAppointment.id,
+        date: nextAppointment.date,
+        startTime: nextAppointment.start_time,
+        endTime: nextAppointment.end_time,
+        type: nextAppointment.type,
+        status: nextAppointment.status,
+        beneficiary: nextAppointment.Beneficiary ? {
+          id: nextAppointment.Beneficiary.id,
+          name: nextAppointment.Beneficiary.name,
+          cpf: nextAppointment.Beneficiary.cpf,
+          phone: nextAppointment.Beneficiary.phone
+        } : null,
+        specialty: nextAppointment.Specialty ? {
+          id: nextAppointment.Specialty.id,
+          name: nextAppointment.Specialty.name
+        } : null,
+        teleconsultRoom: nextAppointment.TeleconsultRoom ? {
+          id: nextAppointment.TeleconsultRoom.id,
+          roomName: nextAppointment.TeleconsultRoom.room_name,
+          doctorLink: nextAppointment.TeleconsultRoom.doctor_link
+        } : null
+      } : null
+    };
+  }
+
   async listAppointmentsHistory(doctorId, filters = {}) {
     const { Op } = require('sequelize');
     const { Beneficiary } = require('../models');

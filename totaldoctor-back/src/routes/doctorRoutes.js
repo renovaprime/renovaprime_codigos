@@ -9,6 +9,15 @@ const { registerDoctorSchema, configureScheduleSchema, scheduleBlockSchema } = r
 
 router.post('/register', validate(registerDoctorSchema), doctorController.register);
 
+// Dashboard route
+router.get(
+  '/dashboard',
+  authMiddleware,
+  permissionMiddleware('medico'),
+  doctorApprovedMiddleware,
+  doctorController.getDashboard
+);
+
 // Schedules routes
 router.get(
   '/schedules',
