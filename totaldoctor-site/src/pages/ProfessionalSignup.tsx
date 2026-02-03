@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, X, Check, Loader2, ExternalLink, Stethoscope, FileText, Award, Shield, CheckCircle2 } from 'lucide-react';
+import { Upload, X, Check, Loader2, ExternalLink, Stethoscope, FileText, Award, Shield, CheckCircle2, Download, AlertCircle } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 import { siteConfig } from '../config/content';
 import { 
   professionalService, 
@@ -89,6 +90,29 @@ export default function ProfessionalSignup() {
     } catch (err) {
       setError('Erro ao carregar especialidades');
     }
+  };
+
+  // Verifica se os dados profissionais estao completos
+  const isDadosComplete = (): boolean => {
+    return !!(
+      formData.name &&
+      formData.email &&
+      formData.phone &&
+      formData.profession &&
+      formData.registry_type &&
+      formData.registry_number &&
+      formData.registry_uf &&
+      formData.specialty_ids.length > 0
+    );
+  };
+
+  const handleTabChange = (tab: 'dados' | 'documentos') => {
+    if (tab === 'documentos' && !isDadosComplete()) {
+      setError('Preencha todos os dados profissionais antes de continuar para os documentos.');
+      return;
+    }
+    setError(null);
+    setActiveTab(tab);
   };
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>, documentType: DocumentType) => {
@@ -189,10 +213,10 @@ export default function ProfessionalSignup() {
     try {
       await professionalService.createProfessional(formData);
       setSuccessMessage('Cadastro enviado com sucesso! Você receberá um email quando for aprovado.');
-      
+
       // Scroll to top to show success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      
+
       setTimeout(() => navigate('/'), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao enviar cadastro');
@@ -200,6 +224,137 @@ export default function ProfessionalSignup() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const generateAcceptanceTermPDF = () => {
+    const doc = new jsPDF('p', 'pt', 'a4');
+
+    const name = formData.name || '[NOME DO PROFISSIONAL]';
+    const registryNumber = formData.registry_number || '[NUMERO DO REGISTRO]';
+    const registryType = formData.registry_type || 'CRM';
+
+    const pdfContent = [
+      {
+        text: 'TERMO DE ACEITE E CONTRATO DE PRESTACAO DE SERVICOS MEDICOS',
+        bold: true,
+      },
+      { text: 'PARTES:', bold: true },
+      {
+        text: `De um lado, ${siteConfig.name.toUpperCase()}, pessoa juridica de direito privado, doravante denominada CONTRATANTE.`,
+        bold: false,
+      },
+      {
+        text: `De outro lado, o PROFISSIONAL PARCEIRO ${name}, profissional autonomo, registrado no ${registryType} sob o numero ${registryNumber}, doravante denominado "CONTRATADO".`,
+        bold: false,
+      },
+      {
+        text: 'As partes resolvem firmar o presente Termo de Aceite e Contrato de Prestacao de Servicos, mediante as seguintes clausulas e condicoes:',
+        bold: false,
+      },
+      { text: 'CLAUSULA PRIMEIRA - OBJETO', bold: true },
+      {
+        text: '1.1. O presente contrato tem por objeto a prestacao de servicos pelo CONTRATADO, por meio da plataforma de telemedicina da CONTRATANTE, consistindo na realizacao de atendimentos online, conforme regulamentacao vigente do Conselho Federal de Medicina (CFM) e demais normas aplicaveis.',
+        bold: false,
+      },
+      {
+        text: 'CLAUSULA SEGUNDA - RESPONSABILIDADES DAS PARTES',
+        bold: true,
+      },
+      {
+        text: '2.1. O CONTRATADO se compromete a: (a) Realizar atendimentos com zelo, diligencia e dentro dos padroes eticos da profissao; (b) Cumprir as normas do CFM e legislacao vigente sobre telemedicina; (c) Manter sigilo absoluto sobre as informacoes obtidas durante as consultas; (d) Garantir a atualizacao de suas credenciais e documentacao profissional.',
+        bold: false,
+      },
+      {
+        text: '2.2. A CONTRATANTE se compromete a: (a) Disponibilizar a infraestrutura tecnologica necessaria para a realizacao dos atendimentos; (b) Garantir a seguranca e privacidade dos dados compartilhados na plataforma; (c) Efetuar o pagamento dos valores acordados, conforme estipulado na Clausula Quinta.',
+        bold: false,
+      },
+      { text: 'CLAUSULA TERCEIRA - REGULAMENTACAO E SIGILO', bold: true },
+      {
+        text: '3.1. O CONTRATADO devera cumprir rigorosamente todas as normas eticas e regulatorias estabelecidas pelo CFM e demais orgaos competentes.',
+        bold: false,
+      },
+      {
+        text: '3.2. O CONTRATADO declara estar ciente de que todas as informacoes compartilhadas durante os atendimentos sao sigilosas e protegidas pela Lei Geral de Protecao de Dados Pessoais (LGPD).',
+        bold: false,
+      },
+      { text: 'CLAUSULA QUARTA - VIGENCIA E RESCISAO', bold: true },
+      {
+        text: '4.1. O presente contrato tem vigencia por prazo indeterminado, podendo ser rescindido por qualquer das partes mediante aviso previo de 30 (trinta) dias.',
+        bold: false,
+      },
+      {
+        text: '4.2. A CONTRATANTE podera rescindir o contrato, a qualquer tempo, caso o CONTRATADO descumpra suas obrigacoes contratuais ou eticas.',
+        bold: false,
+      },
+      { text: 'CLAUSULA QUINTA - REMUNERACAO E REPASSE', bold: true },
+      {
+        text: '5.1. O CONTRATADO recebera da CONTRATANTE a titulo de repasse pelos atendimentos realizados o valor de 37% do valor da consulta, ou sob demanda avulsa de consulta, conforme periodicidade e condicoes estabelecidas pela CONTRATANTE.',
+        bold: false,
+      },
+      {
+        text: '5.2. O pagamento sera realizado por meio de RPA, ate o Quinto dia do mes subsequente aos atendimentos prestados.',
+        bold: false,
+      },
+      { text: 'CLAUSULA SEXTA - DISPOSICOES GERAIS', bold: true },
+      {
+        text: '6.1. O presente contrato nao caracteriza vinculo empregaticio entre as partes, sendo o CONTRATADO responsavel por suas obrigacoes fiscais e previdenciarias.',
+        bold: false,
+      },
+      {
+        text: '6.2. As partes elegem o foro da Comarca de Sao Paulo - SP, com renuncia a qualquer outro, por mais privilegiado que seja, para dirimir quaisquer duvidas ou litigios oriundos do presente contrato.',
+        bold: false,
+      },
+      {
+        text: 'Por estar de acordo com as condicoes aqui estabelecidas, o CONTRATADO manifesta seu aceite eletronicamente por meio da plataforma.',
+        bold: false,
+      },
+      { text: '', bold: false },
+      { text: '[ ] LI E ACEITO OS TERMOS DO CONTRATO', bold: true },
+      { text: '', bold: false },
+      { text: `Data: ____/____/________`, bold: false },
+      { text: '', bold: false },
+      { text: `Assinatura: _________________________________`, bold: false },
+      { text: `Nome: ${name}`, bold: false },
+      { text: `${registryType}: ${registryNumber}`, bold: false },
+    ];
+
+    // Set initial font settings and starting Y position
+    doc.setFontSize(12);
+    let y = 60;
+    const lineSpacing = 18;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const marginLeft = 40;
+    const maxWidth = pageWidth - marginLeft * 2;
+
+    // Add title/header
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(siteConfig.name.toUpperCase(), pageWidth / 2, 30, { align: 'center' });
+    doc.setFontSize(12);
+
+    // Loop through each content object and add text to the PDF
+    pdfContent.forEach((item) => {
+      if (item.bold) {
+        doc.setFont('helvetica', 'bold');
+      } else {
+        doc.setFont('helvetica', 'normal');
+      }
+
+      const lines = doc.splitTextToSize(item.text, maxWidth);
+
+      lines.forEach((line: string) => {
+        if (y > 780) {
+          doc.addPage();
+          y = 40;
+        }
+        doc.text(line, marginLeft, y);
+        y += lineSpacing;
+      });
+
+      y += lineSpacing / 2;
+    });
+
+    doc.save('termo-de-aceite.pdf');
   };
 
   return (
@@ -299,35 +454,43 @@ export default function ProfessionalSignup() {
             <div className="bg-white rounded-2xl shadow-lg mb-8 overflow-hidden border border-gray-100">
               <div className="flex border-b border-gray-200">
                 <button
-                  onClick={() => setActiveTab('dados')}
+                  onClick={() => handleTabChange('dados')}
                   className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 ${
                     activeTab === 'dados'
                       ? 'text-white relative'
                       : 'text-gray-600 hover:bg-gray-50'
                   }`}
-                  style={activeTab === 'dados' ? { 
+                  style={activeTab === 'dados' ? {
                     backgroundColor: siteConfig.colors.primary
                   } : {}}
                 >
                   <span className="flex items-center justify-center gap-2">
                     <Stethoscope className="w-5 h-5" />
                     Dados Profissionais
+                    {isDadosComplete() && <Check className="w-4 h-4" />}
                   </span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('documentos')}
+                  onClick={() => handleTabChange('documentos')}
                   className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 ${
                     activeTab === 'documentos'
                       ? 'text-white relative'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      : !isDadosComplete()
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-gray-600 hover:bg-gray-50'
                   }`}
-                  style={activeTab === 'documentos' ? { 
+                  style={activeTab === 'documentos' ? {
                     backgroundColor: siteConfig.colors.primary
                   } : {}}
                 >
                   <span className="flex items-center justify-center gap-2">
                     <FileText className="w-5 h-5" />
                     Documentos
+                    {!isDadosComplete() && (
+                      <span className="text-xs bg-gray-200 text-gray-500 px-2 py-0.5 rounded-full">
+                        Bloqueado
+                      </span>
+                    )}
                   </span>
                 </button>
               </div>
@@ -550,6 +713,24 @@ export default function ProfessionalSignup() {
                     </div>
                   </div>
                 </div>
+
+                {/* Botao Continuar */}
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => handleTabChange('documentos')}
+                    disabled={!isDadosComplete()}
+                    className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
+                      isDadosComplete()
+                        ? 'text-white hover:shadow-lg'
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+                    style={isDadosComplete() ? { backgroundColor: siteConfig.colors.cta } : {}}
+                  >
+                    Continuar para Documentos
+                    <FileText className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             )}
 
@@ -597,6 +778,40 @@ export default function ProfessionalSignup() {
                     primaryColor={siteConfig.colors.primary}
                     secondaryColor={siteConfig.colors.secondary}
                   />
+
+                  {/* Termo de Aceite Section */}
+                  <div
+                    className="p-6 rounded-xl border-2"
+                    style={{
+                      backgroundColor: `${siteConfig.colors.cta}10`,
+                      borderColor: `${siteConfig.colors.cta}40`
+                    }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: `${siteConfig.colors.cta}20` }}
+                      >
+                        <AlertCircle className="w-6 h-6" style={{ color: siteConfig.colors.cta }} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-gray-900 mb-2">Termo de Aceite</h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Antes de finalizar o cadastro, baixe o Termo de Aceite, leia atentamente,
+                          assine e faca o upload do documento assinado no campo abaixo.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={generateAcceptanceTermPDF}
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold transition-all duration-300 hover:shadow-lg"
+                          style={{ backgroundColor: siteConfig.colors.cta }}
+                        >
+                          <Download className="w-5 h-5" />
+                          Baixar Termo de Aceite
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
                   <DocumentUpload
                     label="Termo de aceite assinado"

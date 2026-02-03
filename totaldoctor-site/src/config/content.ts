@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'TotalDoctor',
+  name: 'RenovaPrime',
   tagline: 'Telemedicina completa para você e sua família',
   description: 'Atendimento médico 24h por telemedicina com clínico geral, especialistas, psicólogos e nutricionistas.',
 
@@ -12,15 +12,15 @@ export const siteConfig = {
 
   contact: {
     phone: '(11) 98765-4321',
-    email: 'contato@totaldoctor.com.br',
+    email: 'contato@renovaprime.com.br',
     whatsapp: '5511987654321',
     address: 'São Paulo, SP',
   },
 
   social: {
-    facebook: 'https://facebook.com/totaldoctor',
-    instagram: 'https://instagram.com/totaldoctor',
-    tiktok: 'https://tiktok.com/@totaldoctor',
+    facebook: 'https://facebook.com/renovaprime',
+    instagram: 'https://instagram.com/renovaprime',
+    tiktok: 'https://tiktok.com/@renovaprime',
   },
 };
 

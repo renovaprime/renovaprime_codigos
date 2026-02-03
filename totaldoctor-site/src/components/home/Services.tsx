@@ -58,7 +58,7 @@ export default function Services() {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src="/assets/placeholder-app.png"
-                alt="Aplicativo TotalDoctor"
+                alt="Aplicativo RenovaPrime"
                 className="w-full h-auto object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';

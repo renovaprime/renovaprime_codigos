@@ -3,6 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { siteConfig } from '../../config/content';
 import Button from '../Button';
 
+const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.renovaprime.com.br';
+
 export default function FinalCTA() {
   return (
     <section className="py-20 md:py-28 bg-gradient-to-br from-blue-50 to-teal-50">
@@ -35,7 +37,7 @@ export default function FinalCTA() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/login/paciente">
+              <a href={`${APP_URL}/beneficiario/login`}>
                 <Button
                   size="lg"
                   variant="outline"
@@ -48,7 +50,7 @@ export default function FinalCTA() {
                 >
                   Já sou cliente
                 </Button>
-              </Link>
+              </a>
             </div>
             <p className="text-sm text-blue-100 mt-6">
               ✓ Sem fidelidade • ✓ Cancele quando quiser • ✓ Suporte 24/7

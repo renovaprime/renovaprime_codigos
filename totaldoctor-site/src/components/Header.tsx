@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, User, Stethoscope } from 'lucide-react';
+import { Menu, X, ChevronDown, User, Stethoscope, Settings } from 'lucide-react';
 import { siteConfig } from '../config/content';
+
+const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.renovaprime.com.br';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -98,7 +100,7 @@ export default function Header() {
             <img 
               src="/assets/logo.png" 
               alt={siteConfig.name}
-              className="h-9 w-auto"
+              className="h-12 w-auto"
             />
           </Link>
 
@@ -139,8 +141,8 @@ export default function Header() {
           </div>
 
           <div className="hidden lg:flex items-center space-x-2">
-            <Link
-              to="/login/paciente"
+            <a
+              href={`${APP_URL}/beneficiario/login`}
               className="group relative px-5 py-2 rounded-lg text-white font-semibold text-sm transition-all duration-300 hover:shadow-lg overflow-hidden"
               style={{ backgroundColor: siteConfig.colors.cta }}
             >
@@ -152,7 +154,7 @@ export default function Header() {
                 className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
                 style={{ backgroundColor: 'white' }}
               />
-            </Link>
+            </a>
 
             <div className="relative" ref={dropdownRef}>
               <button
@@ -185,8 +187,8 @@ export default function Header() {
                       Área Profissional
                     </p>
                   </div>
-                  <Link
-                    to="/login/profissional"
+                  <a
+                    href={`${APP_URL}/profissional/login`}
                     className="group flex items-center gap-2.5 px-3 py-2.5 text-gray-700 hover:bg-gray-50 transition-all duration-200"
                     onClick={() => setLoginDropdownOpen(false)}
                     onMouseEnter={(e) => {
@@ -200,15 +202,15 @@ export default function Header() {
                       className="w-8 h-8 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: `${siteConfig.colors.secondary}20` }}
                     >
-                      <User className="w-4 h-4" style={{ color: siteConfig.colors.secondary }} />
+                      <Stethoscope className="w-4 h-4" style={{ color: siteConfig.colors.secondary }} />
                     </div>
                     <div>
                       <p className="font-semibold text-sm text-gray-900">Profissional</p>
                       <p className="text-xs text-gray-500">Acesso geral</p>
                     </div>
-                  </Link>
-                  <Link
-                    to="/login/medico"
+                  </a>
+                  <a
+                    href={`${APP_URL}/login`}
                     className="group flex items-center gap-2.5 px-3 py-2.5 text-gray-700 hover:bg-gray-50 transition-all duration-200"
                     onClick={() => setLoginDropdownOpen(false)}
                     onMouseEnter={(e) => {
@@ -222,13 +224,13 @@ export default function Header() {
                       className="w-8 h-8 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: `${siteConfig.colors.primary}20` }}
                     >
-                      <Stethoscope className="w-4 h-4" style={{ color: siteConfig.colors.primary }} />
+                      <Settings className="w-4 h-4" style={{ color: siteConfig.colors.primary }} />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm text-gray-900">Médico</p>
-                      <p className="text-xs text-gray-500">Área médica</p>
+                      <p className="font-semibold text-sm text-gray-900">Administração</p>
+                      <p className="text-xs text-gray-500">Área administrativa</p>
                     </div>
-                  </Link>
+                  </a>
                 </div>
               )}
             </div>
@@ -271,19 +273,19 @@ export default function Header() {
               ))}
 
               <div className="pt-4 mt-3 space-y-2.5 border-t border-gray-100">
-                <Link
-                  to="/login/paciente"
+                <a
+                  href={`${APP_URL}/beneficiario/login`}
                   className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white font-semibold text-sm text-center shadow-lg"
                   style={{ backgroundColor: siteConfig.colors.cta }}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <User className="w-4 h-4" />
                   Acessar
-                </Link>
+                </a>
                 
                 <div className="grid grid-cols-2 gap-2">
-                  <Link
-                    to="/login/profissional"
+                  <a
+                    href={`${APP_URL}/profissional/login`}
                     className="flex flex-col items-center gap-1.5 px-3 py-2.5 rounded-lg text-center font-medium border-2 transition-all"
                     style={{ 
                       borderColor: `${siteConfig.colors.secondary}40`,
@@ -293,9 +295,9 @@ export default function Header() {
                   >
                     <User className="w-4 h-4" />
                     <span className="text-xs">Profissional</span>
-                  </Link>
-                  <Link
-                    to="/login/medico"
+                  </a>
+                  <a
+                    href={`${APP_URL}/profissional/login`}
                     className="flex flex-col items-center gap-1.5 px-3 py-2.5 rounded-lg text-center font-medium border-2 transition-all"
                     style={{ 
                       borderColor: `${siteConfig.colors.primary}40`,
@@ -305,7 +307,7 @@ export default function Header() {
                   >
                     <Stethoscope className="w-4 h-4" />
                     <span className="text-xs">Médico</span>
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

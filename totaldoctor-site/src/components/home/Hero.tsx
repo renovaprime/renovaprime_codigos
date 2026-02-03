@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { siteConfig } from '../../config/content';
 import Button from '../Button';
 
+const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.renovaprime.com.br';
+
 export default function Hero() {
   return (
     <section id="hero" className="relative py-16 md:py-24" style={{ backgroundColor: siteConfig.colors.background }}>
@@ -36,11 +38,11 @@ export default function Hero() {
                 </Button>
               </Link>
 
-              <Link to="/login/paciente">
+              <a href={`${APP_URL}/beneficiario/login`}>
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   Entrar como paciente
                 </Button>
-              </Link>
+              </a>
             </div>
 
             <div className="flex items-center gap-8 pt-6">

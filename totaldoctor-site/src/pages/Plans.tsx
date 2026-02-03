@@ -114,7 +114,7 @@ export default function Plans() {
                 className="text-3xl font-bold mb-6"
                 style={{ color: siteConfig.colors.primary }}
               >
-                Por Que Escolher a TotalDoctor?
+                Por Que Escolher a RenovaPrime?
               </h2>
               <div className="space-y-6">
                 <Card>

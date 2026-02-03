@@ -60,7 +60,7 @@ export default function Contact() {
                   color: siteConfig.colors.cta
                 }}
               >
-                ⚡ Resposta rápida garantida
+                Resposta rápida garantida
               </div>
             </div>
 

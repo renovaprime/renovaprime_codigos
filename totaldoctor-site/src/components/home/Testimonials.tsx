@@ -16,7 +16,7 @@ export default function Testimonials() {
             O Que Dizem Nossos Pacientes
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Histórias reais de quem confia na TotalDoctor
+            Histórias reais de quem confia na RenovaPrime
           </p>
         </div>
 

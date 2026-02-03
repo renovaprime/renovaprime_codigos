@@ -66,7 +66,7 @@ export default function Partners() {
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
                   src="/assets/placeholder-partners.png"
-                  alt="Parceiros TotalDoctor"
+                  alt="Parceiros RenovaPrime"
                   className="w-full h-auto object-cover"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
@@ -103,10 +103,10 @@ export default function Partners() {
                 Por Que Ser Nosso Parceiro?
               </h2>
               <p className="text-gray-600 leading-relaxed mb-6">
-                Na TotalDoctor, acreditamos no poder das parcerias estratégicas. Trabalhamos com empresas, instituições e profissionais que compartilham nossa visão de tornar a saúde mais acessível e de qualidade para todos.
+                Na RenovaPrime, acreditamos no poder das parcerias estratégicas. Trabalhamos com empresas, instituições e profissionais que compartilham nossa visão de tornar a saúde mais acessível e de qualidade para todos.
               </p>
               <p className="text-gray-600 leading-relaxed">
-                Se você busca agregar valor aos seus serviços, oferecer benefícios diferenciados ou expandir seu alcance no mercado de saúde, uma parceria com a TotalDoctor pode ser a solução ideal.
+                Se você busca agregar valor aos seus serviços, oferecer benefícios diferenciados ou expandir seu alcance no mercado de saúde, uma parceria com a RenovaPrime pode ser a solução ideal.
               </p>
             </div>
           </div>

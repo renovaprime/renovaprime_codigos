@@ -61,7 +61,7 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  A TotalDoctor nasceu com o propósito de tornar o atendimento médico mais acessível e conveniente para todos os brasileiros. Entendemos que a saúde não pode esperar e que nem sempre é possível se deslocar até um consultório.
+                  A RenovaPrime nasceu com o propósito de tornar o atendimento médico mais acessível e conveniente para todos os brasileiros. Entendemos que a saúde não pode esperar e que nem sempre é possível se deslocar até um consultório.
                 </p>
                 <p>
                   Com uma equipe de profissionais experientes e tecnologia de ponta, oferecemos consultas médicas por vídeo com a mesma qualidade do atendimento presencial, mas com muito mais praticidade e agilidade.
@@ -76,7 +76,7 @@ export default function About() {
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
                   src="/assets/placeholder-app.png"
-                  alt="Plataforma TotalDoctor"
+                  alt="Plataforma RenovaPrime"
                   className="w-full h-auto object-cover"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
@@ -91,7 +91,7 @@ export default function About() {
                   }}
                 />
                 <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
-                  Imagem: Plataforma TotalDoctor
+                  Imagem: Plataforma RenovaPrime
                 </div>
               </div>
             </div>
