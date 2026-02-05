@@ -32,29 +32,35 @@ export function TeleconsultaRoom({
   const localStreamRef = useRef<MediaStream | null>(null);
   const callRef = useRef<MediaConnection | null>(null);
   const initializedRef = useRef(false);
+  const peerCreatedRef = useRef(false); // Guard contra dupla criação de peer
+
+  console.log('[TeleconsultaRoom] render', { appointmentId, role });
+
 
   // Cleanup function
-  const cleanup = useCallback(() => {
+  const cleanup = useCallback((destroyPeer = false): void => {
     if (callRef.current) {
       callRef.current.close();
       callRef.current = null;
     }
-
+  
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach(track => track.stop());
       localStreamRef.current = null;
     }
-
-    if (peerRef.current) {
+  
+    if (destroyPeer && peerRef.current) {
       peerRef.current.destroy();
       peerRef.current = null;
     }
   }, []);
+  
 
   // Finalizar teleconsulta (apenas medico)
   const handleEndCall = useCallback(async () => {
     if (role !== 'doctor') {
-      cleanup();
+      cleanup(true); // Paciente também destrói peer ao sair
+      peerCreatedRef.current = false; // Permite recriação se voltar
       onEnd?.();
       return;
     }
@@ -62,12 +68,14 @@ export function TeleconsultaRoom({
     setIsEnding(true);
     try {
       await teleconsultService.endAppointment(appointmentId);
-      cleanup();
+      cleanup(true); // fecha call e tracks
+      peerCreatedRef.current = false; // Reset flag
       onEnd?.();
     } catch (error) {
       console.error('Error ending teleconsultation:', error);
       // Mesmo com erro, limpar e sair
-      cleanup();
+      cleanup(true);
+      peerCreatedRef.current = false; // Reset flag
       onEnd?.();
     }
   }, [appointmentId, role, cleanup, onEnd]);
@@ -115,6 +123,20 @@ export function TeleconsultaRoom({
 
         console.log('[Peer] Connecting with config:', peerConfig);
 
+        // Guard: se Peer já foi criado, reutilizar
+        if (peerRef.current && !peerRef.current.destroyed) {
+          console.log('[Peer] Reusing existing peer instance');
+          return; // Peer já existe e está vivo
+        }
+
+        // Double-check: StrictMode pode chamar isso 2x simultâneas
+        if (peerCreatedRef.current) {
+          console.log('[Peer] Creation already in progress, skipping');
+          return;
+        }
+
+        peerCreatedRef.current = true;
+
         // Criar peer sem ID específico - PeerJS gerará um ID aleatório
         const peer = new Peer({
           host: peerConfig.host,
@@ -155,6 +177,7 @@ export function TeleconsultaRoom({
             const doctorPeerId = roomData.doctor_peer_id;
 
             const attemptCall = (retryCount = 0) => {
+              if (callRef.current) return;
               setStatus('connecting');
               console.log(`[Peer] Patient attempting to call doctor (attempt ${retryCount + 1}), doctorPeerId: ${doctorPeerId}`);
 
@@ -174,18 +197,28 @@ export function TeleconsultaRoom({
               callRef.current = call;
 
               call.on('stream', (remoteStream) => {
-                console.log('[Peer] Received remote stream');
-                if (remoteVideoRef.current) {
-                  remoteVideoRef.current.srcObject = remoteStream;
+                console.log('[Peer] Received remote stream', remoteStream);
+              
+                const video = remoteVideoRef.current;
+                if (video) {
+                  video.srcObject = remoteStream;
+              
+                  // CRÍTICO
+                  video.onloadedmetadata = () => {
+                    video.play().catch(err => {
+                      console.warn('Video play failed:', err);
+                    });
+                  };
                 }
+              
                 setStatus('connected');
               });
+              
 
               call.on('close', () => {
-                console.log('[Peer] Call closed');
-                setStatus('disconnected');
+                setStatus('waiting');
               });
-
+             
               call.on('error', (err) => {
                 console.error('[Peer] Call error:', err);
                 // Se o erro for unavailable-id, significa que o médico não está conectado ainda
@@ -208,27 +241,45 @@ export function TeleconsultaRoom({
         if (role === 'doctor') {
           peer.on('call', (call) => {
             console.log('[Peer] Receiving call');
-            call.answer(stream);
+        
+            // 🔴 FECHAR chamada antiga (reentrada)
+            if (callRef.current) {
+              callRef.current.close();
+              callRef.current = null;
+            }
+        
+            call.answer(localStreamRef.current!);
             callRef.current = call;
-
+        
             call.on('stream', (remoteStream) => {
-              console.log('[Peer] Received remote stream');
-              if (remoteVideoRef.current) {
-                remoteVideoRef.current.srcObject = remoteStream;
+              console.log('[Peer] Received remote stream', remoteStream);
+            
+              const video = remoteVideoRef.current;
+              if (video) {
+                video.srcObject = remoteStream;
+            
+                // CRÍTICO
+                video.onloadedmetadata = () => {
+                  video.play().catch(err => {
+                    console.warn('Video play failed:', err);
+                  });
+                };
               }
+            
               setStatus('connected');
             });
-
+            
+        
             call.on('close', () => {
-              console.log('[Peer] Call closed');
-              setStatus('disconnected');
+              setStatus('waiting');
             });
-
+        
             call.on('error', (err) => {
               console.error('[Peer] Call error:', err);
             });
           });
         }
+        
 
         peer.on('error', (err) => {
           console.error('[Peer] Error:', err.type, err);
@@ -246,9 +297,8 @@ export function TeleconsultaRoom({
               setErrorMessage('Seu navegador não suporta videochamadas. Use Chrome, Firefox ou Edge.');
               break;
             case 'disconnected':
-              setErrorMessage('Desconectado do servidor. Tentando reconectar...');
-              peer.reconnect();
-              return; // Não definir status de erro
+              setErrorMessage('Conexão perdida. Recarregue a página.');
+              break;
             case 'network':
               setErrorMessage('Erro de rede. Verifique sua conexão com a internet.');
               break;
@@ -267,9 +317,11 @@ export function TeleconsultaRoom({
         });
 
         peer.on('disconnected', () => {
-          console.log('[Peer] Disconnected');
-          // Tentar reconectar
-          peer.reconnect();
+          console.log('[Peer] Disconnected from signaling server');
+          // NÃO usar reconnect() - não é confiável para media calls
+          // Se precisar reconectar, criar novo peer
+          setStatus('disconnected');
+          setErrorMessage('Conexão perdida. Recarregue a página.');
         });
 
       } catch (error: unknown) {
@@ -287,8 +339,9 @@ export function TeleconsultaRoom({
 
     // Cleanup ao desmontar
     return () => {
-      cleanup();
-      // NÃO resetar initializedRef - guard deve persistir para prevenir dupla inicialização no StrictMode
+      // CRÍTICO: StrictMode chama cleanup SEM ser unmount real
+      // Apenas fecha MediaConnection, NUNCA destrói Peer aqui
+      cleanup(false);
     };
   }, [roomData, role]); // cleanup e onError são estáveis, não precisam estar nas deps
 
