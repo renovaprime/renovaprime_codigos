@@ -31,11 +31,11 @@ export function TeleconsultaRoom({
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isEnding, setIsEnding] = useState(false);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [isMicEnabled, setIsMicEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [hasRemoteParticipant, setHasRemoteParticipant] = useState(false);
   const [remoteParticipantName, setRemoteParticipantName] = useState<string>('');
-
+  const [needsAudioInteraction, setNeedsAudioInteraction] = useState(false);
   const localVideoRef = useRef<HTMLDivElement>(null);
   const remoteVideoRef = useRef<HTMLDivElement>(null);
   const localTracksRef = useRef<(LocalVideoTrack | LocalAudioTrack)[]>([]);
@@ -159,7 +159,15 @@ export function TeleconsultaRoom({
       videoElement.style.objectFit = 'cover';
       remoteVideoRef.current.appendChild(videoElement);
     } else if (track.kind === 'audio') {
-      document.body.appendChild((track as RemoteAudioTrack).attach());
+      const audioElement = (track as RemoteAudioTrack).attach() as HTMLAudioElement;
+      audioElement.autoplay = true;
+
+      document.body.appendChild(audioElement);
+
+      audioElement.play().catch(() => {
+        console.warn('[Teleconsulta] Autoplay bloqueado, aguardando interação');
+        setNeedsAudioInteraction(true);
+      });
     }
   }, []);
 
@@ -171,21 +179,22 @@ export function TeleconsultaRoom({
     }
   }, []);
 
-  // Toggle audio
+  // Toggle microphone
   const toggleAudio = useCallback(() => {
-    if (room) {
-      room.localParticipant.audioTracks.forEach(publication => {
-        if (publication.track) {
-          if (isAudioEnabled) {
-            publication.track.disable();
-          } else {
-            publication.track.enable();
-          }
-        }
-      });
-      setIsAudioEnabled(!isAudioEnabled);
-    }
-  }, [room, isAudioEnabled]);
+    if (!room) return;
+
+    room.localParticipant.audioTracks.forEach(publication => {
+      if (!publication.track) return;
+
+      if (isMicEnabled) {
+        publication.track.disable();
+      } else {
+        publication.track.enable();
+      }
+    });
+
+    setIsMicEnabled(!isMicEnabled);
+  }, [room, isMicEnabled]);
 
   // Toggle video
   const toggleVideo = useCallback(() => {
@@ -350,18 +359,35 @@ export function TeleconsultaRoom({
         )}
       </div>
 
+      {/* Audio Interaction Button - Required for autoplay bypass */}
+      {needsAudioInteraction && (
+        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-50">
+          <button
+            onClick={() => {
+              document.querySelectorAll('audio').forEach(el => {
+                el.play().catch(() => {});
+              });
+              setNeedsAudioInteraction(false);
+            }}
+            className="px-6 py-3 bg-cyan-500 text-black rounded-full font-semibold shadow-lg hover:bg-cyan-400 transition-all duration-200"
+          >
+            Ativar som 🔊
+          </button>
+        </div>
+      )}
+
       {/* Controls */}
       <div className="flex items-center justify-center gap-4 p-6 bg-gray-800/95 backdrop-blur">
         <button
           onClick={toggleAudio}
           className={`p-4 rounded-full transition-all duration-200 ${
-            isAudioEnabled
+            isMicEnabled
               ? 'bg-gray-700 hover:bg-gray-600 text-white'
               : 'bg-red-500 hover:bg-red-600 text-white scale-110'
           }`}
-          title={isAudioEnabled ? 'Desativar microfone' : 'Ativar microfone'}
+          title={isMicEnabled ? 'Desativar microfone' : 'Ativar microfone'}
         >
-          {isAudioEnabled ? <Mic className="w-6 h-6" /> : <MicOff className="w-6 h-6" />}
+          {isMicEnabled ? <Mic className="w-6 h-6" /> : <MicOff className="w-6 h-6" />}
         </button>
 
         <button
