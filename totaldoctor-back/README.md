@@ -8,7 +8,7 @@ Telemedicine platform with appointment scheduling, teleconsultation, and role-ba
 - Role-based access control (Admin, Doctor, Patient)
 - Doctor registration and approval workflow
 - Appointment scheduling with conflict detection
-- PeerJS-based teleconsultation room management
+- Jitsi Meet-based teleconsultation
 - Prescription management
 - Comprehensive audit logging
 
@@ -93,8 +93,10 @@ Base URL: `http://localhost:3000/api/v1`
 - `POST /appointments/:id/finish` - Finish appointment
 - `POST /appointments/:id/cancel` - Cancel appointment
 
-### Teleconsultation
-- `GET /teleconsult/:appointmentId/access` - Get room access
+### Teleconsultation (Jitsi Meet)
+- `GET /teleconsult/room/:appointmentId` - Get Jitsi room data
+- `GET /teleconsult/appointments/:appointmentId/availability` - Check availability
+- `POST /teleconsult/appointments/:appointmentId/end` - End teleconsultation
 
 ### Prescriptions
 - `POST /prescriptions/:appointmentId` - Emit prescription

@@ -16,13 +16,14 @@ const TeleconsultRoom = sequelize.define('TeleconsultRoom', {
     type: DataTypes.STRING(150),
     allowNull: false
   },
+  // Campos legados do PeerJS - não mais utilizados com Jitsi
   doctor_link: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   patient_link: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   started_at: {
     type: DataTypes.DATE,

@@ -10,13 +10,13 @@ class TeleconsultController {
     return res.json(successResponse({
       ok: true,
       module: 'teleconsult',
-      peer_path: process.env.PEERJS_PATH || '/peerjs'
+      provider: 'twilio'
     }));
   }
 
   /**
    * GET /teleconsult/room/:appointmentId
-   * Retorna dados da sala de teleconsulta
+   * Retorna dados da sala de teleconsulta para Twilio
    */
   async getRoom(req, res, next) {
     try {
@@ -88,38 +88,6 @@ class TeleconsultController {
 
       return res.json(successResponse(result));
     } catch (error) {
-      next(error);
-    }
-  }
-
-  /**
-   * POST /teleconsult/appointments/:appointmentId/register-peer
-   * Registra o peer ID do médico quando ele conecta
-   */
-  async registerPeerId(req, res, next) {
-    try {
-      const { appointmentId } = req.params;
-      const { peerId } = req.body;
-      const userId = req.user.id;
-
-      if (!peerId) {
-        return res.status(400).json(errorResponse('peerId is required', 'VALIDATION_ERROR'));
-      }
-
-      const result = await teleconsultService.registerDoctorPeerId(
-        parseInt(appointmentId),
-        peerId,
-        userId
-      );
-
-      return res.json(successResponse(result));
-    } catch (error) {
-      if (error.message.includes('not found')) {
-        return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
-      }
-      if (error.message.includes('Access denied')) {
-        return res.status(403).json(errorResponse(error.message, 'FORBIDDEN'));
-      }
       next(error);
     }
   }

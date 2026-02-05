@@ -7,7 +7,7 @@ const permissionMiddleware = require('../../middlewares/permission');
 // Health check (público)
 router.get('/health', teleconsultController.health);
 
-// Obter dados da sala (médico ou paciente autenticado)
+// Obter dados da sala Twilio (médico ou paciente autenticado)
 router.get(
   '/room/:appointmentId',
   authMiddleware,
@@ -29,14 +29,6 @@ router.post(
   authMiddleware,
   permissionMiddleware('medico'),
   teleconsultController.endTeleconsultation
-);
-
-// Registrar peer ID do médico (apenas médico)
-router.post(
-  '/appointments/:appointmentId/register-peer',
-  authMiddleware,
-  permissionMiddleware('medico'),
-  teleconsultController.registerPeerId
 );
 
 module.exports = router;
