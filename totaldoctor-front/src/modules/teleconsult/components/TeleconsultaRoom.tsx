@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Loader2, VideoOff, Mic, MicOff, Video, PhoneOff } from 'lucide-react';
+import { Loader2, VideoOff, Mic, MicOff, Video, PhoneOff, User } from 'lucide-react';
 import { Button } from '../../../components/Button';
 import { teleconsultService, RoomData } from '../../../services/teleconsultService';
 import {
@@ -33,6 +33,8 @@ export function TeleconsultaRoom({
   const [isEnding, setIsEnding] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
+  const [hasRemoteParticipant, setHasRemoteParticipant] = useState(false);
+  const [remoteParticipantName, setRemoteParticipantName] = useState<string>('');
 
   const localVideoRef = useRef<HTMLDivElement>(null);
   const remoteVideoRef = useRef<HTMLDivElement>(null);
@@ -75,7 +77,12 @@ export function TeleconsultaRoom({
         // Attach local tracks
         twilioRoom.localParticipant.videoTracks.forEach(publication => {
           if (publication.track && localVideoRef.current) {
-            localVideoRef.current.appendChild(publication.track.attach());
+            const videoElement = publication.track.attach();
+            videoElement.style.width = '100%';
+            videoElement.style.height = '100%';
+            videoElement.style.objectFit = 'cover';
+            videoElement.style.transform = 'scaleX(-1)';
+            localVideoRef.current.appendChild(videoElement);
             localTracksRef.current.push(publication.track);
           }
         });
@@ -113,6 +120,9 @@ export function TeleconsultaRoom({
 
   // Handle participant connected
   const handleParticipantConnected = useCallback((participant: RemoteParticipant) => {
+    setHasRemoteParticipant(true);
+    setRemoteParticipantName(participant.identity);
+
     participant.tracks.forEach(publication => {
       if (publication.isSubscribed && publication.track) {
         handleTrackSubscribed(publication.track as RemoteVideoTrack | RemoteAudioTrack);
@@ -125,17 +135,29 @@ export function TeleconsultaRoom({
 
   // Handle participant disconnected
   const handleParticipantDisconnected = useCallback((participant: RemoteParticipant) => {
+    setHasRemoteParticipant(false);
+    setRemoteParticipantName('');
+
     participant.tracks.forEach(publication => {
       if (publication.track) {
         handleTrackUnsubscribed(publication.track as RemoteVideoTrack | RemoteAudioTrack);
       }
     });
+
+    // Clear remote video container
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.innerHTML = '';
+    }
   }, []);
 
   // Handle track subscribed
   const handleTrackSubscribed = useCallback((track: RemoteTrack) => {
     if (track.kind === 'video' && remoteVideoRef.current) {
-      remoteVideoRef.current.appendChild((track as RemoteVideoTrack).attach());
+      const videoElement = (track as RemoteVideoTrack).attach();
+      videoElement.style.width = '100%';
+      videoElement.style.height = '100%';
+      videoElement.style.objectFit = 'cover';
+      remoteVideoRef.current.appendChild(videoElement);
     } else if (track.kind === 'audio') {
       document.body.appendChild((track as RemoteAudioTrack).attach());
     }
@@ -246,8 +268,9 @@ export function TeleconsultaRoom({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-white">
-        <Loader2 className="w-12 h-12 animate-spin mb-4" />
-        <p>Conectando à teleconsulta...</p>
+        <Loader2 className="w-12 h-12 animate-spin mb-4 text-cyan-500" />
+        <p className="text-lg">Conectando à teleconsulta...</p>
+        <p className="text-sm text-gray-400 mt-2">Aguarde enquanto preparamos sua chamada</p>
       </div>
     );
   }
@@ -272,34 +295,69 @@ export function TeleconsultaRoom({
     <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-900">
       {/* Video Container */}
       <div className="flex-1 relative min-h-0">
-        {/* Remote Video (large) */}
+        {/* Placeholder quando não há participante remoto */}
+        {!hasRemoteParticipant && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 to-gray-900 z-0">
+            <div className="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center mb-6">
+              <User className="w-16 h-16 text-gray-500" />
+            </div>
+            <p className="text-white text-xl font-medium mb-2">Aguardando participante</p>
+            <p className="text-gray-400 text-sm">
+              {role === 'doctor'
+                ? 'O paciente entrará em breve...'
+                : 'O médico entrará em breve...'}
+            </p>
+            <div className="mt-6 flex items-center gap-2">
+              <div className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse" />
+              <span className="text-gray-400 text-sm">Sala ativa</span>
+            </div>
+          </div>
+        )}
+
+        {/* Remote video container - sempre presente para anexar o vídeo */}
         <div
           ref={remoteVideoRef}
-          className="absolute inset-0 flex items-center justify-center bg-gray-800"
-          style={{ zIndex: 1 }}
-        >
-          <div className="text-gray-500 text-center">
-            <VideoOff className="w-16 h-16 mx-auto mb-2" />
-            <p>Aguardando outro participante...</p>
+          className={`absolute inset-0 bg-black ${hasRemoteParticipant ? 'z-1' : 'hidden'}`}
+        />
+
+        {/* Local Video (picture-in-picture) */}
+        <div className="absolute bottom-20 right-4 z-10">
+          <div className="relative">
+            <div
+              ref={localVideoRef}
+              className="w-40 h-28 md:w-48 md:h-36 bg-gray-800 rounded-xl overflow-hidden shadow-2xl border-2 border-gray-700"
+            />
+            {!isVideoEnabled && (
+              <div className="absolute inset-0 bg-gray-800 rounded-xl flex items-center justify-center">
+                <VideoOff className="w-8 h-8 text-gray-500" />
+              </div>
+            )}
+            <div className="absolute bottom-2 left-2 bg-black/60 px-2 py-1 rounded text-xs text-white">
+              Você
+            </div>
           </div>
         </div>
 
-        {/* Local Video (small, picture-in-picture) */}
-        <div
-          ref={localVideoRef}
-          className="absolute bottom-4 right-4 w-48 h-36 bg-gray-700 rounded-lg overflow-hidden shadow-lg"
-          style={{ zIndex: 10 }}
-        />
+        {/* Remote participant name badge */}
+        {hasRemoteParticipant && remoteParticipantName && (
+          <div className="absolute top-4 left-4 z-10">
+            <div className="bg-black/60 px-3 py-2 rounded-lg">
+              <span className="text-white text-sm font-medium">
+                {remoteParticipantName.includes('doctor') ? 'Médico' : 'Paciente'}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-4 p-4 bg-gray-800">
+      <div className="flex items-center justify-center gap-4 p-6 bg-gray-800/95 backdrop-blur">
         <button
           onClick={toggleAudio}
-          className={`p-4 rounded-full transition-colors ${
+          className={`p-4 rounded-full transition-all duration-200 ${
             isAudioEnabled
               ? 'bg-gray-700 hover:bg-gray-600 text-white'
-              : 'bg-red-500 hover:bg-red-600 text-white'
+              : 'bg-red-500 hover:bg-red-600 text-white scale-110'
           }`}
           title={isAudioEnabled ? 'Desativar microfone' : 'Ativar microfone'}
         >
@@ -308,10 +366,10 @@ export function TeleconsultaRoom({
 
         <button
           onClick={toggleVideo}
-          className={`p-4 rounded-full transition-colors ${
+          className={`p-4 rounded-full transition-all duration-200 ${
             isVideoEnabled
               ? 'bg-gray-700 hover:bg-gray-600 text-white'
-              : 'bg-red-500 hover:bg-red-600 text-white'
+              : 'bg-red-500 hover:bg-red-600 text-white scale-110'
           }`}
           title={isVideoEnabled ? 'Desativar câmera' : 'Ativar câmera'}
         >
@@ -320,7 +378,7 @@ export function TeleconsultaRoom({
 
         <button
           onClick={handleEndCall}
-          className="p-4 rounded-full bg-red-500 hover:bg-red-600 text-white transition-colors"
+          className="p-4 rounded-full bg-red-500 hover:bg-red-600 text-white transition-all duration-200 hover:scale-110"
           title="Encerrar chamada"
         >
           <PhoneOff className="w-6 h-6" />
@@ -329,10 +387,10 @@ export function TeleconsultaRoom({
 
       {/* Ending overlay */}
       {isEnding && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg p-6 text-center">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-white" />
-            <p className="text-white">Encerrando teleconsulta...</p>
+        <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-2xl p-8 text-center shadow-2xl">
+            <Loader2 className="w-10 h-10 animate-spin mx-auto mb-4 text-cyan-500" />
+            <p className="text-white text-lg">Encerrando teleconsulta...</p>
           </div>
         </div>
       )}
