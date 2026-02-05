@@ -18,41 +18,59 @@ class TeleconsultService {
    * Idempotente: se já registrado, retorna sucesso sem erro
    */
   async registerDoctorPeerId(appointmentId, peerId, userId) {
-    const doctor = await Doctor.findOne({ where: { user_id: userId } });
-    if (!doctor) {
-      throw new Error('Doctor not found');
-    }
-
-    const appointment = await Appointment.findByPk(appointmentId);
-    if (!appointment || appointment.doctor_id !== doctor.id) {
-      throw new Error('Access denied');
-    }
-
-    // Buscar ou criar TeleconsultRoom
-    let teleconsultRoom = await TeleconsultRoom.findOne({
-      where: { appointment_id: appointmentId }
-    });
-
-    if (teleconsultRoom) {
-      // Se já existe e já tem doctor_link, operação idempotente - retornar sucesso
-      if (teleconsultRoom.doctor_link) {
-        return { ok: true, message: 'Peer ID already registered' };
-      }
-      // Caso contrário, atualizar com o novo peer ID
-      await teleconsultRoom.update({ doctor_link: peerId });
-    } else {
-      // Criar novo registro
-      teleconsultRoom = await TeleconsultRoom.create({
-        appointment_id: appointmentId,
-        room_name: `room-${appointmentId}`,
-        doctor_link: peerId,
-        patient_link: '',
-        started_at: new Date()
+    const transaction = await sequelize.transaction();
+  
+    try {
+      const doctor = await Doctor.findOne({
+        where: { user_id: userId },
+        transaction
       });
+  
+      if (!doctor) {
+        throw new Error('Doctor not found');
+      }
+  
+      const appointment = await Appointment.findByPk(appointmentId, {
+        transaction
+      });
+  
+      if (!appointment || appointment.doctor_id !== doctor.id) {
+        throw new Error('Access denied');
+      }
+  
+      const [teleconsultRoom] = await TeleconsultRoom.findOrCreate({
+        where: { appointment_id: appointmentId },
+        defaults: {
+          appointment_id: appointmentId,
+          room_name: `room-${appointmentId}`,
+          patient_link: null,
+          started_at: new Date()
+        },
+        transaction,
+        lock: transaction.LOCK.UPDATE
+      });
+  
+      // ✅ SEMPRE sobrescrever
+      await teleconsultRoom.update(
+        {
+          doctor_link: peerId,
+          updated_at: new Date()
+        },
+        { transaction }
+      );
+  
+      await transaction.commit();
+  
+      return {
+        ok: true,
+        doctor_peer_id: peerId
+      };
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
-
-    return { ok: true };
   }
+  
 
   /**
    * Obtém o peer ID atual do médico para uma consulta
