@@ -274,7 +274,7 @@ export function Beneficiarios() {
                         <td className="py-3 px-4">
                           <Switch
                             checked={titular.status === 'ACTIVE'}
-                            onChange={() => handleToggleStatus(titular)}
+                            onCheckedChange={() => handleToggleStatus(titular)}
                           />
                         </td>
                         <td className="py-3 px-4">
@@ -339,7 +339,7 @@ export function Beneficiarios() {
                           <td className="py-3 px-4">
                             <Switch
                               checked={dependente.status === 'ACTIVE'}
-                              onChange={() => handleToggleStatus(dependente)}
+                              onCheckedChange={() => handleToggleStatus(dependente)}
                             />
                           </td>
                           <td className="py-3 px-4">
