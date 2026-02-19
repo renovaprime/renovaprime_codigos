@@ -1,4 +1,4 @@
-// src/pages/Checkout.tsx
+// src/pages/CheckoutAvulsa.tsx
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,7 +7,6 @@ import api from "../services/api";
 import logo from "../logo.png";
 import termoDeUso from "../assets/termo-de-uso.pdf";
 
-// 1. Validação do formulário
 const schema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
   cpfCnpj: yup.string().required("CPF/CNPJ é obrigatório"),
@@ -31,7 +30,6 @@ const schema = yup.object().shape({
   creditCardCcv: yup.string().required(),
 });
 
-// Adicione esses tipos antes da definição do componente
 interface YupValidationError {
   inner: Array<{
     message: string;
@@ -49,12 +47,49 @@ interface ApiError {
 
 type FormError = YupValidationError | ApiError;
 
-interface Dependent {
-  id: string;
-  name: string;
-  cpf: string;
-  birthDate: string;
+interface Especialidade {
+  slug: string;
+  nome: string;
+  preco: number;
 }
+
+const especialidades: Especialidade[] = [
+  { slug: "alergia_imunologia", nome: "Alergia e Imunologia", preco: 129.00 },
+  { slug: "anestesiologia", nome: "Anestesiologia", preco: 129.00 },
+  { slug: "angiologia", nome: "Angiologia", preco: 129.00 },
+  { slug: "ortopedia", nome: "Ortopedia", preco: 129.00 },
+  { slug: "cirurgia_cardiovascular", nome: "Cirurgia Cardiovascular", preco: 129.00 },
+  { slug: "cirurgia_mao", nome: "Cirurgia da Mão", preco: 229.00 },
+  { slug: "cirurgia_cabeca_pescoco", nome: "Cirurgia de Cabeça e Pescoço", preco: 229.00 },
+  { slug: "cirurgia_aparelho_digestivo", nome: "Cirurgia do Aparelho Digestivo", preco: 129.00 },
+  { slug: "cirurgia_geral", nome: "Cirurgia Geral", preco: 55.00 },
+  { slug: "cirurgia_oncologica", nome: "Cirurgia Oncológica", preco: 229.00 },
+  { slug: "cirurgia_pediatrica", nome: "Cirurgia Pediátrica", preco: 229.00 },
+  { slug: "cirurgia_plastica", nome: "Cirurgia Plástica", preco: 229.00 },
+  { slug: "cirurgia_toracica", nome: "Cirurgia Torácica", preco: 229.00 },
+  { slug: "cirurgia_vascular", nome: "Cirurgia Vascular", preco: 229.00 },
+  { slug: "coloproctologia", nome: "Coloproctologia", preco: 229.00 },
+  { slug: "endoscopia", nome: "Endoscopia", preco: 159.00 },
+  { slug: "gastroenterologia", nome: "Gastroenterologia", preco: 159.00 },
+  { slug: "hematologia_hemoterapia", nome: "Hematologia e Hemoterapia", preco: 229.00 },
+  { slug: "homeopatia", nome: "Homeopatia", preco: 229.00 },
+  { slug: "infectologia", nome: "Infectologia", preco: 129.00 },
+  { slug: "mastologia", nome: "Mastologia", preco: 169.00 },
+  { slug: "medicina_familia_comunidade", nome: "Medicina da Família e Comunidade", preco: 129.00 },
+  { slug: "medicina_esportiva", nome: "Medicina Esportiva", preco: 129.00 },
+  { slug: "medicina_fisica_reabilitacao", nome: "Medicina Física e Reabilitação", preco: 229.00 },
+  { slug: "medicina_nuclear", nome: "Medicina Nuclear", preco: 169.00 },
+  { slug: "medicina_preventiva_social", nome: "Medicina Preventiva e Social", preco: 169.00 },
+  { slug: "nefrologia", nome: "Nefrologia", preco: 169.00 },
+  { slug: "oftalmologia", nome: "Oftalmologia", preco: 229.00 },
+  { slug: "oncologia_clinica", nome: "Oncologia Clínica", preco: 129.00 },
+  { slug: "pneumologia", nome: "Pneumologia", preco: 129.00 },
+  { slug: "radioterapia", nome: "Radioterapia", preco: 129.00 },
+  { slug: "reumatologia", nome: "Reumatologia", preco: 129.00 },
+  { slug: "neurocirurgia", nome: "Neurocirurgia", preco: 559.00 },
+  { slug: "genetica_medica", nome: "Genética Médica", preco: 1590.00 },
+  { slug: "neuropediatria", nome: "Neuropediatria", preco: 379.00 },
+];
 
 const Spinner: React.FC = () => (
   <svg
@@ -79,151 +114,24 @@ const Spinner: React.FC = () => (
   </svg>
 );
 
-// Modal para adicionar dependente
-const DependentModal: React.FC<{
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (dependent: Omit<Dependent, 'id'>) => void;
-}> = ({ isOpen, onClose, onSave }) => {
-  const [dependentForm, setDependentForm] = useState({
-    name: "",
-    cpf: "",
-    birthDate: "",
-  });
-
-  const handleSave = () => {
-    if (!dependentForm.name || !dependentForm.cpf || !dependentForm.birthDate) {
-      toast.error("Todos os campos são obrigatórios");
-      return;
-    }
-
-    onSave(dependentForm);
-    setDependentForm({ name: "", cpf: "", birthDate: "" });
-    onClose();
-  };
-
-  const handleDependentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'cpf') {
-      const numericValue = value.replace(/\D/g, "");
-      setDependentForm(prev => ({ ...prev, [name]: numericValue }));
-    } else {
-      setDependentForm(prev => ({ ...prev, [name]: value }));
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md">
-        <h3 className="text-lg font-semibold mb-4">Adicionar Dependente</h3>
-        
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nome Completo
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={dependentForm.name}
-              onChange={handleDependentChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00c9cb] focus:ring-[#00c9cb]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              CPF (somente números)
-            </label>
-            <input
-              type="text"
-              name="cpf"
-              value={dependentForm.cpf}
-              onChange={handleDependentChange}
-              maxLength={11}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00c9cb] focus:ring-[#00c9cb]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Data de Nascimento
-            </label>
-            <input
-              type="date"
-              name="birthDate"
-              value={dependentForm.birthDate}
-              onChange={handleDependentChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00c9cb] focus:ring-[#00c9cb]"
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end space-x-3 mt-6">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md"
-          >
-            Cancelar
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="px-4 py-2 text-sm font-medium text-white bg-[#00c9cb] hover:bg-[#00b4b6] rounded-md"
-          >
-            Adicionar
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Checkout: React.FC = () => {
+const CheckoutAvulsa: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [rev, setRev] = useState<string | null>(null);
-  const [dependents, setDependents] = useState<Dependent[]>([]);
-  const [isDependentModalOpen, setIsDependentModalOpen] = useState(false);
-
-  const plans = [
-    { id: 'plano_individual', name: 'Consulta Clínico Geral', description: ['Clínico Geral'], price: 39.90 },
-    { id: 'plano_individual_site', name: 'Individual', description: ['Clínico Geral'], price: 39.90 },
-    { id: 'plano_individual_premium', name: 'Individual Premium', description: ['Clínico Geral', 'Especialidades Médicas', 'Psicologo', 'Nutrição'], price: 49.90 },
-    { id: 'plano_familiar', name: 'Familiar Master', description: ['Clínico Geral', 'Especialidades Médicas', 'Psicologo', 'Nutrição', '3 integrantes da família'], price: 79.90 },
-  ];
+  const [selectedEspecialidade, setSelectedEspecialidade] = useState<Especialidade | null>(null);
+  const [showEspecialidadeModal, setShowEspecialidadeModal] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const revParam = urlParams.get('rev');
-    const planParam = urlParams.get('p');
+    const espParam = urlParams.get("especialidade");
 
-    let plan = '';
-
-    if(planParam == '1' && !revParam){
-      plan = 'plano_individual_site';
+    if (espParam) {
+      const found = especialidades.find((e) => e.slug === espParam);
+      if (found) {
+        setSelectedEspecialidade(found);
+      }
     }
-
-    if(planParam == '1' && revParam){
-      plan = 'plano_individual';
-    }
-
-    if(planParam == '2'){
-      plan = 'plano_individual_premium';
-    }
-
-    if(planParam == '3'){
-      plan = 'plano_familiar';
-    }
-
-    setRev(revParam);
-    setForm(prev => ({ ...prev, selectedPlan: plan || (revParam ? 'plano_individual' : 'plano_individual_site') }));
   }, []);
 
   const [form, setForm] = useState({
-    selectedPlan: "",
     name: "",
     cpfCnpj: "",
     email: "",
@@ -243,38 +151,9 @@ const Checkout: React.FC = () => {
     mobilePhone: "",
   });
 
-  // Funções para gerenciar dependentes
-  const addDependent = (dependentData: Omit<Dependent, 'id'>) => {
-    if (dependents.length >= 3) {
-      toast.error("Máximo de 3 dependentes permitidos");
-      return;
-    }
-
-    const newDependent: Dependent = {
-      ...dependentData,
-      id: Date.now().toString(),
-    };
-
-    setDependents(prev => [...prev, newDependent]);
-    toast.success("Dependente adicionado com sucesso!");
-  };
-
-  const removeDependent = (id: string) => {
-    setDependents(prev => prev.filter(dep => dep.id !== id));
-    toast.success("Dependente removido com sucesso!");
-  };
-
-  // Limpar dependentes quando mudar de plano familiar para outro
-  useEffect(() => {
-    if (form.selectedPlan !== 'plano_familiar') {
-      setDependents([]);
-    }
-  }, [form.selectedPlan]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    // Lista de campos que devem aceitar apenas números
     const numericFields = [
       "cpfCnpj",
       "phone",
@@ -286,7 +165,6 @@ const Checkout: React.FC = () => {
       "creditCardCcv",
     ];
 
-    // Se o campo estiver na lista, filtra apenas números
     if (numericFields.includes(e.target.id)) {
       const numericValue = e.target.value.replace(/\D/g, "");
       setForm((prev) => ({ ...prev, [e.target.id]: numericValue }));
@@ -295,14 +173,12 @@ const Checkout: React.FC = () => {
     }
   };
 
-  // Adicione esta função para prevenir submissão ao pressionar Enter
   const preventSubmitOnEnter = (e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
     }
   };
 
-  // Adicione esta constante com as UFs do Brasil
   const estados = [
     { sigla: "AC", nome: "Acre" },
     { sigla: "AL", nome: "Alagoas" },
@@ -337,29 +213,19 @@ const Checkout: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      // Validação específica para plano familiar
-      if (form.selectedPlan === 'plano_familiar') {
-        if (dependents.length === 0) {
-          toast.error("Plano familiar requer pelo menos 1 dependente");
-          setLoading(false);
-          return;
-        }
-        if (dependents.length > 3) {
-          toast.error("Máximo de 3 dependentes permitidos");
-          setLoading(false);
-          return;
-        }
-      }
+    if (!selectedEspecialidade) {
+      toast.error("Selecione uma especialidade");
+      setLoading(false);
+      return;
+    }
 
-      // 2. valida form
+    try {
       await schema.validate(form, { abortEarly: false });
 
-      // Estrutura os dados conforme o formato esperado
       const formattedData = {
-        selectedPlan: form.selectedPlan,
-        city: form.city,
-        state: form.state,
+        especialidade: selectedEspecialidade.slug,
+        especialidadeNome: selectedEspecialidade.nome,
+        value: selectedEspecialidade.preco,
         name: form.name,
         cpfCnpj: form.cpfCnpj,
         email: form.email,
@@ -369,6 +235,8 @@ const Checkout: React.FC = () => {
         addressNumber: form.addressNumber,
         addressComplement: form.addressComplement,
         province: form.province,
+        city: form.city,
+        state: form.state,
         creditCard: {
           holderName: form.creditCardHolderName,
           number: form.creditCardNumber,
@@ -386,16 +254,9 @@ const Checkout: React.FC = () => {
           phone: form.phone,
           mobilePhone: form.mobilePhone || form.phone,
         },
-        // Adicionar dependentes se for plano familiar
-        dependents: form.selectedPlan === 'plano_familiar' ? dependents : undefined,
       };
 
-      const serviceUrl = (form.selectedPlan === 'plano_individual') ? "/api/payment" : "/api/subscription";
-
-      const checkoutRes = await api.post(serviceUrl, {
-        ...formattedData,
-        rev: rev,
-      });
+      const checkoutRes = await api.post("/api/payment-avulsa", formattedData);
 
       if (checkoutRes.data.success) {
         toast.success(
@@ -408,10 +269,8 @@ const Checkout: React.FC = () => {
         toast.error(checkoutRes.data.error);
       }
     } catch (err: unknown) {
-      // Tipagem correta para erros
       const error = err as FormError;
 
-      // erros de validação yup
       if ("inner" in error) {
         error.inner.forEach((e) => toast.error(e.message));
       } else if ("response" in error) {
@@ -449,101 +308,66 @@ const Checkout: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Seleção de Plano */}
+          {/* Seleção de Especialidade */}
           <div>
             <h2 className="text-xl font-semibold text-[#34495e] mb-4 pb-2 border-b border-gray-200">
-              Selecione abaixo a opção desejada para finalizar a compra:
+              Consulta Avulsa - Especialidade
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {plans.filter(plan =>(( !rev && plan.id !== 'plano_individual')||(rev && plan.id !== 'plano_individual_site'))).map((plan, index) => (
-                <div
-                  key={index}
-                  className={`relative cursor-pointer transition-all duration-300 ${
-                    form.selectedPlan === plan.id
-                      ? 'ring-2 ring-[#00c9cb] scale-105'
-                      : 'hover:scale-105'
-                  }`}
-                  onClick={() => setForm(prev => ({ ...prev, selectedPlan: plan.id }))}
-                >
-                  <div className="bg-white rounded-lg shadow-lg overflow-hidden h-full flex flex-col">
+
+            {selectedEspecialidade ? (
+              <div className="flex flex-col md:flex-row md:items-center gap-4">
+                <div className="relative flex-1 cursor-default">
+                  <div className="bg-white rounded-lg shadow-lg overflow-hidden ring-2 ring-[#00c9cb]">
                     <div className="absolute top-0 right-0 bg-[#00c9cb] text-white px-4 py-1 text-sm font-semibold">
-                      {plan.id === 'plano_familiar' ? 'FAMILIAR' : 'INDIVIDUAL'}
+                      CONSULTA AVULSA
                     </div>
-                    <div className="p-6 pt-8 flex flex-col flex-grow">
+                    <div className="p-6 pt-8 flex flex-col">
                       <h3 className="text-xl font-bold text-[#34495e] mb-4">
-                        {plan.name}
+                        {selectedEspecialidade.nome}
                       </h3>
                       <div className="h-px bg-gray-200 mb-4"></div>
-                      <ul className="space-y-2 mb-6 flex-grow">
-                        {plan.description.map((item, index) => (
-                          <li key={index} className="flex items-center text-gray-600">
-                            <span className="text-[#00c9cb] mr-2">●</span>
-                            {item}
-                          </li>
-                        ))}
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-center text-gray-600">
+                          <span className="text-[#00c9cb] mr-2">●</span>
+                          Consulta por telemedicina
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <span className="text-[#00c9cb] mr-2">●</span>
+                          Especialidade: {selectedEspecialidade.nome}
+                        </li>
                       </ul>
                       <div className="text-center mt-auto">
                         <p className="text-2xl font-bold text-[#34495e]">
-                          R${plan.price.toFixed(2)}
-                          <span className="text-sm font-normal text-gray-500">{index !== 0 || !rev ? '/mensal' : ''}</span>
+                          R$ {selectedEspecialidade.preco.toFixed(2).replace(".", ",")}
+                          <span className="text-sm font-normal text-gray-500"> /consulta</span>
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Seleção de Dependentes - só aparece para plano familiar */}
-          {form.selectedPlan === 'plano_familiar' && (
-            <div>
-              <h2 className="text-xl font-semibold text-[#34495e] mb-4 pb-2 border-b border-gray-200">
-                Dependentes ({dependents.length}/3)
-              </h2>
-              
-              {dependents.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>Nenhum dependente adicionado</p>
-                  <p className="text-sm">O plano familiar requer pelo menos 1 dependente</p>
+                <div className="flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setShowEspecialidadeModal(true)}
+                    className="bg-[#6a83bd] hover:bg-[#5a73ad] text-white px-5 py-3 rounded-lg font-medium transition-colors"
+                  >
+                    Alterar especialidade
+                  </button>
                 </div>
-              ) : (
-                <div className="space-y-3 mb-4">
-                  {dependents.map((dependent) => (
-                    <div key={dependent.id} className="border rounded-lg p-4 bg-gray-50">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="font-medium text-gray-900">{dependent.name}</h4>
-                          <p className="text-sm text-gray-600">CPF: {dependent.cpf}</p>
-                          <p className="text-sm text-gray-600">
-                            Data de Nascimento: {new Date(dependent.birthDate).toLocaleDateString('pt-BR')}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeDependent(dependent.id)}
-                          className="text-red-500 hover:text-red-700 text-sm font-medium"
-                        >
-                          Remover
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {dependents.length < 3 && (
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500 mb-4">Nenhuma especialidade selecionada</p>
                 <button
                   type="button"
-                  onClick={() => setIsDependentModalOpen(true)}
-                  className="bg-[#00c9cb] hover:bg-[#00b4b6] text-white px-4 py-2 rounded-lg flex items-center space-x-2"
+                  onClick={() => setShowEspecialidadeModal(true)}
+                  className="bg-[#00c9cb] hover:bg-[#00b4b6] text-white px-6 py-3 rounded-lg font-medium transition-colors"
                 >
-                  <span>+</span>
-                  <span>Adicionar Dependente</span>
+                  Selecionar especialidade
                 </button>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
 
           {/* Dados Pessoais */}
           <div>
@@ -552,10 +376,7 @@ const Checkout: React.FC = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="md:col-span-2">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="name" className="block text-sm font-medium text-[#34495e]">
                   Nome completo
                 </label>
                 <input
@@ -567,10 +388,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="cpfCnpj"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="cpfCnpj" className="block text-sm font-medium text-[#34495e]">
                   CPF/CNPJ (somente números)
                 </label>
                 <input
@@ -584,10 +402,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div className="md:col-span-2">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-[#34495e]">
                   Email
                 </label>
                 <input
@@ -599,10 +414,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="phone" className="block text-sm font-medium text-[#34495e]">
                   Telefone
                 </label>
                 <input
@@ -616,10 +428,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="mobilePhone"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="mobilePhone" className="block text-sm font-medium text-[#34495e]">
                   Celular
                 </label>
                 <input
@@ -640,10 +449,7 @@ const Checkout: React.FC = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label
-                  htmlFor="postalCode"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="postalCode" className="block text-sm font-medium text-[#34495e]">
                   CEP
                 </label>
                 <input
@@ -655,10 +461,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div className="md:col-span-3">
-                <label
-                  htmlFor="address"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="address" className="block text-sm font-medium text-[#34495e]">
                   Logradouro
                 </label>
                 <input
@@ -670,10 +473,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="addressNumber"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="addressNumber" className="block text-sm font-medium text-[#34495e]">
                   Número
                 </label>
                 <input
@@ -685,10 +485,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="addressComplement"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="addressComplement" className="block text-sm font-medium text-[#34495e]">
                   Complemento
                 </label>
                 <input
@@ -700,10 +497,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="province"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="province" className="block text-sm font-medium text-[#34495e]">
                   Bairro
                 </label>
                 <input
@@ -715,10 +509,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="city"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="city" className="block text-sm font-medium text-[#34495e]">
                   Cidade
                 </label>
                 <input
@@ -730,10 +521,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="state"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="state" className="block text-sm font-medium text-[#34495e]">
                   UF
                 </label>
                 <select
@@ -761,10 +549,7 @@ const Checkout: React.FC = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="md:col-span-2">
-                <label
-                  htmlFor="creditCardNumber"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="creditCardNumber" className="block text-sm font-medium text-[#34495e]">
                   Número do cartão
                 </label>
                 <input
@@ -778,10 +563,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="creditCardExpiryMonth"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="creditCardExpiryMonth" className="block text-sm font-medium text-[#34495e]">
                   Mês (MM)
                 </label>
                 <input
@@ -795,10 +577,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="creditCardExpiryYear"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="creditCardExpiryYear" className="block text-sm font-medium text-[#34495e]">
                   Ano (AAAA)
                 </label>
                 <input
@@ -812,10 +591,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div className="md:col-span-3">
-                <label
-                  htmlFor="creditCardHolderName"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="creditCardHolderName" className="block text-sm font-medium text-[#34495e]">
                   Nome impresso no cartão
                 </label>
                 <input
@@ -827,10 +603,7 @@ const Checkout: React.FC = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="creditCardCcv"
-                  className="block text-sm font-medium text-[#34495e]"
-                >
+                <label htmlFor="creditCardCcv" className="block text-sm font-medium text-[#34495e]">
                   CVV
                 </label>
                 <input
@@ -868,10 +641,10 @@ const Checkout: React.FC = () => {
           <div className="pt-4">
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !selectedEspecialidade}
               className={`w-full py-3 px-4 rounded-md text-white font-medium flex items-center justify-center
                 ${
-                  loading
+                  loading || !selectedEspecialidade
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#00c9cb] hover:bg-[#00b4b6] transition-colors"
                 }`}
@@ -881,22 +654,65 @@ const Checkout: React.FC = () => {
                   <Spinner />
                   <span>Processando pagamento...</span>
                 </>
+              ) : selectedEspecialidade ? (
+                `Pagar R$ ${selectedEspecialidade.preco.toFixed(2).replace(".", ",")} (Consulta Avulsa: ${selectedEspecialidade.nome})`
               ) : (
-                `Pagar R$ ${plans.find(p => p.id === form.selectedPlan)?.price.toFixed(2)} (${(!rev || (rev && form.selectedPlan != 'plano_individual'))? 'Plano mensal: ' : ''}${plans.find(p => p.id === form.selectedPlan)?.name})`
+                "Selecione uma especialidade"
               )}
             </button>
           </div>
         </form>
       </div>
 
-      {/* Modal para adicionar dependente */}
-      <DependentModal
-        isOpen={isDependentModalOpen}
-        onClose={() => setIsDependentModalOpen(false)}
-        onSave={addDependent}
-      />
+      {/* Modal de seleção de especialidade */}
+      {showEspecialidadeModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowEspecialidadeModal(false);
+          }}
+        >
+          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col">
+            <div className="flex justify-between items-center p-6 border-b border-[#00c9cb] border-b-2">
+              <h3 className="text-lg font-semibold text-[#6a83bd]">
+                Selecionar Especialidade
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowEspecialidadeModal(false)}
+                className="text-gray-400 hover:text-[#00c9cb] text-2xl leading-none"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="overflow-y-auto flex-1 p-4">
+              <div className="space-y-2">
+                {especialidades.map((esp) => (
+                  <div
+                    key={esp.slug}
+                    className={`flex items-center justify-between p-4 rounded-lg cursor-pointer transition-all ${
+                      selectedEspecialidade?.slug === esp.slug
+                        ? "bg-[#00c9cb] bg-opacity-10 ring-2 ring-[#00c9cb]"
+                        : "hover:bg-gray-50 border border-gray-100"
+                    }`}
+                    onClick={() => {
+                      setSelectedEspecialidade(esp);
+                      setShowEspecialidadeModal(false);
+                    }}
+                  >
+                    <span className="font-medium text-[#34495e]">{esp.nome}</span>
+                    <span className="font-bold text-[#34495e] whitespace-nowrap ml-4">
+                      R$ {esp.preco.toFixed(2).replace(".", ",")}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Checkout;
+export default CheckoutAvulsa;

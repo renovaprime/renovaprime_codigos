@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && zip -r dist.zip dist && scp -i /Users/maiconopemcode/Documents/pem/totalmediprod.pem dist.zip bitnami@3.82.209.223:/home/bitnami/",
-    "deploy": "ssh -i /Users/maiconopemcode/Documents/pem/totalmediprod.pem bitnami@3.82.209.223 'cd /home/bitnami/ && sudo unzip -o dist.zip && sudo rm -rf dist.zip && cd /opt/bitnami/nginx/html/ && sudo rm -rf /opt/bitnami/nginx/html/* && sudo mv /home/bitnami/dist/* /opt/bitnami/nginx/html/ && sudo rm -rf /home/bitnami/dist'",
+    "b": "vite build",
+    "build": "vite build && zip -r dist.zip dist && scp -i /Users/maiconopemcode/Documents/pem/totalmedi.pem dist.zip bitnami@54.197.79.195:/home/bitnami/",
+    "deploy": "ssh -i /Users/maiconopemcode/Documents/pem/totalmedi.pem bitnami@54.197.79.195 'cd /home/bitnami/ && sudo unzip -o dist.zip && sudo rm -rf dist.zip && cd /opt/bitnami/nginx/html/ && sudo rm -rf /opt/bitnami/nginx/html/* && sudo mv /home/bitnami/dist/* /opt/bitnami/nginx/html/ && sudo rm -rf /home/bitnami/dist'",
     "lint": "eslint .",
     "preview": "vite preview"
   },

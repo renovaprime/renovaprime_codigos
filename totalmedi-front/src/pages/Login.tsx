@@ -87,7 +87,7 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#f6f6f6] to-[#e9e9e9] flex items-center justify-center px-4">
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 hover:shadow-3xl">
         <div className="flex flex-col items-center mb-10">
-          <a href="https://totalmedi.com.br" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
+          <a href="https://renovaprime.com.br" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
             <img src={logo} alt="Logo" className="h-36 mb-4" />
           </a>
         </div>

@@ -6,6 +6,7 @@ import appointmentsReducer from './slices/appointmentsSlice';
 import partnersReducer from './slices/partnersSlice';
 import branchesReducer from './slices/branchesSlice';
 import resellersReducer from './slices/resellersSlice';
+import consultationRequestsReducer from './slices/consultationRequestsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     partners: partnersReducer,
     branches: branchesReducer,
     resellers: resellersReducer,
+    consultationRequests: consultationRequestsReducer,
   },
 });
 

@@ -225,7 +225,7 @@ const DoctorDetailsModal: React.FC<DoctorDetailsModalProps> = ({
           </label>
           <p className="mt-1 text-gray-900">
             <a
-              href={"https://totalmedi.com.br/" + doctor.foto_medico}
+              href={"https://renovaprime.com.br/" + doctor.foto_medico}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
@@ -242,7 +242,7 @@ const DoctorDetailsModal: React.FC<DoctorDetailsModalProps> = ({
           </label>
           <p className="mt-1 text-gray-900">
             <a
-              href={"https://totalmedi.com.br/" + doctor.copia_crm}
+              href={"https://renovaprime.com.br/" + doctor.copia_crm}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
@@ -261,7 +261,7 @@ const DoctorDetailsModal: React.FC<DoctorDetailsModalProps> = ({
             {doctor.comprovante_especialidade ? (
               <a
                 href={
-                  "https://totalmedi.com.br/" + doctor.comprovante_especialidade
+                  "https://renovaprime.com.br/" + doctor.comprovante_especialidade
                 }
                 target="_blank"
                 rel="noopener noreferrer"
@@ -282,7 +282,7 @@ const DoctorDetailsModal: React.FC<DoctorDetailsModalProps> = ({
           </label>
           <p className="mt-1 text-gray-900">
             <a
-              href={"https://totalmedi.com.br/" + doctor.termo_aceite}
+              href={"https://renovaprime.com.br/" + doctor.termo_aceite}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800"

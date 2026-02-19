@@ -12,6 +12,7 @@ import Referrals from './pages/Referrals';
 import Settings from './pages/Settings';
 import UserProfile from './pages/UserProfile';
 import Checkout from './pages/Checkout';
+import CheckoutAvulsa from './pages/CheckoutAvulsa';
 import Partners from './pages/Partners';
 import Branches from './pages/Branches';
 import Resellers from './pages/Resellers';
@@ -51,6 +52,7 @@ const AppContent = () => {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="checkout" element={<Checkout />} />
+      <Route path="checkout-avulsa" element={<CheckoutAvulsa />} />
       <Route
         path="/"
         element={

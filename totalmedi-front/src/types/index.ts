@@ -74,6 +74,26 @@ export interface Appointment {
   specialty: string;
 }
 
+export interface ConsultationRequest {
+  id: number;
+  nome: string;
+  cpf: string;
+  email: string;
+  telefone: string;
+  cep: string;
+  endereco: string;
+  cidade: string;
+  estado: string;
+  especialidade_slug: string;
+  especialidade_nome: string;
+  valor: number;
+  status: string;
+  id_venda: number | null;
+  beneficiary_uuid: string | null;
+  data_criacao: string;
+  data_agendamento: string | null;
+}
+
 export interface Depoimento {
   id: string;
   arquivo_path: string;

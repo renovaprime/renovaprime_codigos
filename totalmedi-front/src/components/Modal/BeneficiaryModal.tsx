@@ -75,7 +75,7 @@ const BeneficiaryModal: React.FC<BeneficiaryModalProps> = ({
         zipCode: formData.zipCode.replace(/\D/g, ""),
         birthday: formData.birthDate,
         holder: formData.holder ? formData.holder.replace(/\D/g, "") : "",
-        email: formData.email ? formData.email.toLowerCase() : "contato@totalmedi.com.br",
+        email: formData.email ? formData.email.toLowerCase() : "contato@renovaprime.com.br",
       };
       delete transformedData.birthDate;
       onSave(transformedData);
