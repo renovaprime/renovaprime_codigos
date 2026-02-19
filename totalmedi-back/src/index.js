@@ -16,6 +16,7 @@ const branchRoutes = require('./routes/branchRoutes');
 const resellersRoutes = require('./routes/resellersRoutes');
 const commissionRoutes = require('./routes/commissionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const consultationRequestRoutes = require('./routes/consultationRequestRoutes');
 const { initializeJobs } = require('./jobs');
 const app = express();
 
@@ -37,7 +38,7 @@ app.use(helmet({
   },
 }));
 app.use(cors({
-  origin: ['https://portal.totalmedi.com.br', 'http://localhost:5173', 'https://totalmedi.com.br'],
+  origin: ['https://portal.renovaprime.com.br', 'http://localhost:5173', 'https://renovaprime.com.br'],
   credentials: true
 }));
 app.use(express.json());
@@ -85,6 +86,7 @@ app.use('/api', partnerRoutes);
 app.use('/api', branchRoutes);
 app.use('/api', resellersRoutes);
 app.use('/api', commissionRoutes);
+app.use('/api', consultationRequestRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => {

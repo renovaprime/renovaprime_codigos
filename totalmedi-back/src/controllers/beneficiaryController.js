@@ -1,6 +1,7 @@
 const api = require('../services/rapidocApi');
 const axios = require('axios');
 const pool = require('../config/database');
+const { getAllPlans } = require('../services/rapidocPlansService');
 
 const ASAAS_API_KEY = process.env.ASAAS_API_KEY; 
 const ASAAS_BASE_URL = 'https://api.asaas.com/v3';
@@ -49,21 +50,18 @@ class BeneficiaryController {
         if (cliente) {
           console.log("Cliente:", cliente);
 
+          const plans = await getAllPlans("A");
           const beneficiary = {
             name: cliente.name,
             cpf: cliente.cpfCnpj,
             birthday: '1990-01-01',
-            beneficiaryType: "titular",
             phone: cliente.mobilePhone || cliente.phone || '',
             email: cliente.email,
             zipCode: cliente.postalCode,
             address: cliente.address,
             city: cliente.cityName,
             state: cliente.state,
-            paymentType: "A",
-            serviceType: "G",
-            holder: "",
-            general: cliente.id
+            plans
           }
 
           const response = await api.post("/beneficiaries", [beneficiary]);

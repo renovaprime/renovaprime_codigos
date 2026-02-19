@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const svc = require('../services/asaasService');
 const api = require('../services/rapidocApi');
 const db = require('../config/database');
+const { getAllPlans, getPlansForSpecialty } = require('../services/rapidocPlansService');
 
 exports.pay = async (req, res, next) => {
   try {
@@ -17,21 +18,18 @@ exports.pay = async (req, res, next) => {
       });
     }
 
+    const plans = await getAllPlans("A");
     const beneficiary = {
       name: req.body.name,
       cpf: req.body.cpf,
       birthday: '1990-01-01',
-      beneficiaryType: "titular",
       phone: req.body.phone,
       email: req.body.email,
       zipCode: req.body.zipCode,
       address: req.body.address,
       city: req.body.city,
       state: req.body.state,
-      paymentType: "A",
-      serviceType: "G",
-      holder: "",
-      general: ""
+      plans
     }
 
     const response = await api.post("/beneficiaries", [beneficiary]);  
@@ -56,7 +54,7 @@ const axios = require("axios");
 
 // Configure o cliente axios do Asaas
 const asaas = axios.create({
-  baseURL: "https://www.asaas.com/api/v3", // troque para produção quando for o caso
+  baseURL: process.env.ASAAS_BASE_URL, // troque para produção quando for o caso
   headers: {
     access_token: process.env.ASAAS_API_KEY, // ou ASAAS_PROD_KEY
     "Content-Type": "application/json",
@@ -130,21 +128,18 @@ exports.createCustomerAndPay = async (req, res) => {
 
     // 1. First, create the beneficiary (titular)
     console.log('Creating titular beneficiary first...');
+    const plans = await getAllPlans(paymentType);
     const beneficiary = {
       name: name,
       cpf: cpfCnpj,
       birthday: '1990-01-01',
-      beneficiaryType: "titular",
       phone: phone,
       email: email,
       zipCode: postalCode,
       address: address,
       city: city,
       state: state,
-      paymentType: paymentType,
-      serviceType: serviceType,
-      holder: "",
-      general: ""
+      plans
     }
 
     const titularResp = await findOrCreateBeneficiary(beneficiary);
@@ -197,21 +192,18 @@ exports.createCustomerAndPay = async (req, res) => {
     if (selectedPlan === 'plano_familiar' && dependents && dependents.length > 0) {
       console.log('Creating dependents for family plan:', dependents.length);
       
+      const depPlans = await getAllPlans(paymentType);
       const dependentBeneficiaries = dependents.map(dependent => ({
         name: dependent.name,
         cpf: dependent.cpf,
         birthday: dependent.birthDate,
-        beneficiaryType: "dependente",
-        phone: phone, // uses titular's phone
-        email: email, // uses titular's email
+        phone: phone,
+        email: email,
         zipCode: postalCode,
         address: address,
         city: city,
         state: state,
-        paymentType: paymentType,
-        serviceType: serviceType,
-        holder: cpfCnpj, // titular's CPF
-        general: ""
+        plans: depPlans
       }));
 
       try {
@@ -258,6 +250,120 @@ exports.createCustomerAndPay = async (req, res) => {
   }
 };
 
+// Consulta avulsa (pagamento único por especialidade)
+exports.createCustomerAndPayAvulsa = async (req, res) => {
+  try {
+    const {
+      name,
+      cpfCnpj,
+      email,
+      phone,
+      postalCode,
+      address,
+      addressNumber,
+      addressComplement,
+      province,
+      city,
+      state,
+      especialidade,
+      especialidadeNome,
+      value,
+      creditCard,
+      creditCardHolderInfo,
+    } = req.body;
+
+    console.log('Starting consulta avulsa payment flow for:', {
+      name, cpfCnpj, email, especialidade, especialidadeNome, value
+    });
+
+    if (!especialidade || !value) {
+      return res.status(400).json({ success: false, error: 'Especialidade e valor são obrigatórios' });
+    }
+
+    // 1. Create beneficiary in Rapidoc FIRST (required for scheduling later)
+    console.log('Creating beneficiary for avulsa...');
+    const avulsaPlans = await getPlansForSpecialty(especialidadeNome, 'A');
+    const beneficiary = {
+      name,
+      cpf: cpfCnpj,
+      birthday: '1990-01-01',
+      phone: phone || '',
+      email: email || '',
+      zipCode: postalCode || '',
+      address: address || '',
+      city: city || '',
+      state: state || '',
+      plans: avulsaPlans
+    };
+
+    const beneficiaryResp = await findOrCreateBeneficiary(beneficiary);
+    if (!beneficiaryResp.success) {
+      return res.json({ success: false, error: beneficiaryResp.error || 'Erro ao criar beneficiário na Rapidoc' });
+    }
+    const beneficiaryUuid = beneficiaryResp.beneficiary.uuid;
+    console.log('Beneficiary created for avulsa:', beneficiaryUuid);
+
+    // 2. Create customer on Asaas
+    const customerResponse = await asaas.post("/customers", {
+      name, cpfCnpj, email, phone,
+      postalCode, address, addressNumber, addressComplement, province,
+    });
+    const customerId = customerResponse.data.id;
+    console.log('Customer created for avulsa:', customerId);
+
+    // 3. Create single payment
+    const paymentResponse = await asaas.post("/payments", {
+      customer: customerId,
+      billingType: "CREDIT_CARD",
+      value,
+      dueDate: new Date().toISOString().slice(0, 10),
+      description: `Consulta Avulsa - ${especialidadeNome}`,
+      creditCard,
+      creditCardHolderInfo,
+      remoteIp: req.ip,
+    });
+
+    console.log('Avulsa payment created:', {
+      paymentId: paymentResponse.data.id,
+      status: paymentResponse.data.status,
+    });
+
+    // 4. Save sale to database
+    const [vendaResult] = await db.query(
+      `INSERT INTO venda (cpf_beneficiario, valor, tipo, especialidade, uuid) VALUES (?, ?, ?, ?, ?)`,
+      [cpfCnpj, value, 'consulta_avulsa', especialidade, beneficiaryUuid]
+    );
+
+    // 5. Save consultation request
+    await db.query(
+      `INSERT INTO solicitacao_consulta (nome, cpf, email, telefone, cep, endereco, cidade, estado, especialidade_slug, especialidade_nome, valor, id_venda, beneficiary_uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, cpfCnpj, email, phone, postalCode, address, city, state, especialidade, especialidadeNome, value, vendaResult.insertId, beneficiaryUuid]
+    );
+
+    await logToDatabase(req.body, true, null);
+
+    return res.json({
+      success: true,
+      paymentId: paymentResponse.data.id,
+      status: paymentResponse.data.status,
+      invoiceUrl: paymentResponse.data.invoiceUrl,
+    });
+  } catch (error) {
+    await logToDatabase(req.body, false, error);
+
+    console.error('Error in createCustomerAndPayAvulsa:', JSON.stringify({
+      message: error.message,
+      response: error.response?.data,
+    }, null, 2));
+
+    const errorMessage = error.response?.data?.errors
+      ? error.response.data.errors[0]?.description
+      : "Ocorreu um erro ao processar o pagamento, verifique seus dados e tente novamente.";
+
+    return res.json({ success: false, error: errorMessage });
+  }
+};
+
 // controllers/subscriptionController.js
 
 exports.createCustomerAndSubscribe = async (req, res) => {
@@ -293,13 +399,12 @@ exports.createCustomerAndSubscribe = async (req, res) => {
     }
 
     // 2. First, create the titular beneficiary
+    const titularPlans = await getAllPlans(plan.paymentType);
     const titular = {
       name, cpf: cpfCnpj, birthday: '1990-01-01',
-      beneficiaryType: "titular",
       phone, email,
       zipCode: postalCode, address, city, state,
-      paymentType: plan.paymentType, serviceType: plan.serviceType,
-      holder: "", general: ""
+      plans: titularPlans
     };
 
 
@@ -350,13 +455,12 @@ exports.createCustomerAndSubscribe = async (req, res) => {
     // 5. Create dependents (if family plan)
     if (selectedPlan === 'plano_familiar' && Array.isArray(dependents)) {
       console.log('Creating dependents for family plan:', dependents.length);
+      const subDepPlans = await getAllPlans(plan.paymentType);
       const deps = dependents.map(dep => ({
         name: dep.name, cpf: dep.cpf, birthday: dep.birthDate,
-        beneficiaryType: "dependente",
         phone, email,
         zipCode: postalCode, address, city, state,
-        paymentType: plan.paymentType, serviceType: plan.serviceType,
-        holder: cpfCnpj, general: ""
+        plans: subDepPlans
       }));
       try {
         const depsResp = await api.post("/beneficiaries", deps);
@@ -400,28 +504,38 @@ exports.createCustomerAndSubscribe = async (req, res) => {
 };
 
 
+const extractBeneficiaryUuid = (data) => {
+  return data?.beneficiary?.uuid
+    || data?.beneficiaries?.[0]?.uuid
+    || data?.[0]?.uuid;
+};
+
 const findOrCreateBeneficiary = async (titular) => {
   const findBen = await api.get(`/beneficiaries/${titular.cpf}`);
   console.log("Finished getting titular beneficiary", findBen.data);
-  if(findBen.data.success){
-    await reactivateBeneficiary(findBen.data.beneficiary.uuid);
+
+  const foundUuid = extractBeneficiaryUuid(findBen.data);
+  if (foundUuid) {
+    await reactivateBeneficiary(foundUuid);
     return {
       success: true,
-      beneficiary: findBen.data.beneficiary
+      beneficiary: { uuid: foundUuid }
     }
   }
 
   const createBen = await api.post("/beneficiaries", [titular]);
   console.log("Finished creating titular beneficiary", createBen.data);
-  if(createBen.data.success){
+
+  const createdUuid = extractBeneficiaryUuid(createBen.data);
+  if (createdUuid) {
     return {
       success: true,
-      beneficiary: createBen.data.beneficiary
+      beneficiary: { uuid: createdUuid }
     }
   }
   return {
-    success: false, 
-    error: createBen.data.message
+    success: false,
+    error: createBen.data.message || 'Erro ao criar beneficiário na Rapidoc'
   };
 }
 

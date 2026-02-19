@@ -1,0 +1,20 @@
+CREATE TABLE `solicitacao_consulta` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  `cpf` VARCHAR(14) NOT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `telefone` VARCHAR(20) DEFAULT NULL,
+  `cep` VARCHAR(20) DEFAULT NULL,
+  `endereco` VARCHAR(500) DEFAULT NULL,
+  `cidade` VARCHAR(100) DEFAULT NULL,
+  `estado` VARCHAR(2) DEFAULT NULL,
+  `especialidade_slug` VARCHAR(100) NOT NULL,
+  `especialidade_nome` VARCHAR(255) NOT NULL,
+  `valor` DECIMAL(10,2) NOT NULL,
+  `status` ENUM('pendente', 'agendada') NOT NULL DEFAULT 'pendente',
+  `id_venda` INT DEFAULT NULL,
+  `data_criacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `data_agendamento` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
