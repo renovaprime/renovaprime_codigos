@@ -250,7 +250,7 @@ ANA FLAVIA MOREIRA SÁ;8127839647;113;;
       console.log(idFilial);
       await connection.query(`
         INSERT INTO revendedor (id_filial, nome, cpf, cargo, senha, ativo, data_registro, email)
-        VALUES(${idFilial[0].id}, '${name}', '${formattedCpf}', 'Revendedor', '${newPassword}', 1, '2025-07-07', '${formattedCpf}@renovaprime.com.br');
+        VALUES(${idFilial[0].id}, '${name}', '${formattedCpf}', 'Revendedor', '${newPassword}', 1, '2025-07-07', '${formattedCpf}@totalmedi.com.br');
       `);
     } finally {
       connection.release();
