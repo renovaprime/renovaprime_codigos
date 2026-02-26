@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  //baseURL: 'https://backend.renovaprime.com.br',
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://backend.totalmedi.com.br',
+  //baseURL: 'http://localhost:3000',
 });
 
 api.interceptors.request.use((config) => {

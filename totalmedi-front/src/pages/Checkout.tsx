@@ -443,8 +443,8 @@ const Checkout: React.FC = () => {
 
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl">
         <div className="flex flex-col items-center mb-6">
-          <a href="https://renovaprime.com.br" target="_blank" rel="noopener noreferrer">
-            <img src={logo} alt="Logo RenovaPrime" className="h-24 mb-4" />
+          <a href="https://totalmedi.com.br" target="_blank" rel="noopener noreferrer">
+            <img src={logo} alt="Logo TotalMedi" className="h-24 mb-4" />
           </a>
         </div>
 
@@ -857,7 +857,7 @@ const Checkout: React.FC = () => {
               </p>
               <a
                 href={termoDeUso}
-                download="termo-de-uso-renovaprime.pdf"
+                download="termo-de-uso-totalmedi.pdf"
                 className="inline-flex items-center space-x-2 text-[#00c9cb] hover:text-[#00b4b6] font-medium transition-colors border-2 border-blue-200 rounded-md p-2"
               >
                 <span>Baixar Termo de Uso (PDF)</span>
