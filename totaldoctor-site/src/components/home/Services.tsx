@@ -1,5 +1,6 @@
 import { Clock, UserCog, Heart } from 'lucide-react';
 import { siteConfig, services } from '../../config/content';
+import { useCms } from '../../contexts/CmsContext';
 import Card from '../Card';
 
 const iconMap = {
@@ -9,6 +10,8 @@ const iconMap = {
 };
 
 export default function Services() {
+  const cms = useCms();
+
   return (
     <section className="py-16 md:py-24" style={{ backgroundColor: siteConfig.colors.background }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,10 +20,10 @@ export default function Services() {
             className="text-3xl md:text-4xl font-bold mb-4"
             style={{ color: siteConfig.colors.primary }}
           >
-            Nossos Serviços
+            {cms('services_title', 'Nossos Serviços')}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Cuidado completo para você e sua família, quando e onde você precisar
+            {cms('services_subtitle', 'Cuidado completo para você e sua família, quando e onde você precisar')}
           </p>
         </div>
 

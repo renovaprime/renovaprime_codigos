@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../../config/content';
+import { useCms } from '../../contexts/CmsContext';
 import Button from '../Button';
 
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.renovaprime.com.br';
 
 export default function Hero() {
+  const cms = useCms();
+
   return (
     <section id="hero" className="relative py-16 md:py-24" style={{ backgroundColor: siteConfig.colors.background }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,30 +20,30 @@ export default function Hero() {
                 color: siteConfig.colors.secondary
               }}
             >
-              Telemedicina 24 horas
+              {cms('main_badge', 'Telemedicina 24 horas')}
             </div>
 
             <h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
               style={{ color: siteConfig.colors.primary }}
             >
-              Telemedicina 24h e Especialistas quando você precisar
+              {cms('main_headline', 'Telemedicina 24h e Especialistas quando você precisar')}
             </h1>
 
             <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-              Atendimento rápido, seguro e no conforto da sua casa.
+              {cms('main_subtitle', 'Atendimento rápido, seguro e no conforto da sua casa.')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link to="/planos">
                 <Button size="lg" className="w-full sm:w-auto">
-                  Ver planos
+                  {cms('cta_primary_text', 'Ver planos')}
                 </Button>
               </Link>
 
               <a href={`${APP_URL}/beneficiario/login`}>
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  Entrar como paciente
+                  {cms('cta_secondary_text', 'Entrar como paciente')}
                 </Button>
               </a>
             </div>
@@ -48,21 +51,21 @@ export default function Hero() {
             <div className="flex items-center gap-8 pt-6">
               <div>
                 <p className="text-3xl font-bold" style={{ color: siteConfig.colors.cta }}>
-                  24h
+                  {cms('stats_1_value', '24h')}
                 </p>
-                <p className="text-sm text-gray-600">Atendimento</p>
+                <p className="text-sm text-gray-600">{cms('stats_1_label', 'Atendimento')}</p>
               </div>
               <div>
                 <p className="text-3xl font-bold" style={{ color: siteConfig.colors.cta }}>
-                  12+
+                  {cms('stats_2_value', '12+')}
                 </p>
-                <p className="text-sm text-gray-600">Especialidades</p>
+                <p className="text-sm text-gray-600">{cms('stats_2_label', 'Especialidades')}</p>
               </div>
               <div>
                 <p className="text-3xl font-bold" style={{ color: siteConfig.colors.cta }}>
-                  100%
+                  {cms('stats_3_value', '100%')}
                 </p>
-                <p className="text-sm text-gray-600">Online</p>
+                <p className="text-sm text-gray-600">{cms('stats_3_label', 'Online')}</p>
               </div>
             </div>
           </div>

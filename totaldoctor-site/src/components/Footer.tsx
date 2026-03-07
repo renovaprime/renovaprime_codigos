@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 import { siteConfig } from '../config/content';
+import { useCms } from '../contexts/CmsContext';
 
 export default function Footer() {
+  const cms = useCms();
+
   return (
     <footer className="bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -17,7 +20,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-gray-600 text-sm mb-4">
-              {siteConfig.tagline}
+              {cms('footer_tagline', siteConfig.tagline)}
             </p>
             <div className="flex space-x-3">
               <a
@@ -108,15 +111,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 mt-0.5" style={{ color: siteConfig.colors.secondary }} />
-                <span className="text-gray-600 text-sm">{siteConfig.contact.phone}</span>
+                <span className="text-gray-600 text-sm">{cms('contact_phone', siteConfig.contact.phone)}</span>
               </li>
               <li className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 mt-0.5" style={{ color: siteConfig.colors.secondary }} />
-                <span className="text-gray-600 text-sm">{siteConfig.contact.email}</span>
+                <span className="text-gray-600 text-sm">{cms('contact_email', siteConfig.contact.email)}</span>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 mt-0.5" style={{ color: siteConfig.colors.secondary }} />
-                <span className="text-gray-600 text-sm">{siteConfig.contact.address}</span>
+                <span className="text-gray-600 text-sm">{cms('contact_address', siteConfig.contact.address)}</span>
               </li>
             </ul>
           </div>
@@ -127,7 +130,7 @@ export default function Footer() {
             © {new Date().getFullYear()} {siteConfig.name}. Todos os direitos reservados.
           </p>
           <p className="text-gray-500 text-xs mt-2">
-            CNPJ: 00.000.000/0000-00 | Responsável Técnico: Dr. Nome Completo - CRM 00000
+            CNPJ: {cms('company_cnpj', '00.000.000/0000-00')} | Responsável Técnico: {cms('technical_responsible', 'Dr. Nome Completo')} - {cms('technical_responsible_crm', 'CRM 00000')}
           </p>
         </div>
       </div>
