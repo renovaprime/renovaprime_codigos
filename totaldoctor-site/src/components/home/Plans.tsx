@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Check, Star } from 'lucide-react';
 import { siteConfig, plans } from '../../config/content';
 import Card from '../Card';
@@ -12,6 +13,9 @@ interface SelectedPlan {
 }
 
 export default function Plans() {
+  const [searchParams] = useSearchParams();
+  const resellerId = searchParams.get('rev');
+
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
 
@@ -131,6 +135,7 @@ export default function Plans() {
             setSelectedPlan(null);
           }}
           plan={selectedPlan}
+          resellerId={resellerId}
         />
       )}
     </section>

@@ -29,6 +29,7 @@ export interface CheckoutData {
   state: string;
   creditCard: CreditCard;
   dependents?: Dependent[];
+  rev?: number;
 }
 
 export interface CheckoutResponse {

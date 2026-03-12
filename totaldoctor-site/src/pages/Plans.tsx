@@ -1,10 +1,28 @@
+import { useState } from 'react';
 import { Check, Star, HelpCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { siteConfig, plans } from '../config/content';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import CheckoutModal from '../components/CheckoutModal';
+
+interface SelectedPlan {
+  id: number;
+  name: string;
+  price: number;
+}
 
 export default function Plans() {
+  const [searchParams] = useSearchParams();
+  const resellerId = searchParams.get('rev');
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
+
+  const handleSelectPlan = (plan: typeof plans[0]) => {
+    setSelectedPlan({ id: plan.id, name: plan.name, price: plan.price });
+    setIsCheckoutOpen(true);
+  };
+
   const faqs = [
     {
       question: 'Como funciona a assinatura?',
@@ -101,6 +119,7 @@ export default function Plans() {
                 <Button
                   variant={plan.recommended ? 'primary' : 'outline'}
                   className="w-full"
+                  onClick={() => handleSelectPlan(plan)}
                 >
                   Assinar Agora
                 </Button>
@@ -221,6 +240,18 @@ export default function Plans() {
           </div>
         </div>
       </section>
+
+      {selectedPlan && (
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => {
+            setIsCheckoutOpen(false);
+            setSelectedPlan(null);
+          }}
+          plan={selectedPlan}
+          resellerId={resellerId}
+        />
+      )}
     </main>
   );
 }

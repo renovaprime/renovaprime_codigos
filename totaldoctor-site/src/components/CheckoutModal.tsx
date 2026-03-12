@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, CreditCard, User, MapPin, Users, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { checkoutService, type CheckoutData, type Dependent } from '../services/checkoutService';
 import { siteConfig } from '../config/content';
+import { formatPhone, unformatPhone } from '../utils/masks';
 
 interface Plan {
   id: number;
@@ -13,6 +14,7 @@ interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   plan: Plan;
+  resellerId?: string | null;
 }
 
 type Step = 'personal' | 'address' | 'card' | 'dependents' | 'processing' | 'success' | 'error';
@@ -22,10 +24,13 @@ const BRAZILIAN_STATES = [
   'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
 ];
 
-export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
+export default function CheckoutModal({ isOpen, onClose, plan, resellerId }: CheckoutModalProps) {
   const [step, setStep] = useState<Step>('personal');
   const [error, setError] = useState<string>('');
   const [dependents, setDependents] = useState<Dependent[]>([]);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const cepInputRef = useRef<HTMLInputElement>(null);
+  const cardNumberInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -63,6 +68,10 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
         cep: '', address: '', addressNumber: '', neighborhood: '', city: '', state: '',
         cardNumber: '', cardHolder: '', cardExpiryMonth: '', cardExpiryYear: '', cardCvv: ''
       });
+      // Focus on name field when modal opens
+      setTimeout(() => {
+        nameInputRef.current?.focus();
+      }, 100);
     }
   }, [isOpen]);
 
@@ -213,10 +222,12 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
     if (step === 'personal') {
       if (validatePersonalStep()) {
         setStep('address');
+        setTimeout(() => cepInputRef.current?.focus(), 100);
       }
     } else if (step === 'address') {
       if (validateAddressStep()) {
         setStep('card');
+        setTimeout(() => cardNumberInputRef.current?.focus(), 100);
       }
     } else if (step === 'card') {
       if (validateCardStep()) {
@@ -265,7 +276,8 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
           expiryYear: formData.cardExpiryYear,
           cvv: formData.cardCvv
         },
-        dependents: plan.id === 3 ? dependents : undefined
+        dependents: plan.id === 3 ? dependents : undefined,
+        rev: resellerId ? Number(resellerId) : undefined
       };
 
       await checkoutService.processCheckout(checkoutData);
@@ -334,6 +346,7 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
         <input
+          ref={nameInputRef}
           type="text"
           value={formData.name}
           onChange={(e) => handleInputChange('name', e.target.value)}
@@ -374,14 +387,14 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Telefone (somente números)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
         <input
-          type="text"
-          value={formData.phone}
-          onChange={(e) => handleInputChange('phone', e.target.value)}
-          maxLength={11}
+          type="tel"
+          value={formatPhone(formData.phone)}
+          onChange={(e) => handleInputChange('phone', unformatPhone(e.target.value))}
+          maxLength={15}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-          placeholder="11999999999"
+          placeholder="(11) 99999-9999"
         />
       </div>
     </div>
@@ -393,6 +406,7 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">CEP</label>
           <input
+            ref={cepInputRef}
             type="text"
             value={formData.cep}
             onChange={(e) => handleInputChange('cep', e.target.value)}
@@ -467,6 +481,7 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Número do cartão</label>
         <input
+          ref={cardNumberInputRef}
           type="text"
           value={formData.cardNumber}
           onChange={(e) => handleInputChange('cardNumber', e.target.value)}
