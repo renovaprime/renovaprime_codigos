@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, User, Stethoscope, Settings } from 'lucide-react';
+import { Menu, X, ChevronDown, User, Stethoscope, Settings, Handshake } from 'lucide-react';
 import { siteConfig } from '../config/content';
 
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.renovaprime.com.br';
@@ -210,6 +210,28 @@ export default function Header() {
                     </div>
                   </a>
                   <a
+                    href={`${APP_URL}/parceiro/login`}
+                    className="group flex items-center gap-2.5 px-3 py-2.5 text-gray-700 hover:bg-gray-50 transition-all duration-200"
+                    onClick={() => setLoginDropdownOpen(false)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = `${siteConfig.colors.secondary}10`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                  >
+                    <div 
+                      className="w-8 h-8 rounded-lg flex items-center justify-center"
+                      style={{ backgroundColor: `${siteConfig.colors.secondary}20` }}
+                    >
+                      <Handshake className="w-4 h-4" style={{ color: siteConfig.colors.secondary }} />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-gray-900">Parceiros</p>
+                      <p className="text-xs text-gray-500">Área de parceiros</p>
+                    </div>
+                  </a>
+                  <a
                     href={`${APP_URL}/login`}
                     className="group flex items-center gap-2.5 px-3 py-2.5 text-gray-700 hover:bg-gray-50 transition-all duration-200"
                     onClick={() => setLoginDropdownOpen(false)}
@@ -231,6 +253,7 @@ export default function Header() {
                       <p className="text-xs text-gray-500">Área administrativa</p>
                     </div>
                   </a>
+
                 </div>
               )}
             </div>
