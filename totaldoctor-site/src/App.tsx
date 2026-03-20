@@ -11,6 +11,7 @@ import ProfessionalSignup from './pages/ProfessionalSignup';
 import LoginPlaceholder from './pages/LoginPlaceholder';
 import TermsOfUse from './pages/TermsOfUse';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import AccountDeletion from './pages/AccountDeletion';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="/login/:type" element={<LoginPlaceholder />} />
               <Route path="/termos-de-uso" element={<TermsOfUse />} />
               <Route path="/politica-de-privacidade" element={<PrivacyPolicy />} />
+              <Route path="/exclusao-de-conta" element={<AccountDeletion />} />
             </Routes>
           </div>
           <Footer />

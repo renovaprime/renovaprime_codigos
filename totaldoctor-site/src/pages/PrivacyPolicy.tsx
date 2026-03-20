@@ -9,11 +9,11 @@ export default function PrivacyPolicy() {
             className="text-4xl md:text-5xl font-bold mb-6"
             style={{ color: siteConfig.colors.primary }}
           >
-            Politica de Privacidade
+            Política de Privacidade
           </h1>
           <p className="text-gray-600 mb-10">
-            Esta Politica de Privacidade descreve como a {siteConfig.name} coleta, utiliza, armazena e protege os
-            dados pessoais de usuarios e visitantes da plataforma.
+            Esta Política de Privacidade descreve como a {siteConfig.name} coleta, utiliza, armazena e protege os
+            dados pessoais de usuários e visitantes da plataforma.
           </p>
 
           <div className="space-y-8 text-gray-700 leading-relaxed">
@@ -22,8 +22,8 @@ export default function PrivacyPolicy() {
                 1. Dados coletados
               </h2>
               <p>
-                Podemos coletar dados cadastrais, dados de contato e informacoes de navegacao necessarias para
-                prestacao dos servicos, seguranca da conta e melhoria da experiencia do usuario.
+                Podemos coletar dados cadastrais, dados de contato e informações de navegação necessárias para
+                prestação dos serviços, segurança da conta e melhoria da experiência do usuário.
               </p>
             </section>
 
@@ -32,8 +32,8 @@ export default function PrivacyPolicy() {
                 2. Finalidade do tratamento
               </h2>
               <p>
-                Os dados sao tratados para viabilizar o atendimento, cumprir obrigacoes legais e regulatórias, prestar
-                suporte, prevenir fraudes e aperfeicoar funcionalidades da plataforma.
+                Os dados são tratados para viabilizar o atendimento, cumprir obrigações legais e regulatórias, prestar
+                suporte, prevenir fraudes e aperfeiçoar funcionalidades da plataforma.
               </p>
             </section>
 
@@ -42,18 +42,18 @@ export default function PrivacyPolicy() {
                 3. Compartilhamento de dados
               </h2>
               <p>
-                O compartilhamento ocorre apenas quando necessario para execucao dos servicos, cumprimento legal ou com
-                parceiros que atuem sob obrigacao de confidencialidade e seguranca.
+                O compartilhamento ocorre apenas quando necessário para execução dos serviços, cumprimento legal ou com
+                parceiros que atuem sob obrigação de confidencialidade e segurança.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                4. Armazenamento e seguranca
+                4. Armazenamento e segurança
               </h2>
               <p>
-                Adotamos medidas tecnicas e administrativas para proteger os dados pessoais contra acesso nao
-                autorizado, perda, alteracao ou divulgacao indevida.
+                Adotamos medidas técnicas e administrativas para proteger os dados pessoais contra acesso não
+                autorizado, perda, alteração ou divulgação indevida.
               </p>
             </section>
 
@@ -62,8 +62,8 @@ export default function PrivacyPolicy() {
                 5. Direitos do titular
               </h2>
               <p>
-                O titular pode solicitar confirmacao de tratamento, acesso, correcao, exclusao, portabilidade e demais
-                direitos previstos na legislacao aplicavel, conforme os limites legais.
+                O titular pode solicitar confirmação de tratamento, acesso, correção, exclusão, portabilidade e demais
+                direitos previstos na legislação aplicável, conforme os limites legais.
               </p>
             </section>
 
@@ -72,18 +72,18 @@ export default function PrivacyPolicy() {
                 6. Cookies e tecnologias similares
               </h2>
               <p>
-                Utilizamos cookies para funcionamento da plataforma, metricas de desempenho e personalizacao de
-                conteudo. O usuario pode gerenciar preferencias no navegador.
+                Utilizamos cookies para funcionamento da plataforma, métricas de desempenho e personalização de
+                conteúdo. O usuário pode gerenciar preferências no navegador.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                7. Atualizacoes desta politica
+                7. Atualizações desta política
               </h2>
               <p>
-                Esta politica pode ser revisada periodicamente. Recomendamos consulta regular para ciencia de eventuais
-                alteracoes.
+                Esta política pode ser revisada periodicamente. Recomendamos consulta regular para ciência de eventuais
+                alterações.
               </p>
             </section>
 
@@ -92,7 +92,7 @@ export default function PrivacyPolicy() {
                 8. Contato
               </h2>
               <p>
-                Para exercicio de direitos ou duvidas sobre privacidade, entre em contato pelo e-mail{' '}
+                Para exercício de direitos ou dúvidas sobre privacidade, entre em contato pelo e-mail{' '}
                 {siteConfig.contact.email}.
               </p>
             </section>

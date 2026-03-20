@@ -135,7 +135,11 @@ export default function Footer() {
             </Link>
             <span className="text-gray-400">|</span>
             <Link to="/politica-de-privacidade" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Politica de Privacidade
+              Política de Privacidade
+            </Link>
+            <span className="text-gray-400">|</span>
+            <Link to="/exclusao-de-conta" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Exclusão de Conta
             </Link>
           </div>
         </div>

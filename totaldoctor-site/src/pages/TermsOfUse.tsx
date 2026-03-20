@@ -12,18 +12,18 @@ export default function TermsOfUse() {
             Termos de Uso
           </h1>
           <p className="text-gray-600 mb-10">
-            Estes Termos de Uso definem as regras para acesso e utilizacao da plataforma {siteConfig.name}.
-            Ao navegar no site ou contratar nossos servicos, voce concorda com as condicoes abaixo.
+            Estes Termos de Uso definem as regras para acesso e utilização da plataforma {siteConfig.name}.
+            Ao navegar no site ou contratar nossos serviços, você concorda com as condições abaixo.
           </p>
 
           <div className="space-y-8 text-gray-700 leading-relaxed">
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                1. Aceitacao dos termos
+                1. Aceitação dos termos
               </h2>
               <p>
-                O uso da plataforma implica concordancia integral com estes termos e com a Politica de Privacidade.
-                Caso nao concorde com qualquer condicao, recomendamos que nao utilize nossos servicos.
+                O uso da plataforma implica concordância integral com estes termos e com a Política de Privacidade.
+                Caso não concorde com qualquer condição, recomendamos que não utilize nossos serviços.
               </p>
             </section>
 
@@ -32,8 +32,8 @@ export default function TermsOfUse() {
                 2. Cadastro e responsabilidade
               </h2>
               <p>
-                O usuario se compromete a fornecer informacoes verdadeiras, atualizadas e completas durante o cadastro,
-                sendo responsavel pela guarda de suas credenciais de acesso e por toda atividade realizada em sua conta.
+                O usuário se compromete a fornecer informações verdadeiras, atualizadas e completas durante o cadastro,
+                sendo responsável pela guarda de suas credenciais de acesso e por toda atividade realizada em sua conta.
               </p>
             </section>
 
@@ -42,9 +42,9 @@ export default function TermsOfUse() {
                 3. Uso adequado da plataforma
               </h2>
               <p>
-                E proibido utilizar a plataforma para finalidades ilegais, fraudulentas ou que violem direitos de
-                terceiros. Tambem e vedada qualquer tentativa de acesso nao autorizado, engenharia reversa ou
-                comprometimento da seguranca do sistema.
+                É proibido utilizar a plataforma para finalidades ilegais, fraudulentas ou que violem direitos de
+                terceiros. Também é vedada qualquer tentativa de acesso não autorizado, engenharia reversa ou
+                comprometimento da segurança do sistema.
               </p>
             </section>
 
@@ -53,30 +53,30 @@ export default function TermsOfUse() {
                 4. Propriedade intelectual
               </h2>
               <p>
-                Todo o conteudo disponibilizado na plataforma, incluindo marcas, textos, imagens e elementos visuais,
-                pertence a {siteConfig.name} ou a seus licenciadores, sendo proibida sua reproducao sem autorizacao
-                previa.
+                Todo o conteúdo disponibilizado na plataforma, incluindo marcas, textos, imagens e elementos visuais,
+                pertence a {siteConfig.name} ou a seus licenciadores, sendo proibida sua reprodução sem autorização
+                prévia.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                5. Limitacao de responsabilidade
+                5. Limitação de responsabilidade
               </h2>
               <p>
-                A plataforma empenha melhores esforcos para manter disponibilidade e seguranca dos servicos, mas nao
-                garante ausencia de indisponibilidades temporarias, falhas tecnicas ou interrupcoes causadas por
+                A plataforma empenha melhores esforços para manter disponibilidade e segurança dos serviços, mas não
+                garante ausência de indisponibilidades temporárias, falhas técnicas ou interrupções causadas por
                 terceiros.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                6. Alteracoes destes termos
+                6. Alterações destes termos
               </h2>
               <p>
-                Estes termos podem ser atualizados periodicamente para refletir mudancas legais, operacionais ou
-                tecnicas. A versao mais recente estara sempre disponivel nesta pagina.
+                Estes termos podem ser atualizados periodicamente para refletir mudanças legais, operacionais ou
+                técnicas. A versão mais recente estará sempre disponível nesta página.
               </p>
             </section>
 
@@ -85,7 +85,7 @@ export default function TermsOfUse() {
                 7. Contato
               </h2>
               <p>
-                Em caso de duvidas sobre estes Termos de Uso, entre em contato pelo e-mail {siteConfig.contact.email}.
+                Em caso de dúvidas sobre estes Termos de Uso, entre em contato pelo e-mail {siteConfig.contact.email}.
               </p>
             </section>
           </div>
