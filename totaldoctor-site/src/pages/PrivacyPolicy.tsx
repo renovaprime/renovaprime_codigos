@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/content';
 
 export default function PrivacyPolicy() {
@@ -89,7 +90,20 @@ export default function PrivacyPolicy() {
 
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                8. Contato
+                8. Exclusão de conta e dados
+              </h2>
+              <p>
+                Caso deseje solicitar a exclusão da sua conta e dos seus dados pessoais, acesse a página de{' '}
+                <Link to="/exclusao-de-conta" className="font-semibold underline" style={{ color: siteConfig.colors.secondary }}>
+                  exclusão de conta
+                </Link>{' '}
+                para ver o passo a passo.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
+                9. Contato
               </h2>
               <p>
                 Para exercício de direitos ou dúvidas sobre privacidade, entre em contato pelo e-mail{' '}
