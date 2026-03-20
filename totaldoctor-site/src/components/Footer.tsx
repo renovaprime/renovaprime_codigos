@@ -129,9 +129,15 @@ export default function Footer() {
           <p className="text-gray-600 text-sm">
             © {new Date().getFullYear()} {siteConfig.name}. Todos os direitos reservados.
           </p>
-          <p className="text-gray-500 text-xs mt-2">
-            CNPJ: {cms('company_cnpj', '00.000.000/0000-00')} | Responsável Técnico: {cms('technical_responsible', 'Dr. Nome Completo')} - {cms('technical_responsible_crm', 'CRM 00000')}
-          </p>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-sm">
+            <Link to="/termos-de-uso" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Termos de Uso
+            </Link>
+            <span className="text-gray-400">|</span>
+            <Link to="/politica-de-privacidade" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Politica de Privacidade
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
