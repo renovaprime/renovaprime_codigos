@@ -20,21 +20,32 @@ export default function PrivacyPolicy() {
           <div className="space-y-8 text-gray-700 leading-relaxed">
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                1. Dados coletados
+                1. Dados coletados e Dados de Saúde (Health Data)
               </h2>
               <p>
-                Podemos coletar dados cadastrais, dados de contato e informações de navegação necessárias para
-                prestação dos serviços, segurança da conta e melhoria da experiência do usuário.
+                Além de dados cadastrais (nome, documento, e-mail, telefone) e informações de navegação, 
+                nós coletamos e processamos Dados de Saúde. Isso inclui, mas não se limita a: 
+                histórico médico, sintomas relatados, laudos, exames, diagnósticos, prescrições médicas 
+                (receituários) e as informações trocadas entre médicos e pacientes durante as teleconsultas
+                (seja por texto, áudio ou vídeo).
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold mb-3" style={{ color: siteConfig.colors.primary }}>
-                2. Finalidade do tratamento
+                2. Finalidade do tratamento dos Dados de Saúde
               </h2>
               <p>
-                Os dados são tratados para viabilizar o atendimento, cumprir obrigações legais e regulatórias, prestar
-                suporte, prevenir fraudes e aperfeiçoar funcionalidades da plataforma.
+                Os dados, especialmente os de saúde, são tratados exclusivamente para viabilizar a prestação dos serviços de telemedicina. Eles são usados para:
+                
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Conectar pacientes aos profissionais de saúde adequados;</li>
+                  <li>Permitir o agendamento e a realização de consultas online;</li>
+                  <li>Facilitar a emissão de receitas médicas e o controle de tratamentos;</li>
+                  <li>Cumprir obrigações legais e regulatórias da área da saúde.</li>
+                </ul>
+                <br />
+                Estes dados de saúde jamais são vendidos ou utilizados para fins de publicidade ou marketing.
               </p>
             </section>
 
