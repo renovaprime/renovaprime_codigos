@@ -769,7 +769,7 @@ function DocumentUpload({ label, documentType, upload, onFileSelect, onRemove }:
               <>
                 <Upload className="w-5 h-5 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  Clique para fazer upload ou arraste o arquivo aqui
+                  Clique para fazer upload
                 </span>
               </>
             )}
