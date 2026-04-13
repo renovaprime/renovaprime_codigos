@@ -1,0 +1,67 @@
+name: Deploy Backend (V2)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Copiar arquivos via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/home/bitnami/backend/totalmedi-back"
+
+      - name: Instalar e Reiniciar PM2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Carrega o NVM, caso o Node tenha sido instalado por ele
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Carrega variáveis de ambiente do usuário
+            [ -f ~/.profile ] && source ~/.profile
+            [ -f ~/.bashrc ] && source ~/.bashrc
+
+            # Adiciona os binários do Node/PM2 ao PATH desta sessão, 
+            # abrangendo caminhos globais, do Bitnami e usr/local
+            export PATH="/home/bitnami/.npm-global/bin:/opt/bitnami/node/bin:/usr/local/bin:$PATH"
+
+            cd /home/bitnami/backend/totalmedi-back
+
+            # Instala dependências
+            npm install
+
+            # Garante que o PM2 vai usar a pasta correta recriando o processo
+            pm2 delete totalmedi-back || true
+            pm2 start ecosystem.config.js --env production --name "totalmedi-back"
+            pm2 save
+
+      - name: Notificação de Sucesso no Discord
+        if: success()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: "✅ Backend renovaprime (v2) deploy realizado com sucesso!"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notificação de Falha no Discord
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: "🚨 Falha na pipeline do renovaprime (v2)! Verifique os logs no GitHub."
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}

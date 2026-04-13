@@ -1,0 +1,76 @@
+require("dotenv").config();
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const helmet = require("helmet");
+const path = require("path");
+const sequelize = require("./config/database");
+const routes = require("./routes");
+const errorHandler = require("./middlewares/errorHandler");
+const { teleconsultRoutes } = require("./modules/teleconsult");
+
+const app = express();
+const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
+
+// Middlewares de segurança e parsing
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  }),
+);
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../public")));
+
+app.get("/health", async (req, res) => {
+  const health = {
+    status: "Online e Roteando!",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    service: process.env.npm_package_name || "totalmedi-backend",
+    db_status: "checking",
+  };
+
+  try {
+    await sequelize.authenticate();
+    health.db_status = "CONNECTED";
+    res.status(200).json(health);
+  } catch (error) {
+    health.status = "DOWN";
+    health.db_status = "DISCONNECTED";
+    health.error = error.message;
+    res.status(503).json(health);
+  }
+});
+
+app.use("/api/v1", routes);
+
+app.use("/api/v1/teleconsult", teleconsultRoutes);
+
+app.use(errorHandler);
+
+async function startServer() {
+  try {
+    await sequelize.authenticate();
+    console.log("Database connection established successfully.");
+
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV}`);
+      console.log(`API available at http://localhost:${PORT}/api/v1`);
+    });
+  } catch (error) {
+    console.error("Unable to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();
