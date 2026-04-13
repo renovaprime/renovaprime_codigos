@@ -1,0 +1,46 @@
+name: Espelhar para Pasta do Cliente
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código original
+        uses: actions/checkout@v4
+        with:
+          path: main-source
+
+      - name: Remover git history (Transformar em pasta comum)
+        run: rm -rf main-source/.git
+
+      - name: Push para pasta específica do cliente
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN_DESTINO }}
+        with:
+          destination-github-username: "renovaprime"
+          destination-repository-name: "renovaprime_codigos"
+          target-branch: main
+          target-directory: "renovaprime-front"
+          source-directory: "main-source"
+          user-email: ramon@opemcode.com
+
+      - name: Notificação Discord (Sucesso)
+        if: success()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: "✅ A sincronização com o repositório do cliente foi concluída com sucesso!"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notificação Discord (Falha)
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: "🚨 Falha na sincronização com o repositório do cliente."
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}

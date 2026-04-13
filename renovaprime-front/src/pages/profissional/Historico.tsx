@@ -1,0 +1,134 @@
+import { useState, useEffect, useCallback } from 'react';
+import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import {
+  HistoryFilters,
+  HistoryList,
+  HistoryEmptyState,
+  HistoryPagination,
+  appointmentsHistoryService,
+} from '../../modules/appointmentsHistory';
+import type {
+  AppointmentHistoryItem,
+  AppointmentHistoryFilters,
+} from '../../modules/appointmentsHistory';
+
+export function ProfissionalHistorico() {
+  const [appointments, setAppointments] = useState<AppointmentHistoryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filters, setFilters] = useState<AppointmentHistoryFilters>({});
+  const limit = 12;
+
+  const loadHistory = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await appointmentsHistoryService.listDoctorHistory({
+        ...filters,
+        page,
+        limit,
+      });
+      setAppointments(result.items);
+      setTotal(result.total);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Erro ao carregar historico';
+      setError(message);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [filters, page, limit]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
+
+  const handleFilterChange = (newFilters: {
+    status?: 'FINISHED' | 'CANCELED';
+    startDate?: string;
+    endDate?: string;
+    specialtyId?: number;
+    search?: string;
+  }) => {
+    setFilters(newFilters);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const hasFilters = Object.values(filters).some((v) => v !== undefined);
+
+  return (
+    <LayoutProfissional title="Histórico de Consultas">
+      <div className="w-full mx-auto">
+        <div className="relative mb-6 overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
+          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
+          <div className="relative">
+            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
+              Histórico de Consultas
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground md:text-base">
+              Visualize suas consultas finalizadas e canceladas.
+            </p>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <HistoryFilters
+          onFilterChange={handleFilterChange}
+          searchPlaceholder="Buscar por nome do paciente..."
+        />
+
+        {/* Error message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="text-sm text-red-700 underline mt-1"
+            >
+              Fechar
+            </button>
+          </div>
+        )}
+
+        {/* Loading state */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+          </div>
+        ) : appointments.length === 0 ? (
+          /* Empty state */
+          <HistoryEmptyState hasFilters={hasFilters} />
+        ) : (
+          <>
+            {/* Results count */}
+            <p className="text-sm text-muted-foreground mb-4">
+              {total} {total === 1 ? 'consulta encontrada' : 'consultas encontradas'}
+            </p>
+
+            {/* Appointments list */}
+            <HistoryList
+              appointments={appointments}
+              viewType="doctor"
+            />
+
+            {/* Pagination */}
+            <HistoryPagination
+              page={page}
+              limit={limit}
+              total={total}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+      </div>
+    </LayoutProfissional>
+  );
+}

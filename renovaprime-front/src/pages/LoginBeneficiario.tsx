@@ -1,0 +1,298 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Lock, Mail, AlertCircle, Eye, EyeOff, Shield, Stethoscope, Handshake } from 'lucide-react';
+import { Button } from '../components/Button';
+import { Input } from '../components/Input';
+import { ForgotPasswordModal } from '../components/ForgotPasswordModal';
+import { authService } from '../services/authService';
+import logoImage from '../assets/images/logo.png';
+
+export function LoginBeneficiario() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+  useEffect(() => {
+    // Load saved credentials if remember me was enabled
+    const savedEmail = localStorage.getItem('benef_remembered_email');
+    const savedPassword = localStorage.getItem('benef_remembered_password');
+    const rememberMeFlag = localStorage.getItem('benef_remember_me') === 'true';
+
+    if (rememberMeFlag && savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      // Limpar qualquer sessão anterior antes de fazer novo login
+      authService.logout();
+      
+      const { user } = await authService.login(email, password);
+      const userRole = user.role?.toUpperCase();
+
+      if (userRole !== 'PACIENTE') {
+        authService.logout();
+        setError('Acesso negado. Esta área é exclusiva para beneficiários.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Save or remove credentials based on remember me preference
+      if (rememberMe) {
+        localStorage.setItem('benef_remembered_email', email);
+        localStorage.setItem('benef_remembered_password', password);
+        localStorage.setItem('benef_remember_me', 'true');
+      } else {
+        localStorage.removeItem('benef_remembered_email');
+        localStorage.removeItem('benef_remembered_password');
+        localStorage.removeItem('benef_remember_me');
+      }
+
+      window.location.href = '/beneficiario/consultas';
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Erro ao fazer login. Tente novamente.');
+      }
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex">
+      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-primary-light/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/3 h-1/3 bg-primary/5 rounded-full blur-2xl animate-pulse-slow" />
+        </div>
+
+        <div className="relative z-10 flex flex-col justify-between p-12 xl:p-16">
+          <div className="flex items-center gap-3">
+            <img 
+              src={logoImage} 
+              alt="TotalDoctor" 
+              className="h-40 w-auto"
+            />
+          </div>
+
+          <div className="max-w-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <h2 className="font-sans text-4xl xl:text-5xl text-gray-900 leading-tight mb-6">
+                Portal do{' '}
+                <span className="bg-gradient-to-r from-primary-light to-gray-900 bg-clip-text text-transparent">
+                  Beneficiário
+                </span>
+              </h2>
+              <p className="text-lg text-gray-900/60 leading-relaxed">
+                Acesse sua área exclusiva para gerenciar suas consultas, 
+                visualizar receitas e atualizar seu perfil.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="flex items-center gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-col"
+            >
+              <span className="font-display text-3xl text-gray-900">0k+</span>
+              <span className="text-sm text-gray-900/50">Beneficiários</span>
+            </motion.div>
+            <div className="w-px h-12 bg-gray-900/10" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="flex flex-col"
+            >
+              <span className="font-display text-3xl text-gray-900">0k+</span>
+              <span className="text-sm text-gray-900/50">Consultas/mes</span>
+            </motion.div>
+            <div className="w-px h-12 bg-gray-900/10" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="flex flex-col"
+            >
+                <span className="font-display text-3xl text-gray-900">24/7</span>
+              <span className="text-sm text-gray-900/50">Atendimento</span>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-6 sm:p-12">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md"
+        >
+          <div className="lg:hidden flex items-center gap-3 mb-12">
+            <img 
+              src={logoImage} 
+              alt="TotalDoctor" 
+              className="h-40 w-auto"
+            />
+          </div>
+
+          <div className="mb-10">
+            <h1 className="font-display text-3xl text-gray-900 mb-3">
+              Bem-vindo de volta
+            </h1>
+            <p className="text-gray-900/60">
+              Acesse sua conta de beneficiário para continuar.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="p-4 rounded-lg bg-red-50 border border-red-200 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-800">{error}</p>
+              </div>
+            )}
+
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-900/60 pointer-events-none" />
+              <Input
+                type="email"
+                placeholder="seu@email.com"
+                className="pl-12"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError('');
+                }}
+                required
+              />
+            </div>
+
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-900/60 pointer-events-none" />
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Sua senha"
+                className="pl-12 pr-12"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError('');
+                }}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-900/60 hover:text-gray-900 transition-colors focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => setRememberMe(!rememberMe)}>
+                <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out ${
+                  rememberMe ? 'bg-primary' : 'bg-border'
+                }`}>
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-gray-900 transition-transform duration-200 ease-in-out ${
+                    rememberMe ? 'translate-x-6' : 'translate-x-1'
+                  }`} />
+                </div>
+                <span className="text-sm text-gray-900/60">Lembrar-me</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
+                className="text-sm text-gray-900 hover:text-gray-900 font-medium transition-colors"
+              >
+                Esqueci minha senha
+              </button>
+            </div>
+
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full"
+              isLoading={isLoading}
+              disabled={isLoading}
+            >
+              Entrar
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </form>
+
+          <div className="mt-8 pt-8 border-t border-border">
+            <p className="text-center text-sm text-gray-900/60 mb-6">
+              Precisa de ajuda?{' '}
+              <span
+                className="text-gray-900 hover:text-gray-900 font-medium transition-colors"
+              >
+                contato@renovaprime.com.br
+              </span>
+            </p>
+
+            <div className="space-y-3">
+              <p className="text-xs font-medium text-gray-900/50 text-center uppercase tracking-wide">
+                Acessar outra área
+              </p>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="/"
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-sm font-medium text-gray-900"
+                >
+                  <Shield className="w-4 h-4" />
+                  Sou administrador
+                </a>
+                <a
+                  href="/profissional/login"
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-sm font-medium text-gray-900"
+                >
+                  <Stethoscope className="w-4 h-4" />
+                  Sou profissional
+                </a>
+                <a
+                  href="/parceiro/login"
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-sm font-medium text-gray-900"
+                >
+                  <Handshake className="w-4 h-4" />
+                  Sou parceiro
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </motion.div>
+      </div>
+
+      <ForgotPasswordModal
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+      />
+    </div>
+  );
+}

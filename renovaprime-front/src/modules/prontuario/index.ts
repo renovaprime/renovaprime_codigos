@@ -1,0 +1,10 @@
+export { PatientSummary } from './components/PatientSummary';
+export { MedicalRecordForm } from './components/MedicalRecordForm';
+export { VitalsForm } from './components/VitalsForm';
+export { RecordHistory } from './components/RecordHistory';
+export { RecordDetail } from './components/RecordDetail';
+export { AttachmentUpload } from './components/AttachmentUpload';
+export { AuditLog } from './components/AuditLog';
+export { ConsentModal } from './components/ConsentModal';
+export { medicalRecordApiService } from './services/medicalRecordService';
+export type * from './types/medicalRecord';

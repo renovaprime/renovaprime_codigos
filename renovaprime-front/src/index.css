@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+    line-height: 1.2;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary-700;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  input, textarea, select {
+    @apply font-sans;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  .card-elevated {
+    @apply bg-card rounded-2xl shadow-elevated border border-border/50;
+  }
+
+  .card-elevated-interactive {
+    @apply card-elevated transition-all duration-300 ease-out;
+  }
+
+  .card-elevated-interactive:hover {
+    @apply shadow-elevated-lg -translate-y-1;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
