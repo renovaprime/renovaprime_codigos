@@ -1212,7 +1212,7 @@ class AdminService {
       const hashedPassword = await hashPassword(data.password);
       const user = await User.create({
         name: data.name,
-        email: data.email || `${data.cpf.replace(/\D/g, '')}@beneficiario.totaldoctor.com`,
+        email: data.email || `${data.cpf.replace(/\D/g, '')}@beneficiario.renovaprime.com`,
         phone: data.phone,
         password_hash: hashedPassword,
         role_id: pacienteRole.id,
