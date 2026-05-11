@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Lock, Mail, AlertCircle, Eye, EyeOff, Shield, Users, Stethoscope } from 'lucide-react';
+import { ArrowRight, Lock, Mail, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { partnerAuthService } from '../../services/partnerAuthService';
 import logoImage from '../../assets/images/logo.png';
+import doctorBgImage from '../../assets/images/doctor-login-bg.png';
 
 export function LoginParceiro() {
   const [isLoading, setIsLoading] = useState(false);
@@ -60,60 +61,36 @@ export function LoginParceiro() {
   return (
     <div className="min-h-screen bg-background flex">
       <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-primary-light/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/3 h-1/3 bg-primary/5 rounded-full blur-2xl animate-pulse-slow" />
-        </div>
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${doctorBgImage})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40" />
 
         <div className="relative z-10 flex flex-col justify-between p-12 xl:p-16">
-          <div className="flex items-center gap-3">
-            <img
-              src={logoImage}
-              alt="TotalDoctor"
-              className="h-40 w-auto"
-            />
-          </div>
-
           <div className="max-w-lg">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="font-sans text-4xl xl:text-5xl text-gray-900 leading-tight mb-6">
+              <h2 className="font-sans text-4xl xl:text-5xl text-white leading-tight mb-6">
                 Portal do{' '}
-                <span className="bg-gradient-to-r from-primary-light to-gray-900 bg-clip-text text-transparent">
+                <span className="text-primary-light">
                   Parceiro
                 </span>
               </h2>
-              <p className="text-lg text-gray-900/60 leading-relaxed">
+              <p className="text-lg text-white/80 leading-relaxed">
                 Acompanhe suas vendas, comissões e gerencie
                 sua rede de filiais e revendedores.
               </p>
             </motion.div>
           </div>
 
-          <div className="flex items-center gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-col"
-            >
-              <span className="font-display text-3xl text-gray-900">Parceiros</span>
-              <span className="text-sm text-gray-900/50">Filiais e Revendedores</span>
-            </motion.div>
-            <div className="w-px h-12 bg-gray-900/10" />
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="flex flex-col"
-            >
-              <span className="font-display text-3xl text-gray-900">Vendas</span>
-              <span className="text-sm text-gray-900/50">Comissões em tempo real</span>
-            </motion.div>
+          <div className="flex items-center">
+            <p className="text-sm text-white/60">
+              © {new Date().getFullYear()} RenovaPrime. Todos os direitos reservados.
+            </p>
           </div>
         </div>
       </div>
@@ -125,15 +102,15 @@ export function LoginParceiro() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
         >
-          <div className="lg:hidden flex items-center gap-3 mb-12">
+          <div className="flex items-center justify-center gap-3 mb-10">
             <img
               src={logoImage}
-              alt="TotalDoctor"
-              className="h-10 w-auto"
+              alt="RenovaPrime"
+              className="h-24 w-auto"
             />
           </div>
 
-          <div className="mb-10">
+          <div className="mb-8">
             <h1 className="font-display text-3xl text-foreground mb-3">
               Bem-vindo de volta
             </h1>
@@ -207,12 +184,12 @@ export function LoginParceiro() {
             <Button
               type="submit"
               size="lg"
-              className="w-full"
+              className="w-full bg-[#26A69A] hover:bg-[#1E8C82] text-white font-semibold shadow-lg shadow-[#26A69A]/30 hover:shadow-xl hover:shadow-[#26A69A]/40 transition-all duration-300"
               isLoading={isLoading}
               disabled={isLoading}
             >
               Entrar
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5 ml-1" />
             </Button>
           </form>
 
@@ -224,34 +201,6 @@ export function LoginParceiro() {
               </span>
             </p>
 
-            <div className="space-y-3">
-              <p className="text-xs font-medium text-muted-foreground text-center uppercase tracking-wide">
-                Acessar outra área
-              </p>
-              <div className="flex flex-col gap-2">
-                <a
-                  href="/"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium text-foreground"
-                >
-                  <Shield className="w-4 h-4" />
-                  Sou administrador
-                </a>
-                <a
-                  href="/profissional/login"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium text-foreground"
-                >
-                  <Stethoscope className="w-4 h-4" />
-                  Sou profissional
-                </a>
-                <a
-                  href="/beneficiario/login"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium text-foreground"
-                >
-                  <Users className="w-4 h-4" />
-                  Sou beneficiário
-                </a>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>

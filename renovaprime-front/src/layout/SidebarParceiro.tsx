@@ -64,7 +64,7 @@ export function SidebarParceiro({ isOpen, onClose, collapsed, onToggleCollapse }
         <div className={`flex items-center w-full justify-center ${isCollapsed ? 'overflow-hidden' : ''}`}>
           <img
             src={logoImage}
-            alt="TotalDoctor"
+            alt="RenovaPrime"
             className={`w-auto transition-all duration-300 ${isCollapsed ? 'h-10' : 'h-16'}`}
           />
         </div>
