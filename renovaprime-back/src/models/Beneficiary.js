@@ -68,6 +68,16 @@ const Beneficiary = sequelize.define('Beneficiary', {
     allowNull: false,
     defaultValue: 'ACTIVE'
   },
+  face_scan_enabled: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  face_scan_requested: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
   created_by: {
     type: DataTypes.INTEGER,
     allowNull: true

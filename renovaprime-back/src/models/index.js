@@ -11,6 +11,7 @@ const TeleconsultRoom = require('./TeleconsultRoom');
 const Prescription = require('./Prescription');
 const AppointmentLog = require('./AppointmentLog');
 const Beneficiary = require('./Beneficiary');
+const BeneficiaryFaceScanUsage = require('./BeneficiaryFaceScanUsage');
 const Partner = require('./Partner');
 const PartnerBranch = require('./PartnerBranch');
 const Reseller = require('./Reseller');
@@ -66,6 +67,14 @@ AppointmentLog.belongsTo(User, { foreignKey: 'performed_by', as: 'performer' });
 // Beneficiary self-reference (titular -> dependentes)
 Beneficiary.belongsTo(Beneficiary, { as: 'titular', foreignKey: 'titular_id' });
 Beneficiary.hasMany(Beneficiary, { as: 'dependents', foreignKey: 'titular_id' });
+
+Beneficiary.hasMany(BeneficiaryFaceScanUsage, {
+  foreignKey: 'beneficiary_id',
+  as: 'faceScanUsages'
+});
+BeneficiaryFaceScanUsage.belongsTo(Beneficiary, { foreignKey: 'beneficiary_id' });
+User.hasMany(BeneficiaryFaceScanUsage, { foreignKey: 'user_id' });
+BeneficiaryFaceScanUsage.belongsTo(User, { foreignKey: 'user_id' });
 
 // Appointment -> Beneficiary relationship
 Beneficiary.hasMany(Appointment, { foreignKey: 'beneficiary_id' });
@@ -150,6 +159,7 @@ module.exports = {
   Prescription,
   AppointmentLog,
   Beneficiary,
+  BeneficiaryFaceScanUsage,
   Partner,
   PartnerBranch,
   Reseller,

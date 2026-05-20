@@ -51,7 +51,12 @@ const updateBeneficiarySchema = z.object({
   path: ['titular_id']
 });
 
+const adminBeneficiaryFaceScanSchema = z.object({
+  enabled: z.boolean()
+});
+
 module.exports = {
   createBeneficiarySchema,
-  updateBeneficiarySchema
+  updateBeneficiarySchema,
+  adminBeneficiaryFaceScanSchema
 };

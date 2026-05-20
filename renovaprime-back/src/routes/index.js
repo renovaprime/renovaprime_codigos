@@ -15,10 +15,13 @@ const cmsRoutes = require('./cmsRoutes');
 const salesRoutes = require('./salesRoutes');
 const partnerAreaRoutes = require('./partnerAreaRoutes');
 const medicalRecordRoutes = require('./medicalRecordRoutes');
+const rapidocRoutes = require('./rapidocRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/me', meRoutes);
 router.use('/doctors', doctorRoutes);
+// Mais específico antes de `/patient` para não ser engolido pelo patientRoutes
+router.use('/patient/rapidoc', rapidocRoutes);
 router.use('/patient', patientRoutes);
 router.use('/appointments', appointmentRoutes);
 router.use('/prescriptions', prescriptionRoutes);

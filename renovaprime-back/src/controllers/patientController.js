@@ -184,6 +184,23 @@ class PatientController {
       next(error);
     }
   }
+
+  async requestFaceScanAccess(req, res, next) {
+    try {
+      const result = await patientService.requestFaceScanAccess(
+        req.user.id,
+        req.body.cpf
+      );
+      return res.json(successResponse(result));
+    } catch (error) {
+      if (error.statusCode === 403) {
+        return res
+          .status(403)
+          .json(errorResponse(error.message, error.code || 'FORBIDDEN'));
+      }
+      next(error);
+    }
+  }
 }
 
 module.exports = new PatientController();

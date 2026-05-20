@@ -9,6 +9,7 @@ const {
   manageDependentAccessSchema,
   createDependentSchema
 } = require('../validators/patientAppointmentValidator');
+const { faceScanCpfSchema } = require('../validators/rapidocBeneficiaryValidator');
 
 // Patient appointments routes
 router.get(
@@ -39,6 +40,14 @@ router.post(
   authMiddleware,
   permissionMiddleware('paciente'),
   patientController.cancelMyAppointment
+);
+
+router.post(
+  '/face-scan/request',
+  authMiddleware,
+  permissionMiddleware('paciente'),
+  validate(faceScanCpfSchema),
+  patientController.requestFaceScanAccess
 );
 
 router.get(

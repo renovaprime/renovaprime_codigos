@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const { Op } = require('sequelize');
 const memedService = require('./memedService');
 const availabilityService = require('./availabilityService');
+const rapidocService = require('./rapidocService');
 
 class AdminService {
   async createDoctor(data) {
@@ -1059,7 +1060,44 @@ class AdminService {
 
   async listBeneficiaries(filters = {}) {
     const where = {};
-    
+
+    /** @param {string|undefined|null|boolean} raw */
+    const parseFaceScanWhere = (raw) => {
+      if (raw === undefined || raw === null || raw === false) return null;
+      const s = String(raw).trim();
+      if (!s) return null;
+      const v = s.toLowerCase();
+      if (v === 'disabled' || v === 'desativado') {
+        return { face_scan_enabled: false, face_scan_requested: false };
+      }
+      if (v === 'pending' || v === 'solicitado') {
+        return { face_scan_requested: true, face_scan_enabled: false };
+      }
+      if (v === 'active' || v === 'ativo') {
+        return { face_scan_enabled: true };
+      }
+      return null;
+    };
+
+    const faceScanWhere = parseFaceScanWhere(filters.faceScan);
+
+    let faceScanTitularIdSet = null;
+    if (faceScanWhere) {
+      const rows = await Beneficiary.findAll({
+        where: faceScanWhere,
+        attributes: ['id', 'type', 'titular_id'],
+        raw: true
+      });
+      faceScanTitularIdSet = new Set();
+      for (const r of rows) {
+        if (r.type === 'TITULAR') faceScanTitularIdSet.add(r.id);
+        else if (r.titular_id) faceScanTitularIdSet.add(r.titular_id);
+      }
+      if (faceScanTitularIdSet.size === 0) {
+        return [];
+      }
+    }
+
     if (filters.name) {
       where.name = { [Op.like]: `%${filters.name}%` };
     }
@@ -1075,8 +1113,10 @@ class AdminService {
 
     // Se filtrar por tipo DEPENDENTE, buscar todos
     if (filters.type === 'DEPENDENTE') {
+      const depWhere = { ...where };
+      if (faceScanWhere) Object.assign(depWhere, faceScanWhere);
       return await Beneficiary.findAll({
-        where,
+        where: depWhere,
         include: [{
           model: Beneficiary,
           as: 'titular',
@@ -1089,10 +1129,16 @@ class AdminService {
     // Montar filtro dos dependentes
     const dependentWhere = {};
     if (filters.status) dependentWhere.status = filters.status;
+    if (faceScanWhere) Object.assign(dependentWhere, faceScanWhere);
+
+    const titularWhereBase = { ...where, type: 'TITULAR' };
+    if (faceScanTitularIdSet) {
+      titularWhereBase.id = { [Op.in]: [...faceScanTitularIdSet] };
+    }
 
     // Buscar titulares que correspondem ao filtro
     const titulares = await Beneficiary.findAll({
-      where: { ...where, type: 'TITULAR' },
+      where: titularWhereBase,
       include: [{
         model: Beneficiary,
         as: 'dependents',
@@ -1111,13 +1157,17 @@ class AdminService {
       if (filters.name) depWhere.name = { [Op.like]: `%${filters.name}%` };
       if (filters.cpf) depWhere.cpf = { [Op.like]: `%${filters.cpf}%` };
       if (filters.status) depWhere.status = filters.status;
+      if (faceScanWhere) Object.assign(depWhere, faceScanWhere);
 
       const matchingDeps = await Beneficiary.findAll({
         where: depWhere,
         attributes: ['titular_id']
       });
 
-      const titularIdsFromDeps = [...new Set(matchingDeps.map(d => d.titular_id).filter(Boolean))];
+      let titularIdsFromDeps = [...new Set(matchingDeps.map(d => d.titular_id).filter(Boolean))];
+      if (faceScanTitularIdSet) {
+        titularIdsFromDeps = titularIdsFromDeps.filter((id) => faceScanTitularIdSet.has(id));
+      }
       const alreadyFoundIds = titulares.map(t => t.id);
       const missingTitularIds = titularIdsFromDeps.filter(id => !alreadyFoundIds.includes(id));
 
@@ -1318,6 +1368,43 @@ class AdminService {
       await transaction.rollback();
       throw error;
     }
+  }
+
+  /**
+   * Ativa Face Scan (garante cadastro na Rapidoc se necessário) ou desativa localmente.
+   * @param {number} id
+   * @param {boolean} enabled
+   */
+  async setBeneficiaryFaceScanEnabled(id, enabled) {
+    const beneficiary = await Beneficiary.findByPk(id);
+
+    if (!beneficiary) {
+      throw new Error('Beneficiary not found');
+    }
+
+    if (enabled) {
+      if (beneficiary.face_scan_enabled) {
+        return await this.getBeneficiaryById(id);
+      }
+
+      await rapidocService.ensureBeneficiaryInRapidoc(beneficiary);
+      await beneficiary.update({ face_scan_enabled: true });
+      return await this.getBeneficiaryById(id);
+    }
+
+    const transaction = await sequelize.transaction();
+    try {
+      await beneficiary.update(
+        { face_scan_enabled: false, face_scan_requested: false },
+        { transaction }
+      );
+      await transaction.commit();
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+
+    return await this.getBeneficiaryById(id);
   }
 
   async toggleBeneficiaryStatus(id) {

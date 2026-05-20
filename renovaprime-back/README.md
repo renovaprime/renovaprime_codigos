@@ -38,6 +38,12 @@ TWILIO_API_KEY_SID=your_twilio_key
 TWILIO_API_KEY_SECRET=your_twilio_secret
 ASAAS_API_KEY=your_asaas_key
 ASAAS_BASE_URL=https://sandbox.asaas.com/api/v3
+
+# Rapidoc Tema (proxy paciente — ver /api/v1/patient/rapidoc)
+RAPIDOC_BASE_URL=https://api.rapidoc.tech/tema/api
+RAPIDOC_TOKEN=your_rapidoc_bearer_token
+RAPIDOC_CLIENT_ID=your_rapidoc_client_uuid
+# Opcional: se preferir, RAPIDOC_* pode ser omitido e usados BASE_URL, TOKEN e CLIENT_ID (legado)
 ```
 
 3. Run database migrations:

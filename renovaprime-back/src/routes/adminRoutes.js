@@ -6,7 +6,7 @@ const permissionMiddleware = require('../middlewares/permission');
 const validate = require('../validators/validate');
 const { createSpecialtySchema, updateSpecialtySchema } = require('../validators/specialtyValidator');
 const { createDoctorSchema, updateDoctorSchema } = require('../validators/adminDoctorValidator');
-const { createBeneficiarySchema, updateBeneficiarySchema } = require('../validators/beneficiaryValidator');
+const { createBeneficiarySchema, updateBeneficiarySchema, adminBeneficiaryFaceScanSchema } = require('../validators/beneficiaryValidator');
 const { createAdminAppointmentSchema } = require('../validators/adminAppointmentValidator');
 
 router.get(
@@ -197,6 +197,14 @@ router.post(
   permissionMiddleware('admin'),
   validate(createBeneficiarySchema),
   adminController.createBeneficiary
+);
+
+router.patch(
+  '/beneficiaries/:id/face-scan',
+  authMiddleware,
+  permissionMiddleware('admin'),
+  validate(adminBeneficiaryFaceScanSchema),
+  adminController.patchBeneficiaryFaceScan
 );
 
 router.put(

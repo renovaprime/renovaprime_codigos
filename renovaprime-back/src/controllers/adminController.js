@@ -363,7 +363,8 @@ class AdminController {
         name: req.query.name,
         cpf: req.query.cpf,
         type: req.query.type,
-        status: req.query.status
+        status: req.query.status,
+        faceScan: req.query.faceScan
       };
       
       const beneficiaries = await adminService.listBeneficiaries(filters);
@@ -449,6 +450,31 @@ class AdminController {
     } catch (error) {
       if (error.message === 'Titular not found') {
         return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
+      }
+      next(error);
+    }
+  }
+
+  async patchBeneficiaryFaceScan(req, res, next) {
+    try {
+      const beneficiaryId = parseInt(req.params.id, 10);
+      const { enabled } = req.body;
+      const beneficiary = await adminService.setBeneficiaryFaceScanEnabled(
+        beneficiaryId,
+        enabled
+      );
+      return res.json(successResponse(beneficiary));
+    } catch (error) {
+      if (error.message === 'Beneficiary not found') {
+        return res.status(404).json(errorResponse(error.message, 'NOT_FOUND'));
+      }
+      if (error.code === 'FACE_SCAN_INCOMPLETE_DATA') {
+        return res.status(422).json(errorResponse(error.message, error.code));
+      }
+      if (error.statusCode) {
+        return res
+          .status(error.statusCode)
+          .json(errorResponse(error.message, error.code || 'RAPIDOC_ERROR'));
       }
       next(error);
     }

@@ -201,6 +201,8 @@ CREATE TABLE `beneficiaries` (
   `address` varchar(255) DEFAULT NULL,
   `service_type` enum('CLINICO','PREMIUM','FAMILIAR') NOT NULL DEFAULT 'CLINICO',
   `status` enum('ACTIVE','INACTIVE') NOT NULL DEFAULT 'ACTIVE',
+  `face_scan_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `face_scan_requested` tinyint(1) NOT NULL DEFAULT '0',
   `created_by` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -213,6 +215,21 @@ CREATE TABLE `beneficiaries` (
   CONSTRAINT `fk_beneficiaries_titular` FOREIGN KEY (`titular_id`) REFERENCES `beneficiaries` (`id`),
   CONSTRAINT `fk_beneficiaries_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- totalmedi.beneficiary_face_scan_usages (Face Scan — auditoria de aberturas)
+
+CREATE TABLE `beneficiary_face_scan_usages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `beneficiary_id` int NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_beneficiary_face_scan_usages_beneficiary` (`beneficiary_id`),
+  KEY `idx_beneficiary_face_scan_usages_created` (`created_at`),
+  CONSTRAINT `fk_bfsu_beneficiary` FOREIGN KEY (`beneficiary_id`) REFERENCES `beneficiaries` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_bfsu_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- totalmedi.doctors definition

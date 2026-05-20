@@ -4,6 +4,10 @@ const { Op } = require('sequelize');
 const availabilityService = require('./availabilityService');
 const { hashPassword } = require('../utils/hash');
 
+function normalizeCpf(cpf) {
+  return String(cpf || '').replace(/\D/g, '');
+}
+
 class PatientService {
   /**
    * Lista consultas pendentes do beneficiário logado
@@ -272,6 +276,70 @@ class PatientService {
     });
 
     return [selfBeneficiary, ...dependents];
+  }
+
+  /**
+   * Beneficiário ativo cujo CPF pertence ao usuário (titular da rede ou dependente com login ou titular).
+   */
+  async findOwnedBeneficiaryByCpf(userId, cpfDigits) {
+    const digits = normalizeCpf(cpfDigits);
+    if (digits.length !== 11) {
+      return null;
+    }
+
+    const selfBeneficiary = await Beneficiary.findOne({
+      where: {
+        user_id: userId,
+        status: 'ACTIVE'
+      }
+    });
+
+    if (!selfBeneficiary) {
+      return null;
+    }
+
+    if (normalizeCpf(selfBeneficiary.cpf) === digits) {
+      return selfBeneficiary;
+    }
+
+    if (selfBeneficiary.type !== 'TITULAR') {
+      return null;
+    }
+
+    const network = await Beneficiary.findAll({
+      where: {
+        status: 'ACTIVE',
+        [Op.or]: [{ id: selfBeneficiary.id }, { titular_id: selfBeneficiary.id }]
+      }
+    });
+
+    return network.find((b) => normalizeCpf(b.cpf) === digits) || null;
+  }
+
+  /**
+   * Marca pedido de liberação do Face Scan (admin vê face_scan_requested).
+   */
+  async requestFaceScanAccess(userId, cpfDigits) {
+    const local = await this.findOwnedBeneficiaryByCpf(userId, cpfDigits);
+    if (!local) {
+      const err = new Error('Beneficiário não encontrado ou sem permissão');
+      err.statusCode = 403;
+      err.code = 'FORBIDDEN';
+      throw err;
+    }
+
+    if (local.face_scan_enabled) {
+      return {
+        alreadyEnabled: true,
+        message: 'Face Scan já está ativado para este beneficiário.'
+      };
+    }
+
+    await local.update({ face_scan_requested: true });
+    return {
+      alreadyEnabled: false,
+      message: 'Solicitação registrada. Nossa equipe irá analisar e liberar em breve.'
+    };
   }
 
   async createDependent(userId, data) {
