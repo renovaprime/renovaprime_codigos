@@ -1,11 +1,15 @@
 import { apiClient } from './api';
 import type { ApiResponse, Beneficiary, BeneficiaryFormData } from '../types/api';
 
-interface BeneficiaryFilters {
+export type FaceScanListFilter = 'disabled' | 'pending' | 'active';
+
+export interface BeneficiaryFilters {
   name?: string;
   cpf?: string;
   type?: string;
   status?: string;
+  /** Filtra pela situação do Face Scan (mesmos estados da coluna na lista) */
+  faceScan?: FaceScanListFilter;
 }
 
 class BeneficiaryService {
@@ -15,6 +19,7 @@ class BeneficiaryService {
     if (filters?.cpf) params.append('cpf', filters.cpf);
     if (filters?.type) params.append('type', filters.type);
     if (filters?.status) params.append('status', filters.status);
+    if (filters?.faceScan) params.append('faceScan', filters.faceScan);
     
     const queryString = params.toString();
     const url = queryString ? `/admin/beneficiaries?${queryString}` : '/admin/beneficiaries';
@@ -56,6 +61,15 @@ class BeneficiaryService {
 
   async delete(id: number): Promise<void> {
     await apiClient.delete(`/admin/beneficiaries/${id}`);
+  }
+
+  /** Ativa ou desativa Face Scan (Rapidoc + flags locais). */
+  async setFaceScan(id: number, enabled: boolean): Promise<Beneficiary> {
+    const response = await apiClient.patch<ApiResponse<Beneficiary>>(
+      `/admin/beneficiaries/${id}/face-scan`,
+      { enabled }
+    );
+    return response.data;
   }
 }
 

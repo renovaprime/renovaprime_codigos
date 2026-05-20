@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { Users, Plus, Search, Eye, Edit2, Trash2 } from 'lucide-react';
 import { Layout } from '../layout';
 import { Card, EmptyState, Button, Input, Badge, Switch, ConfirmModal, BeneficiaryDetailsModal } from '../components';
 import { TitularFormModal } from '../components/TitularFormModal';
 import { DependenteFormModal } from '../components/DependenteFormModal';
-import { beneficiaryService } from '../services/beneficiaryService';
+import { beneficiaryService, type BeneficiaryFilters, type FaceScanListFilter } from '../services/beneficiaryService';
 import type { Beneficiary } from '../types/api';
 
 export function Beneficiarios() {
@@ -14,6 +14,7 @@ export function Beneficiarios() {
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
+  const [faceScanFilter, setFaceScanFilter] = useState<FaceScanListFilter | ''>('');
 
   const [titularModalOpen, setTitularModalOpen] = useState(false);
   const [dependenteModalOpen, setDependenteModalOpen] = useState(false);
@@ -38,17 +39,18 @@ export function Beneficiarios() {
 
   useEffect(() => {
     loadBeneficiaries();
-  }, [searchTerm, typeFilter, statusFilter]);
+  }, [searchTerm, typeFilter, statusFilter, faceScanFilter]);
 
   const loadBeneficiaries = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const filters: Record<string, string> = {};
+      const filters: BeneficiaryFilters = {};
       if (searchTerm) filters.name = searchTerm;
       if (typeFilter) filters.type = typeFilter;
       if (statusFilter) filters.status = statusFilter;
+      if (faceScanFilter) filters.faceScan = faceScanFilter;
 
       const data = await beneficiaryService.list(filters);
       setBeneficiaries(data);
@@ -150,6 +152,18 @@ export function Beneficiarios() {
     return labels[serviceType] || serviceType;
   };
 
+  const getFaceScanBadge = (b: Beneficiary) => {
+    const enabled = Boolean(b.face_scan_enabled);
+    const requested = Boolean(b.face_scan_requested);
+    if (enabled) {
+      return { label: 'Ativo', variant: 'success' as const };
+    }
+    if (requested) {
+      return { label: 'Solicitado', variant: 'warning' as const };
+    }
+    return { label: 'Desativado', variant: 'secondary' as const };
+  };
+
   return (
     <Layout title="Beneficiários">
       <div className="space-y-6">
@@ -213,6 +227,17 @@ export function Beneficiarios() {
                 <option value="ACTIVE">Ativo</option>
                 <option value="INACTIVE">Inativo</option>
               </select>
+              <select
+                value={faceScanFilter}
+                data-cy="beneficiary-face-scan-filter"
+                onChange={(e) => setFaceScanFilter((e.target.value || '') as FaceScanListFilter | '')}
+                className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary min-w-[12rem]"
+              >
+                <option value="">Face Scan: todos</option>
+                <option value="disabled">Face Scan: desativado</option>
+                <option value="pending">Face Scan: solicitado</option>
+                <option value="active">Face Scan: ativo</option>
+              </select>
             </div>
           </div>
         </Card>
@@ -229,12 +254,12 @@ export function Beneficiarios() {
               icon={Users}
               title="Nenhum beneficiário encontrado"
               description={
-                searchTerm || typeFilter || statusFilter
+                searchTerm || typeFilter || statusFilter || faceScanFilter
                   ? 'Tente ajustar os filtros de busca'
                   : 'Cadastre o primeiro beneficiário do sistema'
               }
               action={
-                !searchTerm && !typeFilter && !statusFilter ? (
+                !searchTerm && !typeFilter && !statusFilter && !faceScanFilter ? (
                   <Button variant="secondary" onClick={handleNewTitular}>
                     <Plus className="w-4 h-4" />
                     Adicionar Titular
@@ -255,16 +280,18 @@ export function Beneficiarios() {
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Titular</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Telefone</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Plano/Serviço</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Face Scan</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
                     <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">Acoes</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {beneficiaries.map((titular) => (
-                    <>
+                  {beneficiaries.map((titular) => {
+                    const titularFaceScan = getFaceScanBadge(titular);
+                    return (
+                    <Fragment key={titular.id}>
                       {/* Linha do Titular */}
                       <tr
-                        key={titular.id}
                         className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors"
                       >
                         <td className="py-3 px-4">
@@ -289,6 +316,11 @@ export function Beneficiarios() {
                         </td>
                         <td className="py-3 px-4">
                           <Badge variant="primary" data-cy="beneficiary-service-badge">{getServiceLabel(titular.service_type)}</Badge>
+                        </td>
+                        <td className="py-3 px-4">
+                          <Badge variant={titularFaceScan.variant} data-cy="beneficiary-face-scan-badge">
+                            {titularFaceScan.label}
+                          </Badge>
                         </td>
                         <td className="py-3 px-4">
                           <Switch
@@ -328,7 +360,9 @@ export function Beneficiarios() {
                       </tr>
 
                       {/* Linhas dos Dependentes */}
-                      {titular.dependents?.map((dependente) => (
+                      {titular.dependents?.map((dependente) => {
+                        const depFaceScan = getFaceScanBadge(dependente);
+                        return (
                         <tr
                           key={dependente.id}
                           className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors bg-muted/10"
@@ -358,6 +392,11 @@ export function Beneficiarios() {
                           </td>
                           <td className="py-3 px-4">
                             <Badge variant="primary">{getServiceLabel(dependente.service_type)}</Badge>
+                          </td>
+                          <td className="py-3 px-4">
+                            <Badge variant={depFaceScan.variant} data-cy="dependent-face-scan-badge">
+                              {depFaceScan.label}
+                            </Badge>
                           </td>
                           <td className="py-3 px-4">
                             <Switch
@@ -391,9 +430,11 @@ export function Beneficiarios() {
                             </div>
                           </td>
                         </tr>
-                      ))}
-                    </>
-                  ))}
+                        );
+                      })}
+                    </Fragment>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

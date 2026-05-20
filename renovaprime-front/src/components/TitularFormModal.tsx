@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Button, Input } from './index';
+import { BeneficiaryFaceScanAdminSection } from './BeneficiaryFaceScanAdminSection';
 import { beneficiaryService } from '../services/beneficiaryService';
 import type { Beneficiary, BeneficiaryFormData, ServiceType } from '../types/api';
 
@@ -37,6 +38,7 @@ export function TitularFormModal({ isOpen, onClose, beneficiary, isEditing = fal
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<BeneficiaryFormData>({ ...INITIAL_FORM });
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [beneficiaryFaceScan, setBeneficiaryFaceScan] = useState<Beneficiary | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +63,16 @@ export function TitularFormModal({ isOpen, onClose, beneficiary, isEditing = fal
       setPasswordConfirmation('');
       setError(null);
     }
+    if (!isOpen) {
+      setBeneficiaryFaceScan(null);
+    }
   }, [isOpen, beneficiary, isEditing]);
+
+  useEffect(() => {
+    if (isOpen && isEditing && beneficiary) {
+      setBeneficiaryFaceScan(beneficiary);
+    }
+  }, [isOpen, isEditing, beneficiary]);
 
   const handleChange = (field: keyof BeneficiaryFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -334,6 +345,14 @@ export function TitularFormModal({ isOpen, onClose, beneficiary, isEditing = fal
               />
             </div>
           </div>
+
+          {isEditing && beneficiaryFaceScan && (
+            <BeneficiaryFaceScanAdminSection
+              beneficiary={beneficiaryFaceScan}
+              formBusy={isLoading}
+              onBeneficiaryRefresh={setBeneficiaryFaceScan}
+            />
+          )}
 
           {/* Servico */}
           <div>

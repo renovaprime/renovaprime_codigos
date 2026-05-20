@@ -139,6 +139,10 @@ export interface Beneficiary {
   address?: string;
   service_type: ServiceType;
   status: BeneficiaryStatus;
+  /** Admin liberou Face Scan (VitalScan) para este beneficiário */
+  face_scan_enabled?: boolean;
+  /** Paciente solicitou pelo app; aguardando liberação */
+  face_scan_requested?: boolean;
   created_by?: number;
   created_at?: string;
   updated_at?: string;
