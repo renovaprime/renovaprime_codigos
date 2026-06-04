@@ -131,7 +131,7 @@ export function Revendedores() {
   };
 
   const handleCopySalesLink = (reseller: Reseller) => {
-    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://renovaprime.com.br';
+    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://site.renovaprime.com.br';
     const link = `${siteUrl}/?rev=${reseller.id}#planos`;
     navigator.clipboard.writeText(link);
     showSuccess(`Link de vendas de ${reseller.name} copiado!`);
