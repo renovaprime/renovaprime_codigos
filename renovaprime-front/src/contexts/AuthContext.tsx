@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authService } from '../services/authService';
+import { memedManager } from '../services/memedManager';
 import type { User } from '../types/api';
 
 interface AuthContextType {
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
+    memedManager.logout();
     authService.logout();
     setUser(null);
   };
