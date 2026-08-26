@@ -3,7 +3,7 @@ import { Users, X } from 'lucide-react';
 import { LayoutBeneficiario } from '../../layout/LayoutBeneficiario';
 import { EmptyState } from '../../components/EmptyState';
 import { Card } from '../../components/Card';
-import { Button, Input } from '../../components';
+import { Button, Input, PageHeader } from '../../components';
 import { appointmentService } from '../../services/appointmentService';
 import type { Beneficiary } from '../../types/api';
 
@@ -228,17 +228,10 @@ export function BeneficiarioDependentes() {
   return (
     <LayoutBeneficiario title="Dependentes">
       <div className="w-full mx-auto space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-
-          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Dependentes</h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
-                Gerencie os dependentes vinculados ao seu plano com cadastro e controle de acesso.
-              </p>
-            </div>
+        <PageHeader
+          title="Dependentes"
+          subtitle="Gerencie os dependentes vinculados ao seu plano com cadastro e controle de acesso."
+          actions={
             <Button
               type="button"
               onClick={openCreateModal}
@@ -247,8 +240,8 @@ export function BeneficiarioDependentes() {
             >
               Cadastrar dependente
             </Button>
-          </div>
-        </div>
+          }
+        />
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Card className="bg-gradient-to-br from-primary/10 via-card/90 to-secondary/10 p-4 shadow-sm backdrop-blur-sm">

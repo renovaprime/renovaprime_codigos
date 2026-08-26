@@ -7,6 +7,7 @@ import {
   FileText,
   ClipboardList,
   History,
+  BookOpen,
   User,
   LogOut,
   X,
@@ -29,6 +30,7 @@ const navigation = [
   { id: 'nav-professional-prescriptions', name: 'Receitas', href: '/profissional/receitas', icon: FileText },
   { id: 'nav-professional-records', name: 'Pacientes', href: '/profissional/pacientes', icon: ClipboardList },
   { id: 'nav-professional-history', name: 'Historico', href: '/profissional/historico', icon: History },
+  { id: 'nav-professional-manual', name: 'Manual', href: '/profissional/manual', icon: BookOpen },
   { id: 'nav-professional-profile', name: 'Meu Perfil', href: '/profissional/perfil', icon: User },
 ];
 

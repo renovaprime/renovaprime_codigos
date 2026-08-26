@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   ShoppingCart,
   Percent,
+  BookOpen,
   User,
   Building2,
   Users,
@@ -37,6 +38,7 @@ const partnerBranchNavigation = [
 ];
 
 const profileNavigation = [
+  { id: 'nav-partner-manual', name: 'Manual', href: '/parceiro/manual', icon: BookOpen },
   { id: 'nav-partner-profile', name: 'Meu Perfil', href: '/parceiro/perfil', icon: User },
 ];
 

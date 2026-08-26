@@ -1,0 +1,621 @@
+{
+  "title": "Manual do Profissional",
+  "subtitle": "Guia para agenda, consultas, prontuário, receitas e sua conta no painel.",
+  "categories": [
+    {
+      "id": "agenda",
+      "title": "Agenda",
+      "description": "Defina os horários em que você atende e os bloqueios de folga ou imprevisto.",
+      "icon": "Clock",
+      "items": [
+        {
+          "id": "horarios-semanais",
+          "title": "Configurar horários da semana",
+          "description": "Ativar dias e intervalos em que a plataforma pode marcar consultas com você.",
+          "route": "/profissional/disponibilidade",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Disponibilidade. A aba Agenda Semanal mostra os sete dias da semana."
+              ]
+            },
+            {
+              "title": "Como configurar",
+              "steps": [
+                {
+                  "title": "Ativar os dias de atendimento",
+                  "text": "Ligue o dia em que você atende (por exemplo, segunda a sexta). É preciso ter pelo menos um dia ativo."
+                },
+                {
+                  "title": "Informar os intervalos",
+                  "text": "Em cada dia ativo, cadastre ao menos um intervalo com horário de início e fim (o início precisa ser anterior ao fim). Você pode ter mais de um intervalo no mesmo dia, por exemplo manhã e tarde."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Clique em Salvar no topo. Sem salvar, as mudanças não entram na agenda usada pelo agendamento."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Sem agenda salva, o sistema não encontra horário para marcar consulta com você.",
+                "É obrigatório ao menos um dia ativo, com intervalo válido.",
+                "Se houver o aviso Alterações não salvas, clique em Salvar antes de sair."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bloqueios",
+          "title": "Bloquear horários",
+          "description": "Tirar da agenda um dia inteiro ou um período (férias, reunião, imprevisto).",
+          "route": "/profissional/disponibilidade",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Disponibilidade, abra a aba Bloqueios."
+              ]
+            },
+            {
+              "title": "Como criar um bloqueio",
+              "steps": [
+                {
+                  "title": "Novo bloqueio",
+                  "text": "Informe a data. Se quiser bloquear só um trecho do dia, preencha início e fim juntos. Se deixar os dois horários em branco, o dia inteiro fica indisponível."
+                },
+                {
+                  "title": "Motivo (opcional)",
+                  "text": "Descreva o motivo, se quiser lembrar depois (férias, congresso, etc.)."
+                },
+                {
+                  "title": "Salvar o bloqueio",
+                  "text": "O bloqueio entra na lista. Edite ou exclua pela própria aba. Lembre-se de Salvar a disponibilidade se o sistema indicar alterações pendentes."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Horário de início e fim devem vir juntos ou os dois vazios (dia inteiro).",
+                "O início precisa ser anterior ao fim.",
+                "Bloqueio impede novos agendamentos naquele período; consultas já marcadas não são canceladas automaticamente."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "previa-calendario",
+          "title": "Ver a prévia do calendário",
+          "description": "Conferir como a semana fica depois dos horários e bloqueios.",
+          "route": "/profissional/disponibilidade",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Disponibilidade, abra a aba Prévia. O calendário mostra os dias e faixas livres, já descontando os bloqueios."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Conferir a grade",
+                  "text": "Use a prévia para validar se os intervalos e bloqueios estão como você espera antes de encerrar a configuração."
+                },
+                {
+                  "title": "Ajustar se precisar",
+                  "text": "Volte para Agenda Semanal ou Bloqueios, corrija e salve de novo."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "A prévia reflete o que está na tela, inclusive alterações ainda não salvas.",
+                "Quem agenda (admin ou beneficiário) só vê o que já foi salvo."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atendimento",
+      "title": "Atendimento",
+      "description": "Acompanhar o dia, iniciar a consulta, entrar na sala e encerrar o atendimento.",
+      "icon": "Calendar",
+      "items": [
+        {
+          "id": "dashboard",
+          "title": "Dashboard",
+          "description": "Ver o resumo do dia, a consulta em andamento e a próxima da fila.",
+          "route": "/profissional/dashboard",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Após o login, você entra no Dashboard. Também está no primeiro item do menu."
+              ]
+            },
+            {
+              "title": "O que você vê",
+              "paragraphs": [
+                "Totais do dia (agendadas, em andamento, finalizadas) e cards da consulta atual e da próxima. Use Atualizar se os números parecerem desatualizados."
+              ]
+            },
+            {
+              "title": "Como seguir para o atendimento",
+              "steps": [
+                {
+                  "title": "Ir para Consultas",
+                  "text": "Pelo card da consulta em andamento (quando for online) ou pelo menu Consultas, você abre a lista para iniciar, entrar na sala ou finalizar."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O dashboard é um resumo; as ações de iniciar, receita e sala ficam em Consultas.",
+                "Só aparecem as suas consultas, não as de outros profissionais."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "listar-consultas",
+          "title": "Ver suas consultas",
+          "description": "Listar o que está agendado ou em andamento e filtrar por data.",
+          "route": "/profissional/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Consultas. Cada card mostra paciente, data, horário, tipo (online) e o status."
+              ]
+            },
+            {
+              "title": "Como filtrar",
+              "steps": [
+                {
+                  "title": "Escolher o período",
+                  "text": "Use os filtros Todas, Hoje, Amanhã, Semana ou uma data específica para achar o atendimento."
+                }
+              ]
+            },
+            {
+              "title": "O que cada status permite",
+              "bullets": [
+                "Agendada: botão Iniciar Consulta.",
+                "Em andamento: Entrar na Sala (se for online), Emitir Receita e Finalizar.",
+                "Finalizada ou cancelada: só consulta; o histórico fica em Historico."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "iniciar-consulta",
+          "title": "Iniciar consulta",
+          "description": "Passar a consulta de agendada para em andamento.",
+          "route": "/profissional/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Consultas, no card com status Agendada, clique em Iniciar Consulta e confirme."
+              ]
+            },
+            {
+              "title": "Como iniciar",
+              "steps": [
+                {
+                  "title": "Abrir a lista",
+                  "text": "Filtre o dia se precisar e localize o paciente."
+                },
+                {
+                  "title": "Confirmar o início",
+                  "text": "Clique em Iniciar Consulta e confirme. O status passa para Em andamento. Se for online, a sala de vídeo fica disponível para você e, em seguida, para o paciente."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só a consulta agendada e atribuída a você pode ser iniciada.",
+                "O paciente só entra na teleconsulta depois que o status estiver em andamento.",
+                "Depois de iniciar, use Entrar na Sala, Emitir Receita ou Finalizar no mesmo card."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "teleconsulta",
+          "title": "Entrar na teleconsulta",
+          "description": "Abrir a sala de vídeo com o paciente.",
+          "route": "/profissional/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Com a consulta em andamento e do tipo online, no card aparece Entrar na Sala. Isso abre a sala em /profissional/teleconsulta/ seguida do número da consulta."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Iniciar a consulta primeiro",
+                  "text": "Se ainda estiver agendada, inicie. Sem isso, a sala não libera o paciente."
+                },
+                {
+                  "title": "Entrar na sala",
+                  "text": "Clique em Entrar na Sala e permita câmera e microfone no navegador, se pedido."
+                },
+                {
+                  "title": "Atender",
+                  "text": "Converse com o paciente. Durante a consulta você pode emitir receita e preencher o prontuário; ao terminar, finalize a consulta na lista."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "A sala só existe para consulta online em andamento.",
+                "O paciente só consegue entrar depois que você inicia a consulta.",
+                "Encerrar o vídeo não substitui o botão Finalizar na lista de consultas."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "finalizar-consulta",
+          "title": "Finalizar consulta",
+          "description": "Encerrar o atendimento e registrar a consulta como finalizada.",
+          "route": "/profissional/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Consultas, no card Em andamento, clique em Finalizar e confirme."
+              ]
+            },
+            {
+              "title": "Como finalizar",
+              "steps": [
+                {
+                  "title": "Concluir o atendimento",
+                  "text": "Assine o prontuário se ainda estiver em rascunho e emita a receita se for o caso."
+                },
+                {
+                  "title": "Confirmar o fim",
+                  "text": "Clique em Finalizar. O status passa a Finalizada e a consulta some desta lista, indo para o Histórico."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só consulta em andamento e sua pode ser finalizada.",
+                "Depois de finalizada, você ainda pode emitir receita (enquanto a regra da Memed permitir) e consultar o prontuário.",
+                "Consulta cancelada não se finaliza: ela já está encerrada."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "historico",
+          "title": "Histórico de consultas",
+          "description": "Ver atendimentos finalizados e cancelados.",
+          "route": "/profissional/historico",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Historico. A lista mostra suas consultas finalizadas e canceladas."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Filtrar",
+                  "text": "Use status, período, especialidade e busca para localizar o atendimento."
+                },
+                {
+                  "title": "Abrir o registro",
+                  "text": "Consulte os dados do card. Para evoluções clínicas, use Pacientes e o prontuário."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela é só consulta: não inicia nem finaliza atendimento.",
+                "Aparecem apenas as suas consultas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "prontuario",
+      "title": "Prontuário",
+      "description": "Abrir o paciente, registrar a evolução da consulta e assinar o prontuário.",
+      "icon": "ClipboardList",
+      "items": [
+        {
+          "id": "lista-pacientes",
+          "title": "Lista de pacientes",
+          "description": "Encontrar quem você já atendeu e abrir o prontuário.",
+          "route": "/profissional/pacientes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Pacientes. A lista traz quem já teve consulta com você."
+              ]
+            },
+            {
+              "title": "Como abrir o prontuário",
+              "steps": [
+                {
+                  "title": "Buscar",
+                  "text": "Filtre por nome ou CPF."
+                },
+                {
+                  "title": "Abrir",
+                  "text": "Clique no paciente (ou em Prontuário). Você vai para a ficha em /profissional/prontuario/ com as abas Resumo e Histórico."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só aparecem pacientes com consulta vinculada a você.",
+                "A aba Evolução da consulta atual não abre por esta lista: preencha o prontuário na sala da teleconsulta (Entrar na Sala), depois de iniciar o atendimento."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "registrar-prontuario",
+          "title": "Registrar e assinar o prontuário",
+          "description": "Preencher a evolução durante a teleconsulta, salvar rascunho e assinar.",
+          "route": "/profissional/consultas",
+          "sections": [
+            {
+              "title": "O que é o prontuário",
+              "paragraphs": [
+                "O prontuário é o registro clínico de cada evolução. Reúne anamnese, exame e conduta. Depois da assinatura, fica disponível no histórico e o paciente pode consultar o que foi finalizado."
+              ]
+            },
+            {
+              "title": "Como o médico registra",
+              "steps": [
+                {
+                  "title": "Abrir durante a consulta",
+                  "text": "Inicie a consulta em Consultas e clique em Entrar na Sala. Na teleconsulta, abra o painel de prontuário. Se ainda não existir evolução para aquela consulta, ela é criada quando você começa a registrar. Em Pacientes você só consulta o histórico (Resumo e Histórico), sem a evolução da consulta atual."
+                },
+                {
+                  "title": "Salvar como rascunho",
+                  "text": "O prontuário começa como rascunho. Você pode ir preenchendo e salvando. Há salvamento automático para reduzir perda de dados."
+                },
+                {
+                  "title": "Campos preenchidos",
+                  "text": "Queixa principal e história da doença atual; antecedentes, alergias, medicamentos, comorbidades, hábitos e histórico familiar; sinais vitais; exame e avaliação; diagnóstico e CID-10; plano/conduta e orientações; pedidos de exame e encaminhamentos, quando houver. Anexos podem ser enviados enquanto o registro não estiver assinado."
+                },
+                {
+                  "title": "Assinar e finalizar",
+                  "text": "Para tornar o registro definitivo, assine. São obrigatórios queixa principal, avaliação e plano/conduta. Depois de assinado, o prontuário fica somente leitura. Correção posterior deve ser uma nova evolução."
+                },
+                {
+                  "title": "Histórico",
+                  "text": "Na aba Histórico você vê as evoluções anteriores do paciente e abre o detalhe de cada uma."
+                }
+              ]
+            },
+            {
+              "title": "O que o paciente vê",
+              "paragraphs": [
+                "O paciente acessa em Meu Prontuário só os registros assinados. Rascunho não aparece para ele."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O prontuário da consulta atual se preenche na sala da teleconsulta, não na lista de Pacientes.",
+                "Para finalizar, você precisa assinar.",
+                "Depois da assinatura não dá para editar nem remover anexos.",
+                "O paciente só visualiza prontuários assinados."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "receitas",
+      "title": "Receitas",
+      "description": "Emitir prescrição pela Memed na consulta e consultar receitas por paciente.",
+      "icon": "FileText",
+      "items": [
+        {
+          "id": "emitir-receita",
+          "title": "Emitir receita",
+          "description": "Abrir a Memed a partir da consulta em andamento.",
+          "route": "/profissional/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Consultas, no card Em andamento, clique em Emitir Receita. A Memed abre para prescrever para aquele paciente."
+              ]
+            },
+            {
+              "title": "Como emitir",
+              "steps": [
+                {
+                  "title": "Iniciar a consulta",
+                  "text": "A receita se emite pelo botão Emitir Receita no card Em andamento. Depois de finalizar, esse botão some da lista."
+                },
+                {
+                  "title": "Abrir a Memed",
+                  "text": "Clique em Emitir Receita. O sistema busca seu token na Memed e carrega o módulo. Monte a prescrição e imprima/emita conforme a Memed orientar."
+                },
+                {
+                  "title": "Confirmação no sistema",
+                  "text": "Quando a Memed confirma a emissão, a receita é gravada na consulta (ainda não assinada internamente até o fluxo de assinatura, se houver)."
+                }
+              ]
+            },
+            {
+              "title": "Se a Memed não abrir",
+              "paragraphs": [
+                "O prescritor precisa estar cadastrado na Memed (identificador externo no seu perfil). Se faltar, peça ao administrador para sincronizar você com a Memed. Sem isso, o sistema informa que o prescritor não está registrado."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Na lista de Consultas, o botão Emitir Receita aparece só com a consulta em andamento.",
+                "Você precisa estar aprovado no painel e ter o cadastro Memed.",
+                "Receita emitida fica ligada àquela consulta e daquele paciente."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "consultar-receitas",
+          "title": "Consultar receitas por paciente",
+          "description": "Ver as prescrições já emitidas, paciente a paciente.",
+          "route": "/profissional/receitas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Receitas. A tela lista os pacientes que você atendeu."
+              ]
+            },
+            {
+              "title": "Como consultar",
+              "steps": [
+                {
+                  "title": "Buscar o paciente",
+                  "text": "Filtre por nome ou CPF e clique na pessoa."
+                },
+                {
+                  "title": "Ver as receitas",
+                  "text": "Abre a lista de prescrições daquele paciente. Você pode abrir a receita na Memed pelo identificador da prescrição."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela consulta o que já foi emitido; para criar receita nova, use Emitir Receita na consulta.",
+                "O paciente também vê as receitas no painel dele."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conta",
+      "title": "Conta",
+      "description": "Entrar no painel depois da aprovação e manter seus dados de acesso.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "login",
+          "title": "Entrar no painel",
+          "description": "Acessar com e-mail e senha depois que o administrador aprovar o cadastro.",
+          "route": "/profissional/login",
+          "sections": [
+            {
+              "title": "Antes do primeiro acesso",
+              "paragraphs": [
+                "O cadastro não é feito neste painel. Você se cadastra no site (cadastro de profissional) ou o administrador cria seu usuário. Enquanto o cadastro não for aprovado, o login não libera agenda, consultas nem receitas."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Abrir o login do profissional",
+                  "text": "Acesse a tela de login do profissional (não use o login de administrador nem o de beneficiário)."
+                },
+                {
+                  "title": "Informar e-mail e senha",
+                  "text": "Use o e-mail do cadastro e a senha definida no cadastro ou enviada pelo administrador. Se esqueceu a senha, use Esqueci minha senha."
+                },
+                {
+                  "title": "Ir ao dashboard",
+                  "text": "Com perfil de profissional aprovado, você entra no Dashboard."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Conta de outro perfil (admin ou beneficiário) é recusada nesta tela.",
+                "Sem aprovação, o login pode até abrir o painel, mas agenda, consultas e receitas ficam bloqueadas nas APIs até o administrador aprovar.",
+                "Usuário bloqueado (reprovado) não acessa o painel."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "meu-perfil",
+          "title": "Meu perfil",
+          "description": "Atualizar nome, e-mail, telefone e senha.",
+          "route": "/profissional/perfil",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Meu Perfil. Também dá para abrir pelo avatar no canto superior direito."
+              ]
+            },
+            {
+              "title": "Como atualizar os dados",
+              "steps": [
+                {
+                  "title": "Editar o formulário",
+                  "text": "Altere nome, e-mail e telefone. O nome precisa ter pelo menos 3 caracteres e o e-mail precisa ser válido."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Clique em salvar. O e-mail novo será o login nas próximas entradas."
+                }
+              ]
+            },
+            {
+              "title": "Como trocar a senha",
+              "steps": [
+                {
+                  "title": "Preencher senha atual e nova",
+                  "text": "Informe a senha atual, a nova e a confirmação. A nova senha deve ter pelo menos 6 caracteres."
+                },
+                {
+                  "title": "Confirmar",
+                  "text": "Salve e use a senha nova no próximo login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela altera só a sua conta de acesso, não conselho, especialidades nem documentos.",
+                "Conselho, especialidade e aprovação são geridos pelo administrador."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

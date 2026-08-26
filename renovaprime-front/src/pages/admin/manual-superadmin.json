@@ -1,0 +1,890 @@
+{
+  "title": "Manual do Sistema",
+  "subtitle": "Guia do administrador para cadastros, aprovações, atendimento e relatórios.",
+  "categories": [
+    {
+      "id": "cadastros",
+      "title": "Cadastros",
+      "description": "Crie e mantenha beneficiários, a rede comercial, profissionais, especialidades e o conteúdo do site.",
+      "icon": "UserPlus",
+      "items": [
+        {
+          "id": "beneficiarios",
+          "title": "Cadastro de beneficiários",
+          "description": "Criar titular e dependente, alterar status e consultar a lista.",
+          "route": "/beneficiarios",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Beneficiários. A tela lista titulares e, abaixo de cada um, os dependentes vinculados."
+              ]
+            },
+            {
+              "title": "Como cadastrar um titular",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Novo Beneficiário no topo da tela."
+                },
+                {
+                  "title": "Preencher os dados",
+                  "text": "Informe nome, CPF, data de nascimento, senha e tipo de serviço (Clínico, Premium ou Familiar) — obrigatórios. Telefone, e-mail, CEP, cidade, UF e endereço são opcionais, mas o e-mail é necessário para o titular entrar no painel, e os demais dados ajudam no Face Scan e no contato."
+                },
+                {
+                  "title": "Confirmar a senha",
+                  "text": "Repita a senha no campo de confirmação e salve. Com e-mail e senha, o titular acessa o app e o painel do beneficiário."
+                }
+              ]
+            },
+            {
+              "title": "Como cadastrar um dependente",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Novo Dependente."
+                },
+                {
+                  "title": "Vincular ao titular",
+                  "text": "Selecione o titular responsável. Sem titular, o cadastro não é aceito."
+                },
+                {
+                  "title": "Preencher e salvar",
+                  "text": "Informe nome, CPF, data de nascimento e senha. Depois de salvo, o dependente aparece na lista, abaixo do titular."
+                }
+              ]
+            },
+            {
+              "title": "Editar, inativar ou excluir",
+              "steps": [
+                {
+                  "title": "Editar",
+                  "text": "Use o ícone de lápis na linha. Na edição, deixe a senha em branco para não alterá-la."
+                },
+                {
+                  "title": "Ativar ou inativar",
+                  "text": "Use o interruptor de status. Se o titular tiver dependentes, o sistema pergunta se a alteração vale só para ele ou também para os dependentes."
+                },
+                {
+                  "title": "Excluir",
+                  "text": "Use o ícone de lixeira e confirme. Não é possível excluir um titular que ainda tenha dependentes: remova ou mova os dependentes antes."
+                }
+              ]
+            },
+            {
+              "title": "Busca e filtros",
+              "paragraphs": [
+                "Use a busca por nome ou CPF. Os filtros permitem ver só titulares ou só dependentes, ativos ou inativos, e o status do Face Scan (desativado, solicitado ou ativo)."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Titular precisa de CPF, nome, data de nascimento, senha e tipo de serviço. Dependente precisa de CPF, nome, data de nascimento e senha.",
+                "Dependente sempre exige um titular.",
+                "Titular com dependentes não pode ser excluído.",
+                "A liberação do Face Scan fica no cadastro do beneficiário (veja Aprovações e liberações)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "parceiros",
+          "title": "Cadastro de parceiros",
+          "description": "Cadastrar a empresa da rede e definir as comissões por plano.",
+          "route": "/parceiros",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Parceiros. O parceiro é o topo da rede comercial: abaixo dele ficam as filiais e, nas filiais, os revendedores."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Novo Parceiro."
+                },
+                {
+                  "title": "Preencher identificação e acesso",
+                  "text": "Informe nome, e-mail e senha (usados no login da área do parceiro). CNPJ, dados bancários, PIX, logo e site são opcionais."
+                },
+                {
+                  "title": "Definir comissões",
+                  "text": "Para cada plano (Individual, Individual Premium e Familiar Master), informe o percentual do parceiro, da filial e do revendedor. A soma de cada plano não pode passar de 100% (pode ser menor; zeros são aceitos)."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Após salvar, o parceiro aparece na lista e já pode receber filiais."
+                }
+              ]
+            },
+            {
+              "title": "Editar, ativar ou excluir",
+              "paragraphs": [
+                "Use o lápis para editar. Deixe a senha em branco para não trocá-la. O interruptor ativa ou desativa o parceiro. A lixeira exclui, após confirmação."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Nome, e-mail e senha são obrigatórios na criação.",
+                "As comissões por plano (parceiro + filial + revendedor) não podem somar mais de 100%.",
+                "Parceiro inativo não deve operar na área comercial até ser reativado."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "filiais",
+          "title": "Cadastro de filiais",
+          "description": "Criar unidades vinculadas a um parceiro.",
+          "route": "/filiais",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Filiais. Cada filial pertence a um parceiro e pode ter vários revendedores."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Nova Filial."
+                },
+                {
+                  "title": "Vincular ao parceiro",
+                  "text": "Selecione o parceiro responsável. Sem parceiro, a filial não é criada."
+                },
+                {
+                  "title": "Preencher e salvar",
+                  "text": "Informe nome, e-mail e senha (login da área da filial). Apelido e demais dados são opcionais. Salve para a filial aparecer na lista."
+                }
+              ]
+            },
+            {
+              "title": "Editar, filtrar e desativar",
+              "paragraphs": [
+                "A busca filtra por nome, e-mail ou apelido. O filtro por parceiro mostra só as filiais daquele parceiro. Edite com o lápis, ative ou desative com o interruptor e exclua com a lixeira."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "A filial precisa estar ligada a um parceiro.",
+                "E-mail e senha são o acesso da filial ao portal comercial.",
+                "Cadastre a filial antes de criar os revendedores dela."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "revendedores",
+          "title": "Cadastro de revendedores",
+          "description": "Cadastrar quem vende os planos, vinculado a uma filial.",
+          "route": "/revendedores",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Revendedores. O revendedor pertence a uma filial e é quem origina as vendas e as comissões."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Novo Revendedor."
+                },
+                {
+                  "title": "Vincular à filial",
+                  "text": "Selecione a filial. Sem filial, o cadastro não segue."
+                },
+                {
+                  "title": "Preencher e salvar",
+                  "text": "Informe nome, CPF, e-mail e senha. Depois de salvo, o revendedor pode acessar a área comercial no escopo dele."
+                }
+              ]
+            },
+            {
+              "title": "Editar, filtrar e desativar",
+              "paragraphs": [
+                "Busque por nome, CPF ou e-mail. Filtre por filial. Edite, ative, desative ou exclua pelas ações da linha."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Revendedor sempre exige uma filial.",
+                "CPF identifica o revendedor na rede.",
+                "As vendas e comissões vistas em Relatórios usam esses cadastros."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "profissionais",
+          "title": "Cadastro de profissionais",
+          "description": "Cadastrar médico, psicólogo ou nutricionista e manter o cadastro ativo.",
+          "route": "/profissionais",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Profissionais. Essa lista mostra apenas profissionais já aprovados e com status ativo. Para cadastrar, use Novo Profissional."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o cadastro",
+                  "text": "Clique em Novo Profissional. Você vai para a tela de cadastro, com as abas Dados e Documentos."
+                },
+                {
+                  "title": "Preencher acesso",
+                  "text": "Informe nome, e-mail, telefone e senha. Se preferir, clique em Gerar para criar uma senha. O status padrão é Ativo."
+                },
+                {
+                  "title": "Preencher dados profissionais",
+                  "text": "Escolha a profissão (Médico, Psicólogo ou Nutricionista). O tipo de registro ajusta sozinho (CRM, CRP ou CFN). Informe número do conselho, UF (obrigatória para médico e psicólogo), CPF e pelo menos uma especialidade. RQE, data de nascimento e sexo são opcionais, mas o CPF e a especialidade ajudam na Memed."
+                },
+                {
+                  "title": "Aprovar na hora (opcional)",
+                  "text": "Se ligar Aprovar profissional?, a pessoa já entra com acesso liberado. Se deixar desligado neste cadastro (status Ativo), ela não usa o painel médico e também não entra na fila de Solicitações Pendentes. Prefira aprovar na hora. Quem se cadastra pelo site nasce como pendente e aparece nessa fila."
+                },
+                {
+                  "title": "Enviar documentos (opcional)",
+                  "text": "Na aba Documentos, envie foto, documento do conselho, comprovante de especialidade/RQE e termo de aceite. Aceita JPG, PNG ou PDF de até 5 MB."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Clique em cadastrar. Se o sistema gerou a senha, ela aparece na confirmação. Em seguida você volta para a lista de profissionais."
+                }
+              ]
+            },
+            {
+              "title": "Editar, excluir e sincronizar Memed",
+              "paragraphs": [
+                "Na lista, use o lápis para editar. A busca filtra por nome, e-mail, registro ou especialidade. A lixeira exclui o profissional e o usuário de acesso. O botão de sincronizar Memed tenta registrar o prescritor se o cadastro ainda não tiver o identificador externo."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Nome, e-mail, telefone, senha, conselho, UF (médico/psicólogo), CPF e ao menos uma especialidade são obrigatórios.",
+                "Sem aprovação (approved_at), o profissional não acessa agenda, consultas nem prescrição.",
+                "Neste formulário o status só é Ativo ou Bloqueado (não há Pendente). Sem aprovar e com status Ativo, o profissional some das duas listas. Prefira aprovar na hora; a fila de pendentes é para quem se cadastrou pelo site.",
+                "A falha na Memed não impede o cadastro: o profissional é salvo mesmo assim."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "especialidades",
+          "title": "Cadastro de especialidades",
+          "description": "Manter a lista usada no cadastro do profissional e no agendamento.",
+          "route": "/especialidades",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Especialidades."
+              ]
+            },
+            {
+              "title": "Como cadastrar ou editar",
+              "steps": [
+                {
+                  "title": "Criar",
+                  "text": "Clique em Nova Especialidade, informe o nome (mínimo 3 caracteres) e salve."
+                },
+                {
+                  "title": "Editar",
+                  "text": "Use o lápis na linha para alterar o nome."
+                },
+                {
+                  "title": "Ativar ou desativar",
+                  "text": "Use o interruptor. Especialidade inativa não entra no cadastro de profissionais nem na escolha de agenda."
+                },
+                {
+                  "title": "Excluir",
+                  "text": "Use a lixeira. Se a especialidade já estiver ligada a médicos ou consultas, a exclusão pode ser recusada."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O profissional precisa de pelo menos uma especialidade ativa.",
+                "O agendamento de consultas usa essa mesma lista.",
+                "Não exclua especialidades em uso; desative se quiser escondê-las."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cms",
+          "title": "Gestão de conteúdo (CMS)",
+          "description": "Criar e editar blocos de texto do site institucional.",
+          "route": "/cms",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Gestão de Conteúdo. Cada entrada tem uma chave (identificador), um título e um conteúdo em JSON."
+              ]
+            },
+            {
+              "title": "Como criar ou editar",
+              "steps": [
+                {
+                  "title": "Nova entrada",
+                  "text": "Se a lista estiver vazia, use Criar Primeira Entrada. Informe a chave (por exemplo homepage-hero), o título e o JSON de conteúdo. A chave não pode ser alterada depois. Com entradas já salvas, o cabeçalho desta tela só atualiza a lista: edite ou exclua cada bloco existente."
+                },
+                {
+                  "title": "Editar",
+                  "text": "Abra a entrada e altere título ou conteúdo. Valide se o JSON está correto antes de salvar."
+                },
+                {
+                  "title": "Excluir",
+                  "text": "Remova a entrada apenas se o site não depender mais daquela chave."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "A chave é o identificador usado pelo site. Não reaproveite chaves diferentes para o mesmo bloco.",
+                "O conteúdo precisa ser um JSON válido.",
+                "Nesta tela, criar uma entrada nova só aparece quando a lista está vazia (Criar Primeira Entrada). Depois disso, edite ou exclua as existentes.",
+                "Alterações passam a valer no site institucional após o salvamento."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aprovacoes",
+      "title": "Aprovações e liberações",
+      "description": "Liberar acesso de profissionais, Face Scan do beneficiário e prescritor na Memed.",
+      "icon": "Clock",
+      "items": [
+        {
+          "id": "aprovar-profissional",
+          "title": "Aprovar ou rejeitar profissional",
+          "description": "Analisar documentos e liberar (ou bloquear) o acesso ao painel médico.",
+          "route": "/solicitacoes-pendentes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Solicitações Pendentes. Aparecem profissionais com cadastro ainda não aprovado e status pendente."
+              ]
+            },
+            {
+              "title": "Como aprovar",
+              "steps": [
+                {
+                  "title": "Revisar o cadastro",
+                  "text": "Abra os documentos (foto, conselho, especialidade e termo) para conferir o profissional."
+                },
+                {
+                  "title": "Aprovar",
+                  "text": "Confirme a aprovação. O sistema marca a data de aprovação e ativa o usuário. A partir daí o profissional acessa agenda, consultas e prescrição."
+                }
+              ]
+            },
+            {
+              "title": "Como rejeitar",
+              "steps": [
+                {
+                  "title": "Reprovar o cadastro",
+                  "text": "Confirme a rejeição. O usuário é bloqueado e continua sem aprovação. Ele não entra no painel médico."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só entra nesta fila quem está pendente e ainda sem data de aprovação.",
+                "Sem aprovação, as rotas do profissional ficam bloqueadas.",
+                "Profissional cadastrado já aprovado não passa por esta tela: vai direto para Profissionais."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "face-scan",
+          "title": "Liberar Face Scan",
+          "description": "Ativar ou desligar o Face Scan (Rapidoc) no cadastro do beneficiário.",
+          "route": "/beneficiarios",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Abra Beneficiários, edite o titular ou o dependente. Na ficha há a seção Face Scan (Rapidoc), com o status atual: Desativado, Solicitado ou Ativo."
+              ]
+            },
+            {
+              "title": "Como ativar",
+              "steps": [
+                {
+                  "title": "Abrir o cadastro",
+                  "text": "Edite o beneficiário e localize Face Scan."
+                },
+                {
+                  "title": "Ativar",
+                  "text": "Clique em ativar. Se a pessoa ainda não existir na Rapidoc, o sistema tenta criá-la e depois libera o uso no app. Isso não abre o VitalScan."
+                }
+              ]
+            },
+            {
+              "title": "Como desativar",
+              "paragraphs": [
+                "Clique em desativar. A liberação local é removida e o pedido feito pelo paciente é zerado. O cadastro na Rapidoc não é apagado."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Para criar na Rapidoc são necessários CPF, nome, data de nascimento, telefone, e-mail, CEP, endereço, cidade e UF.",
+                "Se faltar dado, a ativação é recusada até completar o cadastro.",
+                "Na lista de beneficiários, filtre por Face Scan: desativado, solicitado ou ativo."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sync-memed",
+          "title": "Sincronizar prescritor na Memed",
+          "description": "Gerar o identificador da Memed quando o cadastro do profissional não concluiu essa etapa.",
+          "route": "/profissionais",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Profissionais, na linha do profissional, use a ação de sincronizar com a Memed."
+              ]
+            },
+            {
+              "title": "Quando usar",
+              "paragraphs": [
+                "O cadastro já tenta registrar o prescritor na Memed. Se isso falhar, o profissional continua salvo, mas sem o identificador externo. Sem esse identificador, ele não emite receitas pela Memed."
+              ]
+            },
+            {
+              "title": "Como sincronizar",
+              "steps": [
+                {
+                  "title": "Localizar o profissional",
+                  "text": "Abra Profissionais e encontre o cadastro (por nome, registro ou especialidade)."
+                },
+                {
+                  "title": "Sincronizar",
+                  "text": "Clique na ação de sincronizar Memed e aguarde a confirmação. Se der certo, o identificador externo fica gravado."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "CPF, conselho, especialidade e dados pessoais completos aumentam a chance de sucesso.",
+                "A sincronização não substitui a aprovação do profissional.",
+                "Se a Memed recusar, corrija os dados do cadastro e tente de novo."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atendimento",
+      "title": "Operação de atendimento",
+      "description": "Agendar e acompanhar consultas, cancelar quando preciso e consultar prontuários.",
+      "icon": "Calendar",
+      "items": [
+        {
+          "id": "agendar-consulta",
+          "title": "Agendar consulta",
+          "description": "Marcar uma consulta online para um beneficiário.",
+          "route": "/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Consultas e depois em Criar consulta para beneficiario."
+              ]
+            },
+            {
+              "title": "Como agendar",
+              "steps": [
+                {
+                  "title": "Escolher especialidade e beneficiário",
+                  "text": "Selecione a especialidade e o beneficiário ativo que será atendido."
+                },
+                {
+                  "title": "Escolher o dia",
+                  "text": "No calendário do mês, só os dias com horário livre ficam disponíveis."
+                },
+                {
+                  "title": "Escolher o horário",
+                  "text": "Selecione um slot do dia. A consulta dura 30 minutos e é do tipo online. O sistema escolhe o profissional disponível naquele horário."
+                },
+                {
+                  "title": "Confirmar",
+                  "text": "Salve. A consulta entra como agendada e aparece na lista. Um registro de criação fica no histórico da consulta."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Não é possível agendar em data passada.",
+                "É preciso haver profissional aprovado, com agenda e especialidade compatível naquele horário.",
+                "O admin não escolhe o médico à mão: o sistema indica o melhor disponível."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "listar-cancelar-consultas",
+          "title": "Listar e cancelar consultas",
+          "description": "Acompanhar consultas agendadas ou em andamento e cancelar quando necessário.",
+          "route": "/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Consultas. Por padrão a lista mostra consultas agendadas e em andamento."
+              ]
+            },
+            {
+              "title": "Como filtrar e ver detalhes",
+              "steps": [
+                {
+                  "title": "Filtrar",
+                  "text": "Use status, período, especialidade, tipo (online ou presencial) e busca para achar a consulta."
+                },
+                {
+                  "title": "Ver detalhes",
+                  "text": "Abra o card da consulta para ver beneficiário, profissional, horário e os registros (logs) de criação, cancelamento e demais eventos."
+                }
+              ]
+            },
+            {
+              "title": "Como cancelar",
+              "steps": [
+                {
+                  "title": "Solicitar cancelamento",
+                  "text": "No card da consulta agendada, escolha cancelar e confirme. A ação não pode ser desfeita."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só consulta com status Agendada pode ser cancelada.",
+                "Consulta em andamento, finalizada ou já cancelada não volta por esta tela.",
+                "O cancelamento fica registrado no log da consulta."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "historico-atendimentos",
+          "title": "Histórico de atendimentos",
+          "description": "Consultar consultas finalizadas e canceladas.",
+          "route": "/historico",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Histórico de Atendimentos. A lista padrão traz consultas finalizadas e canceladas."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Filtrar",
+                  "text": "Use período, especialidade, tipo e busca, como na tela de Consultas."
+                },
+                {
+                  "title": "Ver detalhes",
+                  "text": "Abra o card para ver os dados da consulta e os logs."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela é só consulta: não agenda nem cancela.",
+                "Para cancelar uma consulta ainda marcada, use Consultas."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "prontuarios",
+          "title": "Consultar prontuários",
+          "description": "Ver o histórico clínico dos beneficiários. O admin não preenche nem assina o prontuário.",
+          "route": "/prontuarios",
+          "sections": [
+            {
+              "title": "O que é o prontuário",
+              "paragraphs": [
+                "O prontuário é o registro clínico de cada evolução de consulta. Ele reúne anamnese, exame e conduta. Ao final da consulta, o médico assina e o registro fica disponível para consulta histórica."
+              ]
+            },
+            {
+              "title": "Como o administrador consulta",
+              "steps": [
+                {
+                  "title": "Abrir a tela",
+                  "text": "No menu, clique em Prontuários."
+                },
+                {
+                  "title": "Escolher o beneficiário",
+                  "text": "Busque pelo nome e clique na pessoa. A lista de evoluções daquela pessoa é carregada."
+                },
+                {
+                  "title": "Abrir o registro",
+                  "text": "Selecione uma evolução para ver o detalhe completo. O admin não edita o conteúdo."
+                }
+              ]
+            },
+            {
+              "title": "Como o médico registra o prontuário",
+              "steps": [
+                {
+                  "title": "Abrir durante a consulta",
+                  "text": "Na teleconsulta, o médico acessa o prontuário da consulta. Se ainda não existir, ele é criado quando o registro começa."
+                },
+                {
+                  "title": "Salvar como rascunho",
+                  "text": "O prontuário começa como rascunho. O médico pode ir preenchendo e salvando. Há salvamento automático para reduzir perda de dados."
+                },
+                {
+                  "title": "Campos preenchidos",
+                  "text": "Queixa principal e história da doença atual; antecedentes, alergias, medicamentos, comorbidades, hábitos e histórico familiar; sinais vitais; exame e avaliação; diagnóstico e CID-10; plano/conduta e orientações; pedidos de exame e encaminhamentos, quando houver."
+                },
+                {
+                  "title": "Assinar e finalizar",
+                  "text": "Para finalizar, o médico assina. São obrigatórios queixa principal, avaliação e plano/conduta. Depois de assinado, o prontuário fica somente leitura. Correção posterior deve ser feita em uma nova evolução."
+                },
+                {
+                  "title": "Histórico",
+                  "text": "O médico vê o histórico de evoluções do paciente e abre o detalhe de cada registro."
+                }
+              ]
+            },
+            {
+              "title": "Como o paciente consulta o prontuário",
+              "steps": [
+                {
+                  "title": "Acesso",
+                  "text": "O paciente acessa em Meu Prontuário."
+                },
+                {
+                  "title": "O que aparece",
+                  "text": "Só prontuários assinados e finalizados pelo médico. Rascunho não é exibido."
+                },
+                {
+                  "title": "Detalhes",
+                  "text": "Ao abrir uma evolução, o paciente vê anamnese, exame e conduta daquela consulta."
+                }
+              ]
+            },
+            {
+              "title": "Resumo das regras importantes",
+              "bullets": [
+                "O prontuário é registrado durante a consulta e pode ser salvo como rascunho.",
+                "Para finalizar, o médico precisa assinar o prontuário.",
+                "Depois da assinatura, o prontuário fica somente leitura.",
+                "O paciente só visualiza prontuários assinados.",
+                "O administrador consulta, mas não assina nem altera o registro clínico."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "relatorios",
+      "title": "Relatórios e visão geral",
+      "description": "Acompanhar números da plataforma, vendas da rede e comissões.",
+      "icon": "BarChart3",
+      "items": [
+        {
+          "id": "dashboard",
+          "title": "Dashboard",
+          "description": "Ver totais de profissionais, beneficiários, consultas e teleconsultas.",
+          "route": "/dashboard",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Dashboard. É a tela inicial depois do login do administrador."
+              ]
+            },
+            {
+              "title": "O que você vê",
+              "paragraphs": [
+                "Cards com médicos aprovados e pendentes, beneficiários ativos, consultas (agendadas, em andamento, finalizadas e canceladas) e teleconsultas. Alguns cards levam direto à tela correspondente."
+              ]
+            },
+            {
+              "title": "Como atualizar",
+              "steps": [
+                {
+                  "title": "Atualizar os números",
+                  "text": "Clique em Atualizar no topo para recarregar os totais."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O dashboard é só leitura: não cadastra nem aprova por aqui.",
+                "Médicos pendentes no card correspondem à fila de Solicitações Pendentes."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "vendas",
+          "title": "Relatório de vendas",
+          "description": "Consultar as vendas da rede comercial por período, filial, revendedor e plano.",
+          "route": "/vendas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Vendas. A tela mostra a lista de vendas e um resumo (totais e status)."
+              ]
+            },
+            {
+              "title": "Como filtrar",
+              "steps": [
+                {
+                  "title": "Escolher os filtros",
+                  "text": "Filtre por filial, revendedor, plano (Individual, Premium ou Familiar), status e período (data inicial e final)."
+                },
+                {
+                  "title": "Ler o resultado",
+                  "text": "A lista atualiza com as vendas encontradas. Status na tela: Confirmada, Pendente, Vencida, Reembolsada, Falha ou Cancelada."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O administrador não registra venda nesta tela: só consulta.",
+                "As vendas vêm dos revendedores da rede cadastrada.",
+                "Comissões usam, em geral, apenas vendas confirmadas (veja Relatório de comissões)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "comissoes",
+          "title": "Relatório de comissões",
+          "description": "Ver o split de comissão entre revendedor, filial e parceiro.",
+          "route": "/comissoes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Comissões. O relatório considera vendas confirmadas e mostra o valor de cada elo da rede."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Definir o período",
+                  "text": "Informe data inicial e final, se quiser restringir o intervalo."
+                },
+                {
+                  "title": "Ler os totais",
+                  "text": "Cada linha traz o revendedor, a filial, o parceiro, a quantidade de vendas, o valor e as comissões de revendedor, filial e parceiro. No topo há o consolidado."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Os percentuais vêm do cadastro do parceiro, por tipo de plano.",
+                "Só vendas confirmadas entram neste relatório.",
+                "Para conferir a venda em si, use a tela Vendas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conta",
+      "title": "Conta",
+      "description": "Atualizar seus dados de acesso e a senha da conta de administrador.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "meu-perfil",
+          "title": "Meu perfil",
+          "description": "Alterar nome, e-mail, telefone e senha da sua conta.",
+          "route": "/admin/perfil",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Meu Perfil. Também é possível abrir pelo avatar no canto superior direito e escolher a opção de perfil."
+              ]
+            },
+            {
+              "title": "Como atualizar os dados",
+              "steps": [
+                {
+                  "title": "Editar o formulário",
+                  "text": "Altere nome, e-mail e telefone. O nome precisa ter pelo menos 3 caracteres e o e-mail precisa ser válido."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Clique em salvar. A sessão continua a mesma; o e-mail novo passa a ser o login nas próximas entradas."
+                }
+              ]
+            },
+            {
+              "title": "Como trocar a senha",
+              "steps": [
+                {
+                  "title": "Preencher a senha atual e a nova",
+                  "text": "No bloco de senha, informe a senha atual, a nova e a confirmação. A nova senha deve ter pelo menos 6 caracteres."
+                },
+                {
+                  "title": "Confirmar",
+                  "text": "Salve. Use a senha nova no próximo login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela altera só a sua conta, não a de outros administradores.",
+                "Não é por aqui que se cadastram profissionais, beneficiários ou parceiros.",
+                "Mantenha o e-mail atualizado: ele é o acesso ao painel."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

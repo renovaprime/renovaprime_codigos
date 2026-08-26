@@ -21,6 +21,7 @@ import {
 import { Layout } from '../layout';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/Card';
 import { Button } from '../components/Button';
+import { PageHeader } from '../components';
 import { adminDashboardService } from '../services/adminDashboardService';
 import type { AdminDashboard } from '../types/api';
 
@@ -205,29 +206,23 @@ export function Dashboard() {
         className="space-y-6"
       >
         {/* Header */}
-        <motion.div variants={itemVariants} className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
-                Dashboard
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">
-                Visão geral da plataforma.
-              </p>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={loadDashboard}
-              disabled={loading}
-              className="self-start md:self-auto"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Atualizar
-            </Button>
-          </div>
+        <motion.div variants={itemVariants}>
+          <PageHeader
+            title="Dashboard"
+            subtitle="Visão geral da plataforma."
+            actions={
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={loadDashboard}
+                disabled={loading}
+                className="self-start md:self-auto"
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                Atualizar
+              </Button>
+            }
+          />
         </motion.div>
 
         {/* Cards principais */}

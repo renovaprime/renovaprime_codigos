@@ -1,0 +1,229 @@
+{
+  "title": "Manual do Revendedor",
+  "subtitle": "Guia para copiar o link de vendas, acompanhar suas vendas e comissões, e manter a conta.",
+  "categories": [
+    {
+      "id": "vendas",
+      "title": "Vendas",
+      "description": "Compartilhar o link, ver as vendas e entender como a comissão é gerada.",
+      "icon": "ShoppingCart",
+      "items": [
+        {
+          "id": "dashboard-link",
+          "title": "Dashboard e link de vendas",
+          "description": "Ver totais e copiar o link para o cliente fechar o plano no site.",
+          "route": "/parceiro/dashboard",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Após o login você entra no Dashboard. Como revendedor, além dos totais aparece o botão Copiar link (e o endereço completo do site com o seu código)."
+              ]
+            },
+            {
+              "title": "Como copiar o link",
+              "steps": [
+                {
+                  "title": "Copiar",
+                  "text": "Clique em Copiar link. O formato é o site + ?rev=seu número + #planos."
+                },
+                {
+                  "title": "Enviar ao cliente",
+                  "text": "Mande esse endereço. O cliente escolhe o plano e conclui o pagamento no site."
+                }
+              ]
+            },
+            {
+              "title": "O que os totais mostram",
+              "paragraphs": [
+                "Quantidade e valor das suas vendas, confirmadas, pendentes e a sua comissão. Você não vê filiais nem a rede inteira do parceiro."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você não lança venda no painel: ela nasce no checkout do site com o seu rev.",
+                "Sem o link certo, a venda pode não ser creditada a você."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "como-link-vira-venda",
+          "title": "Como o link vira venda e comissão",
+          "description": "O que acontece depois que o cliente fecha o plano no site.",
+          "route": "/parceiro/dashboard",
+          "sections": [
+            {
+              "title": "Passo a passo",
+              "steps": [
+                {
+                  "title": "Cliente abre o site pelo seu link",
+                  "text": "O site guarda o código rev na página de planos."
+                },
+                {
+                  "title": "Checkout",
+                  "text": "Ao contratar, o sistema cria o beneficiário, registra a venda na sua cadeia (você, sua filial e o parceiro) e calcula as comissões pelos percentuais do plano."
+                },
+                {
+                  "title": "Pagamento",
+                  "text": "Se a assinatura já entra ativa, a venda pode nascer confirmada; senão, fica pendente até o pagamento confirmar."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Comissão no relatório de Comissões considera, em geral, só venda confirmada.",
+                "Os percentuais são definidos pelo administrador no cadastro do parceiro, por tipo de plano (Individual, Premium, Familiar).",
+                "Se não houver percentual cadastrado, a comissão pode ficar zerada."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lista-vendas",
+          "title": "Relatório de vendas",
+          "description": "Acompanhar as suas vendas por plano, status e período.",
+          "route": "/parceiro/vendas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Vendas. A lista já está limitada às suas vendas: não há filtro de filial nem de outro revendedor."
+              ]
+            },
+            {
+              "title": "Como filtrar",
+              "steps": [
+                {
+                  "title": "Escolher plano, status e datas",
+                  "text": "Use os filtros para achar uma venda. Status na tela: Confirmada, Pendente, Vencida, Reembolsada, Falha ou Cancelada."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela consulta; você não edita status da venda.",
+                "O status pode mudar depois, quando o pagamento for confirmado ou recusado."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "comissoes",
+          "title": "Relatório de comissões",
+          "description": "Ver a sua comissão nas vendas confirmadas.",
+          "route": "/parceiro/comissoes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Comissões. Sem filtro de status, o sistema usa vendas confirmadas."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Definir o período",
+                  "text": "Informe datas se quiser restringir."
+                },
+                {
+                  "title": "Ler o resultado",
+                  "text": "Você vê suas vendas confirmadas, o valor e a sua comissão. Colunas de filial e parceiro não aparecem neste perfil."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Venda pendente normalmente não entra neste relatório.",
+                "Para conferir todas as situações (Pendente, Vencida etc.), use Vendas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conta",
+      "title": "Conta",
+      "description": "Entrar na área da rede e atualizar seus dados.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "login",
+          "title": "Entrar como revendedor",
+          "description": "Usar o mesmo login da área do parceiro, com o seu e-mail.",
+          "route": "/parceiro/login",
+          "sections": [
+            {
+              "title": "Como a conta é criada",
+              "paragraphs": [
+                "O administrador cadastra o revendedor em uma filial e define e-mail e senha. Entre na tela de login da área do parceiro."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Informar e-mail e senha",
+                  "text": "O sistema identifica que você é revendedor. O menu mostra Dashboard, Vendas, Comissões, Manual e Meu Perfil (sem Filiais nem Revendedores)."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Revendedor inativo não opera até o admin reativar.",
+                "Não use o login de beneficiário, médico ou administrador."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "meu-perfil",
+          "title": "Meu perfil",
+          "description": "Atualizar nome, telefone, PIX e senha.",
+          "route": "/parceiro/perfil",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Meu Perfil."
+              ]
+            },
+            {
+              "title": "O que o revendedor pode alterar",
+              "paragraphs": [
+                "Nome, telefone e chave PIX. Salve depois de editar."
+              ]
+            },
+            {
+              "title": "Como trocar a senha",
+              "steps": [
+                {
+                  "title": "Informar senha atual e nova",
+                  "text": "Preencha a senha atual, a nova (mínimo 6 caracteres) e a confirmação."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Use a senha nova no próximo login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você não altera filial, parceiro nem percentuais de comissão.",
+                "O link de vendas usa o seu identificador; não depende do nome no perfil."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

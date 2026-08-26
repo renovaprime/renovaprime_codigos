@@ -1,6 +1,7 @@
 import { useState, useEffect, ReactNode } from 'react';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Card } from '../../../components/Card';
+import { PageHeader } from '../../../components';
 import { profileService } from '../services/profileService';
 import { ProfileBasicForm } from '../components/ProfileBasicForm';
 import { ProfilePasswordForm } from '../components/ProfilePasswordForm';
@@ -68,16 +69,10 @@ export function ProfilePage({ Layout }: ProfilePageProps) {
   return (
     <Layout title="Meu Perfil">
       <div className="w-full mx-auto space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Meu Perfil</h1>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
-              Atualize seus dados pessoais e mantenha sua conta segura.
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Meu Perfil"
+          subtitle="Atualize seus dados pessoais e mantenha sua conta segura."
+        />
 
         {error && (
           <Card className="border-red-200 bg-red-50/70 px-4 py-3">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Clock, CheckCircle, XCircle, Eye, Loader2, ExternalLink, X } from 'lucide-react';
 import { Layout } from '../layout';
-import { Card, EmptyState, Badge, Button, ConfirmModal } from '../components';
+import { Card, EmptyState, Badge, Button, ConfirmModal, PageHeader } from '../components';
 import { doctorService } from '../services/doctorService';
 import { uploadService } from '../services/uploadService';
 import type { Doctor } from '../types/api';
@@ -169,17 +169,13 @@ export function MedicosPendentes() {
           </div>
         )}
 
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Profissionais Pendentes</h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">Aprove ou rejeite cadastros de novos profissionais.</p>
-            </div>
+        <PageHeader
+          title="Profissionais Pendentes"
+          subtitle="Aprove ou rejeite cadastros de novos profissionais."
+          actions={
             <Badge variant="warning" data-cy="pending-doctors-count">{pendingDoctors.length} pendentes</Badge>
-          </div>
-        </div>
+          }
+        />
 
         {/* Lista de Profissionais Pendentes */}
         {isLoading ? (

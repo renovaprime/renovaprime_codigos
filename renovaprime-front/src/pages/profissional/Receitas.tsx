@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle2, XCircle, Users, Search, AlertCircle } from 'lucide-react';
 import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import { PageHeader } from '../../components';
 import { Card } from '../../components/Card';
 import { EmptyState } from '../../components/EmptyState';
 import { Badge } from '../../components/Badge';
@@ -109,18 +110,11 @@ export function ProfissionalReceitas() {
   return (
     <LayoutProfissional title="Receitas">
       <div className="w-full mx-auto">
-        <div className="relative mb-6 overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
-              Receitas
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">
-              Gerenciar receitas e histórico de consultas com seus pacientes.
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Receitas"
+          subtitle="Gerenciar receitas e histórico de consultas com seus pacientes."
+          className="mb-6"
+        />
 
         {/* Search bar */}
         <div className="mb-6">

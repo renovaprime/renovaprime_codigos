@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react';
 import { Users, Plus, Search, Eye, Edit2, Trash2 } from 'lucide-react';
 import { Layout } from '../layout';
-import { Card, EmptyState, Button, Input, Badge, Switch, ConfirmModal, BeneficiaryDetailsModal } from '../components';
+import { Card, EmptyState, Button, Input, Badge, Switch, ConfirmModal, BeneficiaryDetailsModal, PageHeader } from '../components';
 import { TitularFormModal } from '../components/TitularFormModal';
 import { DependenteFormModal } from '../components/DependenteFormModal';
 import { beneficiaryService, type BeneficiaryFilters, type FaceScanListFilter } from '../services/beneficiaryService';
@@ -167,15 +167,11 @@ export function Beneficiarios() {
   return (
     <Layout title="Beneficiários">
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Beneficiários</h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">Gerencie titulares e dependentes do sistema.</p>
-            </div>
-            <div className="flex flex-col gap-2 self-start sm:flex-row sm:self-auto">
+        <PageHeader
+          title="Beneficiários"
+          subtitle="Gerencie titulares e dependentes do sistema."
+          actions={
+            <>
               <Button onClick={handleNewTitular} data-cy="new-beneficiary-button">
                 <Plus className="w-4 h-4" />
                 Novo Beneficiário
@@ -184,9 +180,9 @@ export function Beneficiarios() {
                 <Plus className="w-4 h-4" />
                 Novo Dependente
               </Button>
-            </div>
-          </div>
-        </div>
+            </>
+          }
+        />
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" data-cy="error-message">

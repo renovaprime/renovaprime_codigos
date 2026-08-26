@@ -25,6 +25,7 @@ import {
   ProfissionalPerfil,
   ProfissionalProntuario,
   ProfissionalPacientes,
+  ProfissionalManual,
   LoginBeneficiario,
   BeneficiarioConsultas,
   BeneficiarioHistorico,
@@ -32,6 +33,8 @@ import {
   BeneficiarioAssinatura,
   BeneficiarioDependentes,
   BeneficiarioPerfil,
+  BeneficiarioMeuProntuario,
+  BeneficiarioManual,
   AdminCms,
   AdminProntuarios,
   LoginParceiro,
@@ -41,6 +44,7 @@ import {
   ParceiroPerfil,
   ParceiroFiliais,
   ParceiroRevendedores,
+  ParceiroManual,
   AdminManual,
 } from '../pages';
 import { TeleconsultaMedico, TeleconsultaPaciente } from '../modules/teleconsult';
@@ -267,6 +271,14 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: '/profissional/manual',
+    element: (
+      <ProtectedRoute allowedRoles={['medico']}>
+        <ProfissionalManual />
+      </ProtectedRoute>
+    ),
+  },
   // Rotas do Beneficiário
   {
     path: '/beneficiario/login',
@@ -317,6 +329,22 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['paciente']}>
         <BeneficiarioPerfil />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/beneficiario/prontuario',
+    element: (
+      <ProtectedRoute allowedRoles={['paciente']}>
+        <BeneficiarioMeuProntuario />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/beneficiario/manual',
+    element: (
+      <ProtectedRoute allowedRoles={['paciente']}>
+        <BeneficiarioManual />
       </ProtectedRoute>
     ),
   },
@@ -387,6 +415,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedPartnerRoute allowedTypes={['partner', 'branch']}>
         <ParceiroRevendedores />
+      </ProtectedPartnerRoute>
+    ),
+  },
+  {
+    path: '/parceiro/manual',
+    element: (
+      <ProtectedPartnerRoute>
+        <ParceiroManual />
       </ProtectedPartnerRoute>
     ),
   },

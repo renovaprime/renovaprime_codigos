@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User, Mail, Building2, Phone, CreditCard, Key, Globe, MapPin, AlertCircle, Check, Lock, Eye, EyeOff } from 'lucide-react';
 import { LayoutParceiro } from '../../layout/LayoutParceiro';
-import { Card, Button, Input } from '../../components';
+import { Card, Button, Input, PageHeader } from '../../components';
 import { partnerAreaService } from '../../services/partnerAreaService';
 import { usePartnerAuth } from '../../contexts/PartnerAuthContext';
 import type { PartnerProfile } from '../../types/partner';
@@ -161,14 +161,7 @@ export function ParceiroPerfil() {
   return (
     <LayoutParceiro title="Meu Perfil">
       <div className="max-w-2xl space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Meu Perfil</h1>
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">{getTypeLabel()} — Informações da conta.</p>
-          </div>
-        </div>
+        <PageHeader title="Meu Perfil" subtitle={`${getTypeLabel()} — Informações da conta.`} />
 
         {/* Profile Data Form */}
         <Card>

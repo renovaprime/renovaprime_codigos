@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Percent, DollarSign } from 'lucide-react';
 import { LayoutParceiro } from '../../layout/LayoutParceiro';
-import { Card, EmptyState, Input } from '../../components';
+import { Card, EmptyState, Input, PageHeader } from '../../components';
 import { partnerAreaService, type CommissionRow } from '../../services/partnerAreaService';
 import { usePartnerAuth } from '../../contexts/PartnerAuthContext';
 
@@ -57,14 +57,7 @@ export function ParceiroComissoes() {
   return (
     <LayoutParceiro title="Comissões">
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Comissões</h1>
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">Relatório de comissões (vendas confirmadas).</p>
-          </div>
-        </div>
+        <PageHeader title="Comissões" subtitle="Relatório de comissões (vendas confirmadas)." />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {showResellerCol && (

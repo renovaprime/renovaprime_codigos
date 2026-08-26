@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Save, ArrowLeft, Clock } from 'lucide-react';
 import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import { PageHeader } from '../../components';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { Badge } from '../../components/Badge';
@@ -184,21 +185,11 @@ export function ProfissionalDisponibilidade() {
   return (
     <LayoutProfissional title="Disponibilidade">
       <div className="w-full mx-auto space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-
-          <div className="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h1 className="font-display text-3xl font-bold text-primary md:text-4xl">
-                Configuração de Disponibilidade
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">
-                Configure seus horários de atendimento e bloqueios.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
+        <PageHeader
+          title="Configuração de Disponibilidade"
+          subtitle="Configure seus horários de atendimento e bloqueios."
+          actions={
+            <>
               {hasUnsavedChanges && (
                 <Badge variant="warning">Alterações não salvas</Badge>
               )}
@@ -210,9 +201,9 @@ export function ProfissionalDisponibilidade() {
                 <Save className="w-4 h-4" />
                 Salvar
               </Button>
-            </div>
-          </div>
-        </div>
+            </>
+          }
+        />
 
         {/* Mensagens de feedback */}
         {error && (

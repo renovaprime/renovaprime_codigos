@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ShoppingCart, DollarSign, CheckCircle, Clock } from 'lucide-react';
 import { Layout } from '../layout';
-import { Card, EmptyState, Input, Badge } from '../components';
+import { Card, EmptyState, Input, Badge, PageHeader } from '../components';
 import { salesReportService, type ResellerSaleRecord, type SalesSummary } from '../services/salesReportService';
 import { branchService } from '../services/branchService';
 import { resellerService } from '../services/resellerService';
@@ -95,14 +95,10 @@ export function Vendas() {
   return (
     <Layout title="Vendas">
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Vendas</h1>
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">Acompanhe as vendas realizadas por revendedores.</p>
-          </div>
-        </div>
+        <PageHeader
+          title="Vendas"
+          subtitle="Acompanhe as vendas realizadas por revendedores."
+        />
 
         {summary && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Layout } from '../../layout';
+import { PageHeader } from '../../components';
 import { specialtyService } from '../../services/specialtyService';
 import {
   AdminAppointmentsFilters,
@@ -91,16 +92,12 @@ export function AdminHistoricoAtendimentos() {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-display font-bold text-foreground">
-            Histórico de Atendimentos
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Visualize consultas finalizadas e canceladas
-          </p>
-        </div>
+      <div className="w-full mx-auto">
+        <PageHeader
+          title="Histórico de Atendimentos"
+          subtitle="Visualize consultas finalizadas e canceladas"
+          className="mb-6"
+        />
 
         {/* Filters */}
         <AdminAppointmentsFilters

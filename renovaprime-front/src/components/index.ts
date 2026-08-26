@@ -1,4 +1,5 @@
 export { Button } from './Button';
+export { PageHeader } from './PageHeader';
 export { Input } from './Input';
 export { TimeInput } from './TimeInput';
 export { DateInput } from './DateInput';
@@ -7,6 +8,7 @@ export { Badge } from './Badge';
 export { Switch } from './Switch';
 export { EmptyState } from './EmptyState';
 export { ProtectedRoute } from './ProtectedRoute';
+export { ManualGuide } from './ManualGuide';
 export { SpecialtyModal } from './SpecialtyModal';
 export { ConfirmModal } from './ConfirmModal';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';

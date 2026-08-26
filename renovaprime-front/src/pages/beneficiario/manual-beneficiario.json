@@ -1,0 +1,476 @@
+{
+  "title": "Manual do Beneficiário",
+  "subtitle": "Guia para consultas, receitas, dependentes, assinatura e sua conta.",
+  "categories": [
+    {
+      "id": "consultas",
+      "title": "Consultas",
+      "description": "Agendar, acompanhar, entrar na teleconsulta e cancelar atendimentos.",
+      "icon": "Calendar",
+      "items": [
+        {
+          "id": "listar-consultas",
+          "title": "Ver minhas consultas",
+          "description": "Acompanhar o que está marcado ou em andamento.",
+          "route": "/beneficiario/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Minhas consultas. É a tela inicial depois do login. Cada card mostra o profissional, a data, o horário e o status."
+              ]
+            },
+            {
+              "title": "O que aparece",
+              "bullets": [
+                "Agendada: consulta marcada, ainda não começou.",
+                "Em andamento: o profissional já iniciou; se for online, aparece Entrar na consulta.",
+                "Consultas finalizadas e canceladas ficam em Historico, não nesta lista."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você vê só as consultas do seu próprio cadastro. O titular agenda para dependentes, mas o card aparece no acesso de quem foi agendado (o dependente, depois que tiver login).",
+                "Dependente só vê as próprias consultas depois que o titular criar o acesso (e-mail e senha)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "agendar-consulta",
+          "title": "Agendar consulta",
+          "description": "Marcar um horário online para você ou para um dependente.",
+          "route": "/beneficiario/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Minhas consultas, clique em Agendar nova consulta."
+              ]
+            },
+            {
+              "title": "Como agendar",
+              "steps": [
+                {
+                  "title": "Escolher especialidade e para quem",
+                  "text": "Selecione a especialidade. Se você for titular, escolha se a consulta é para você ou para um dependente. Dependente agenda só para si."
+                },
+                {
+                  "title": "Escolher o dia",
+                  "text": "No calendário, só os dias com horário livre ficam disponíveis."
+                },
+                {
+                  "title": "Escolher o horário e confirmar",
+                  "text": "Selecione um horário. A consulta é online. O sistema escolhe o profissional disponível. Depois de confirmar, ela aparece na lista como agendada."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Não é possível agendar em data passada.",
+                "É preciso haver profissional com agenda naquela especialidade e horário.",
+                "Você não escolhe o médico à mão: a plataforma indica quem está livre."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cancelar-consulta",
+          "title": "Cancelar consulta",
+          "description": "Desmarcar um atendimento que ainda não começou.",
+          "route": "/beneficiario/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Minhas consultas, no card da consulta agendada, use a opção de cancelar e confirme. A ação não pode ser desfeita."
+              ]
+            },
+            {
+              "title": "Como cancelar",
+              "steps": [
+                {
+                  "title": "Localizar a consulta",
+                  "text": "Abra Minhas consultas e encontre o card ainda agendado."
+                },
+                {
+                  "title": "Confirmar",
+                  "text": "Clique em cancelar e confirme. O status passa a cancelada e o horário some da lista ativa; você o encontra em Historico."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só consulta agendada pode ser cancelada.",
+                "Consulta em andamento, finalizada ou já cancelada não se desmarca por aqui.",
+                "Minhas consultas lista só as suas. Consulta marcada para o dependente é cancelada no login dele (depois que o titular criar o acesso)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "teleconsulta",
+          "title": "Entrar na teleconsulta",
+          "description": "Abrir a sala de vídeo quando o profissional já iniciou o atendimento.",
+          "route": "/beneficiario/consultas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Minhas consultas, quando o status estiver Em andamento e a consulta for online, aparece Entrar na consulta. Isso abre a sala de vídeo."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Esperar o profissional iniciar",
+                  "text": "Antes disso, a sala informa que ainda não está disponível e tenta de novo sozinha. O botão só funciona depois que o médico clica em Iniciar Consulta."
+                },
+                {
+                  "title": "Entrar na sala",
+                  "text": "Clique em Entrar na consulta e permita câmera e microfone, se o navegador pedir."
+                },
+                {
+                  "title": "Consentimento",
+                  "text": "Pode aparecer um termo de consentimento do prontuário. Leia e aceite para seguir o atendimento."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "A sala só abre para consulta online em andamento.",
+                "Quem finaliza o atendimento é o profissional, não você.",
+                "A teleconsulta do dependente abre no login dele. Em Minhas consultas o titular não vê o card do dependente."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "historico",
+          "title": "Histórico de consultas",
+          "description": "Ver atendimentos finalizados e cancelados.",
+          "route": "/beneficiario/historico",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Historico. A lista traz consultas finalizadas e canceladas."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Filtrar",
+                  "text": "Use período, especialidade, status e busca. Esta lista mostra o histórico do seu cadastro (não há filtro por dependente nesta tela)."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela é só consulta: não agenda nem cancela.",
+                "Para desmarcar uma consulta ainda marcada, use Minhas consultas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "receitas-prontuario",
+      "title": "Receitas e prontuário",
+      "description": "Ver receitas emitidas pelo profissional e as evoluções clínicas assinadas.",
+      "icon": "FileText",
+      "items": [
+        {
+          "id": "minhas-receitas",
+          "title": "Ver minhas receitas",
+          "description": "Abrir as prescrições digitais emitidas nas consultas.",
+          "route": "/beneficiario/receitas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Minhas receitas. A lista mostra as prescrições ligadas às suas consultas (e, quando couber, às de dependentes no seu acesso)."
+              ]
+            },
+            {
+              "title": "Como abrir a receita",
+              "steps": [
+                {
+                  "title": "Localizar",
+                  "text": "Busque por profissional, especialidade ou data da consulta."
+                },
+                {
+                  "title": "Abrir o documento",
+                  "text": "Clique para abrir o link digital da receita em uma nova aba. Pode aparecer um código (dígitos) para validar o documento na Memed."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Quem emite a receita é o profissional, na consulta em andamento.",
+                "Se ainda não houver receita, a lista fica vazia até o médico prescrever.",
+                "Guarde o código da receita se ele for exibido: pode ser pedido na farmácia ou na validação digital."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "meu-prontuario",
+          "title": "Consultar meu prontuário",
+          "description": "Ver as evoluções que o médico já assinou e finalizou.",
+          "route": "/beneficiario/prontuario",
+          "sections": [
+            {
+              "title": "O que é o prontuário",
+              "paragraphs": [
+                "É o registro clínico da consulta (anamnese, exame e conduta). O médico preenche durante o atendimento e assina para tornar o texto definitivo."
+              ]
+            },
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Meu prontuário."
+              ]
+            },
+            {
+              "title": "Como consultar",
+              "steps": [
+                {
+                  "title": "Ver a lista",
+                  "text": "Aparecem só evoluções assinadas. Rascunho do médico não é exibido."
+                },
+                {
+                  "title": "Abrir o detalhe",
+                  "text": "Clique em uma evolução para ver anamnese, exame e conduta daquela consulta."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você não edita o prontuário: só consulta o que foi assinado.",
+                "Se a lista estiver vazia, a consulta ainda não foi finalizada com assinatura, ou ainda não houve evolução."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "familia-plano",
+      "title": "Família e plano",
+      "description": "Titular: cadastrar dependentes, liberar o acesso deles e acompanhar a assinatura.",
+      "icon": "Users",
+      "items": [
+        {
+          "id": "cadastrar-dependente",
+          "title": "Cadastrar dependente",
+          "description": "Incluir um familiar no plano (até 3 dependentes ativos).",
+          "route": "/beneficiario/dependentes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Dependentes. Esta tela só aparece para o titular. Dependente não gerencia a família por aqui."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique para adicionar um dependente."
+                },
+                {
+                  "title": "Preencher os dados",
+                  "text": "Informe nome (mínimo 3 caracteres), CPF (11 dígitos) e data de nascimento. Telefone e e-mail são opcionais."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "O dependente entra na lista como ativo. Isso ainda não cria login: para ele entrar no painel, libere o acesso (item seguinte)."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Máximo de 3 dependentes ativos.",
+                "Nome, CPF e data de nascimento são obrigatórios.",
+                "Alguns dependentes já podem ter vindo no plano familiar na compra; aqui você inclui os que faltarem, até o limite."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "acesso-dependente",
+          "title": "Liberar acesso do dependente",
+          "description": "Criar e-mail e senha para o dependente entrar no painel.",
+          "route": "/beneficiario/dependentes",
+          "sections": [
+            {
+              "title": "Por que isso importa",
+              "paragraphs": [
+                "Sem acesso, o dependente não faz login. O titular ainda pode agendar consulta para ele. Com acesso, o dependente vê as próprias consultas e receitas."
+              ]
+            },
+            {
+              "title": "Como criar ou alterar o acesso",
+              "steps": [
+                {
+                  "title": "Abrir o dependente",
+                  "text": "Em Dependentes, escolha a pessoa e a opção de acesso."
+                },
+                {
+                  "title": "Informar e-mail e senha",
+                  "text": "Preencha e-mail, senha e confirmação. Se já existir conta, os dados são atualizados; se não, uma conta de paciente é criada e ligada a ele."
+                },
+                {
+                  "title": "Entregar as credenciais",
+                  "text": "Passe o e-mail e a senha para o dependente. Ele entra em /beneficiario/login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só o titular configura o acesso.",
+                "O e-mail precisa ser válido e a senha deve ser confirmada.",
+                "Dependente com acesso não vê as telas Dependentes e Assinatura."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "assinatura",
+          "title": "Ver a assinatura",
+          "description": "Consultar o plano e a situação do pagamento.",
+          "route": "/beneficiario/assinatura",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Assinatura. Só o titular vê esta tela. O plano vem do cadastro do titular; o pagamento reflete a última venda (por exemplo, via revendedor)."
+              ]
+            },
+            {
+              "title": "O que você vê",
+              "paragraphs": [
+                "Tipo de plano (Clínico, Premium ou Familiar), dados do titular e o status do pagamento: pendente, confirmado, inadimplente, reembolsado, falhou ou cancelado."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Nesta tela você consulta o plano; a compra inicial acontece no checkout, não aqui.",
+                "Se o pagamento estiver pendente ou inadimplente, fale com o canal de atendimento ou com quem vendeu o plano."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conta",
+      "title": "Conta",
+      "description": "Entrar no painel e manter seus dados de acesso.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "login",
+          "title": "Entrar no painel",
+          "description": "Acessar com e-mail e senha na área do beneficiário.",
+          "route": "/beneficiario/login",
+          "sections": [
+            {
+              "title": "Como a conta é criada",
+              "paragraphs": [
+                "O titular em geral nasce na compra do plano (checkout). O dependente só faz login depois que o titular cria o acesso em Dependentes. Não use o login de administrador nem o de profissional."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Abrir o login do beneficiário",
+                  "text": "Acesse a tela de login do beneficiário."
+                },
+                {
+                  "title": "Informar e-mail e senha",
+                  "text": "Titular: use o e-mail e a senha definidos na compra (em alguns casos a senha inicial segue o CPF, só números — confirme com quem vendeu o plano). Dependente: use o e-mail e a senha que o titular cadastrou. Se esqueceu a senha, use Esqueci minha senha."
+                },
+                {
+                  "title": "Ir para as consultas",
+                  "text": "Com perfil de paciente, você entra em Minhas consultas."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Conta de outro perfil é recusada nesta tela.",
+                "Cadastro inativo não usa o painel normalmente.",
+                "Titular e dependente têm logins separados depois que o acesso do dependente existe."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "meu-perfil",
+          "title": "Meu perfil",
+          "description": "Atualizar nome, e-mail, telefone e senha.",
+          "route": "/beneficiario/perfil",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Meu Perfil. Também dá para abrir pelo avatar no canto superior direito."
+              ]
+            },
+            {
+              "title": "Como atualizar os dados",
+              "steps": [
+                {
+                  "title": "Editar o formulário",
+                  "text": "Altere nome, e-mail e telefone. O nome precisa ter pelo menos 3 caracteres e o e-mail precisa ser válido."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Clique em salvar. O e-mail novo será o login nas próximas entradas."
+                }
+              ]
+            },
+            {
+              "title": "Como trocar a senha",
+              "steps": [
+                {
+                  "title": "Preencher senha atual e nova",
+                  "text": "Informe a senha atual, a nova e a confirmação. A nova senha deve ter pelo menos 6 caracteres."
+                },
+                {
+                  "title": "Confirmar",
+                  "text": "Salve e use a senha nova no próximo login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela altera só a sua conta de acesso.",
+                "Plano, dependentes e Face Scan não se gerenciam aqui (Face Scan é liberado pelo administrador)."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

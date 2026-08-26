@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { UserCheck, Plus, Search, Filter, Edit2, Trash2, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../layout';
-import { Card, EmptyState, Button, Input, Badge, ConfirmModal } from '../components';
+import { Card, EmptyState, Button, Input, Badge, ConfirmModal, PageHeader } from '../components';
 import { doctorService } from '../services/doctorService';
 import type { Doctor } from '../types/api';
 
@@ -134,20 +134,16 @@ export function MedicosAtivos() {
   return (
     <Layout title="Profissionais">
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Profissionais</h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">Visualize e gerencie profissionais ativos na plataforma.</p>
-            </div>
+        <PageHeader
+          title="Profissionais"
+          subtitle="Visualize e gerencie profissionais ativos na plataforma."
+          actions={
             <Button onClick={() => navigate('/profissionais/cadastro')} data-cy="new-doctor-button" className="self-start sm:self-auto">
               <Plus className="w-4 h-4" />
               Novo Profissional
             </Button>
-          </div>
-        </div>
+          }
+        />
 
         {/* Error Alert */}
         {error && (

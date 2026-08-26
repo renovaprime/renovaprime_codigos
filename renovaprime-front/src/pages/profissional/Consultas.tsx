@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import { PageHeader } from '../../components';
 import { DoctorConsultaCard } from '../../components/DoctorConsultaCard';
 import { EmptyState } from '../../components/EmptyState';
 import { ConfirmModal } from '../../components/ConfirmModal';
@@ -145,76 +146,66 @@ export function ProfissionalConsultas() {
   return (
     <LayoutProfissional title="Minhas Consultas">
       <div className="w-full mx-auto">
-        <div className="relative mb-6 overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
+        <PageHeader
+          title="Minhas Consultas"
+          subtitle="Gerencie suas consultas agendadas."
+          className="mb-6"
+        />
 
-          <div className="relative flex flex-col gap-4">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
-                Minhas Consultas
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">
-                Gerencie suas consultas agendadas.
-              </p>
-            </div>
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex items-center overflow-hidden rounded-xl border border-border bg-card">
+            <button
+              onClick={() => setDateFilter('all')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                dateFilter === 'all'
+                  ? 'bg-primary text-white'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              Todas
+            </button>
+            <button
+              onClick={() => setDateFilter('today')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                dateFilter === 'today'
+                  ? 'bg-primary text-white'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              Hoje
+            </button>
+            <button
+              onClick={() => setDateFilter('tomorrow')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                dateFilter === 'tomorrow'
+                  ? 'bg-primary text-white'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              Amanha
+            </button>
+            <button
+              onClick={() => setDateFilter('week')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                dateFilter === 'week'
+                  ? 'bg-primary text-white'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              Semana
+            </button>
+          </div>
 
-            <div className="flex items-center gap-2">
-            <div className="flex items-center bg-card border border-border rounded-xl overflow-hidden">
-              <button
-                onClick={() => setDateFilter('all')}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  dateFilter === 'all'
-                    ? 'bg-primary text-white'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                Todas
-              </button>
-              <button
-                onClick={() => setDateFilter('today')}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  dateFilter === 'today'
-                    ? 'bg-primary text-white'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                Hoje
-              </button>
-              <button
-                onClick={() => setDateFilter('tomorrow')}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  dateFilter === 'tomorrow'
-                    ? 'bg-primary text-white'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                Amanha
-              </button>
-              <button
-                onClick={() => setDateFilter('week')}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  dateFilter === 'week'
-                    ? 'bg-primary text-white'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                Semana
-              </button>
-            </div>
-
-            <div className="relative">
-              <input
-                type="date"
-                value={customDate}
-                onChange={(e) => {
-                  setCustomDate(e.target.value);
-                  setDateFilter('custom');
-                }}
-                className="px-4 py-2 text-sm border border-border rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-              </div>
-            </div>
+          <div className="relative">
+            <input
+              type="date"
+              value={customDate}
+              onChange={(e) => {
+                setCustomDate(e.target.value);
+                setDateFilter('custom');
+              }}
+              className="rounded-xl border border-border bg-card px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
           </div>
         </div>
 

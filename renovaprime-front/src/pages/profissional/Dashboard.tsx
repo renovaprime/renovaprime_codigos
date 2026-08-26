@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import { PageHeader } from '../../components';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { doctorAppointmentService } from '../../services/doctorAppointmentService';
@@ -243,19 +244,10 @@ export function ProfissionalDashboard() {
   return (
     <LayoutProfissional title="Dashboard">
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-
-          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
-                Bem-vindo!
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
-                Acompanhe suas consultas de hoje.
-              </p>
-            </div>
+        <PageHeader
+          title="Bem-vindo!"
+          subtitle="Acompanhe suas consultas de hoje."
+          actions={
             <Button
               variant="ghost"
               size="sm"
@@ -266,8 +258,8 @@ export function ProfissionalDashboard() {
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               Atualizar
             </Button>
-          </div>
-        </div>
+          }
+        />
 
         {/* Estatisticas do dia */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

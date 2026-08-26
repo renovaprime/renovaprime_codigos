@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { ClipboardList, FileText, History, Paperclip } from 'lucide-react';
 import { LayoutProfissional } from '../../layout/LayoutProfissional';
+import { PageHeader } from '../../components';
 import {
   PatientSummary,
   MedicalRecordForm,
@@ -81,16 +82,11 @@ export function ProfissionalProntuario() {
   return (
     <LayoutProfissional>
       <div className="max-w-5xl mx-auto">
-        <div className="relative mb-6 overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Prontuário</h1>
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">
-              Visualize e registre dados clínicos do paciente.
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Prontuário"
+          subtitle="Visualize e registre dados clínicos do paciente."
+          className="mb-6"
+        />
 
         {/* Tabs */}
         <div className="flex items-center gap-1 mb-6 border-b border-border">

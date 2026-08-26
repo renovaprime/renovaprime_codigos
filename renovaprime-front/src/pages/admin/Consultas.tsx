@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Layout } from '../../layout';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { Button } from '../../components/Button';
+import { PageHeader } from '../../components';
 import { specialtyService } from '../../services/specialtyService';
 import {
   AdminAppointmentsFilters,
@@ -120,25 +121,20 @@ export function AdminConsultas() {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-foreground">Consultas</h1>
-              <p className="text-muted-foreground mt-1">
-                Gerencie as consultas agendadas e em andamento
-              </p>
-            </div>
+      <div className="w-full mx-auto">
+        <PageHeader
+          title="Consultas"
+          subtitle="Gerencie as consultas agendadas e em andamento"
+          className="mb-6"
+          actions={
             <Button
               onClick={() => setCreateModalOpen(true)}
-              className="w-full sm:w-auto"
               data-cy="admin-create-appointment"
             >
               Criar consulta para beneficiario
             </Button>
-          </div>
-        </div>
+          }
+        />
 
         {/* Filters */}
         <AdminAppointmentsFilters

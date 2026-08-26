@@ -1,0 +1,233 @@
+{
+  "title": "Manual da Filial",
+  "subtitle": "Guia para acompanhar os revendedores da unidade, vendas, comissões e sua conta.",
+  "categories": [
+    {
+      "id": "rede",
+      "title": "Rede",
+      "description": "Consultar os revendedores da sua filial. O cadastro é feito pelo administrador.",
+      "icon": "Users",
+      "items": [
+        {
+          "id": "listar-revendedores",
+          "title": "Ver revendedores da filial",
+          "description": "Listar quem vende pela sua unidade e copiar o link de vendas.",
+          "route": "/parceiro/revendedores",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Revendedores. Como filial, a lista mostra só os revendedores da sua unidade. Você não vê a tela Filiais (ela é do parceiro)."
+              ]
+            },
+            {
+              "title": "Como copiar o link de vendas",
+              "steps": [
+                {
+                  "title": "Localizar o revendedor",
+                  "text": "Veja nome, CPF, e-mail, telefone e se está ativo."
+                },
+                {
+                  "title": "Copiar o link",
+                  "text": "Clique em Link de vendas. O endereço do site inclui o código do revendedor (?rev= e #planos)."
+                },
+                {
+                  "title": "Enviar ao cliente",
+                  "text": "Com esse link, a venda no site entra na sua filial e gera comissão conforme os percentuais definidos pelo admin no cadastro do parceiro."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Criar ou desativar revendedor é no painel do administrador.",
+                "Sem o rev no link, a venda pode não amarrar comissão à sua filial."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "relatorios",
+      "title": "Relatórios",
+      "description": "Acompanhar vendas e comissões no escopo da filial.",
+      "icon": "BarChart3",
+      "items": [
+        {
+          "id": "dashboard",
+          "title": "Dashboard",
+          "description": "Ver o resumo de vendas e a comissão da filial.",
+          "route": "/parceiro/dashboard",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Após o login você entra no Dashboard."
+              ]
+            },
+            {
+              "title": "O que você vê",
+              "paragraphs": [
+                "Totais de vendas, valor, confirmadas, pendentes e a comissão da sua filial. Os números são só da sua unidade, não da rede inteira do parceiro."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O dashboard é só leitura.",
+                "Para o detalhe por revendedor, use Vendas e Comissões."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "vendas",
+          "title": "Relatório de vendas",
+          "description": "Filtrar as vendas da filial por revendedor, plano, status e período.",
+          "route": "/parceiro/vendas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Vendas."
+              ]
+            },
+            {
+              "title": "Como filtrar",
+              "steps": [
+                {
+                  "title": "Escolher os filtros",
+                  "text": "Revendedor, plano, status e datas. Não há filtro de filial: o sistema já limita à sua unidade."
+                },
+                {
+                  "title": "Ler o resultado",
+                  "text": "A lista e o resumo mostram as vendas encontradas."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você não lança venda nesta tela; ela nasce no checkout do site pelo link do revendedor.",
+                "Comissões consideram, em geral, vendas confirmadas."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "comissoes",
+          "title": "Relatório de comissões",
+          "description": "Ver a comissão da filial e a do revendedor nas vendas confirmadas.",
+          "route": "/parceiro/comissoes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Comissões. Sem filtro de status, entram vendas confirmadas."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Definir o período",
+                  "text": "Informe datas se quiser restringir."
+                },
+                {
+                  "title": "Ler as colunas",
+                  "text": "Cada linha traz o revendedor, quantidade e valor, comissão do revendedor e a da filial. A coluna do parceiro não aparece neste perfil."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Os percentuais vêm do cadastro do parceiro no admin.",
+                "Venda não confirmada normalmente não gera comissão neste relatório."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conta",
+      "title": "Conta",
+      "description": "Entrar na área da rede e atualizar os dados da filial.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "login",
+          "title": "Entrar como filial",
+          "description": "Usar o mesmo login da área do parceiro, com o e-mail da filial.",
+          "route": "/parceiro/login",
+          "sections": [
+            {
+              "title": "Como a conta é criada",
+              "paragraphs": [
+                "O administrador cadastra a filial ligada a um parceiro e define e-mail e senha. Use a tela de login da área do parceiro, não a de médico ou beneficiário."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Informar e-mail e senha da filial",
+                  "text": "O sistema identifica o tipo automaticamente. Você cai no Dashboard com o menu da filial (sem o item Filiais)."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "O menu mostra Dashboard, Vendas, Comissões, Revendedores, Manual e Meu Perfil.",
+                "Filial inativa não opera até o admin reativar."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "meu-perfil",
+          "title": "Meu perfil",
+          "description": "Atualizar nome, apelido, endereço e senha da filial.",
+          "route": "/parceiro/perfil",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Meu Perfil."
+              ]
+            },
+            {
+              "title": "O que a filial pode alterar",
+              "paragraphs": [
+                "Nome, apelido (alias) e endereço. Salve depois de editar."
+              ]
+            },
+            {
+              "title": "Como trocar a senha",
+              "steps": [
+                {
+                  "title": "Informar senha atual e nova",
+                  "text": "Preencha a senha atual, a nova (mínimo 6 caracteres) e a confirmação."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Use a senha nova no próximo login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você não altera o parceiro-pai nem os percentuais de comissão por aqui.",
+                "Revendedores da filial continuam sendo cadastrados pelo administrador."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

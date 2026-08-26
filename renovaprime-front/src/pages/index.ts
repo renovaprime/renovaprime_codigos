@@ -25,6 +25,7 @@ export { ProfissionalHistorico } from './profissional/Historico';
 export { ProfissionalPerfil } from './profissional/Perfil';
 export { ProfissionalProntuario } from './profissional/Prontuario';
 export { ProfissionalPacientes } from './profissional/Pacientes';
+export { ProfissionalManual } from './profissional/Manual';
 
 // Páginas do Beneficiário
 export { LoginBeneficiario } from './LoginBeneficiario';
@@ -35,6 +36,7 @@ export { BeneficiarioAssinatura } from './beneficiario/Assinatura';
 export { BeneficiarioDependentes } from './beneficiario/Dependentes';
 export { BeneficiarioPerfil } from './beneficiario/Perfil';
 export { BeneficiarioMeuProntuario } from './beneficiario/MeuProntuario';
+export { BeneficiarioManual } from './beneficiario/Manual';
 
 // Páginas do Parceiro
 export { LoginParceiro } from './parceiro/LoginParceiro';
@@ -44,6 +46,7 @@ export { ParceiroComissoes } from './parceiro/Comissoes';
 export { ParceiroPerfil } from './parceiro/Perfil';
 export { ParceiroFiliais } from './parceiro/Filiais';
 export { ParceiroRevendedores } from './parceiro/Revendedores';
+export { ParceiroManual } from './parceiro/Manual';
 
 // Páginas do Admin (extras)
 export { AdminManual } from './admin/Manual';

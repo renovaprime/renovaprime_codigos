@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Users, Copy, Check } from 'lucide-react';
 import { LayoutParceiro } from '../../layout/LayoutParceiro';
-import { Card, EmptyState, Badge } from '../../components';
+import { Card, EmptyState, Badge, PageHeader } from '../../components';
 import { partnerAreaService } from '../../services/partnerAreaService';
 import { usePartnerAuth } from '../../contexts/PartnerAuthContext';
 import type { PartnerResellerItem } from '../../types/partner';
@@ -41,18 +41,14 @@ export function ParceiroRevendedores() {
   return (
     <LayoutParceiro title="Revendedores">
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Revendedores</h1>
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">
-              {entity?.type === 'partner'
-                ? 'Todos os revendedores das suas filiais'
-                : 'Revendedores da sua filial'}
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Revendedores"
+          subtitle={
+            entity?.type === 'partner'
+              ? 'Todos os revendedores das suas filiais'
+              : 'Revendedores da sua filial'
+          }
+        />
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{error}</div>

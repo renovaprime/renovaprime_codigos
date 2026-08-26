@@ -3,6 +3,7 @@ import { Layout } from '../../layout';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { ConfirmModal } from '../../components/ConfirmModal';
+import { PageHeader } from '../../components';
 import { cmsService } from '../../services/cmsService';
 import type { CmsEntry } from '../../types/api';
 import {
@@ -223,28 +224,18 @@ export function AdminCms() {
 
   return (
     <Layout title="CMS">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="w-full mx-auto space-y-6">
         {/* Header */}
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
-                Gerenciador de Conteúdo (CMS)
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground md:text-base">
-                Gerencie o conteúdo dinâmico do sistema.
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="secondary" onClick={loadEntries} disabled={isLoading}>
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                Atualizar
-              </Button>
-            </div>
-          </div>
-        </div>
+        <PageHeader
+          title="Gerenciador de Conteúdo (CMS)"
+          subtitle="Gerencie o conteúdo dinâmico do sistema."
+          actions={
+            <Button variant="secondary" onClick={loadEntries} disabled={isLoading}>
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Atualizar
+            </Button>
+          }
+        />
 
         {/* Search */}
         <div className="relative">

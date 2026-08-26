@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Shield, Users, Calendar, CreditCard, Loader2 } from 'lucide-react';
 import { LayoutBeneficiario } from '../../layout/LayoutBeneficiario';
 import { Card } from '../../components/Card';
+import { PageHeader } from '../../components';
 import { subscriptionService } from '../../services/subscriptionService';
 import type { SubscriptionData } from '../../types/api';
 
@@ -68,16 +69,10 @@ export function BeneficiarioAssinatura() {
   return (
     <LayoutBeneficiario title="Assinatura">
       <div className="w-full mx-auto space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-          <div className="relative">
-            <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">Assinatura</h1>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
-              Acompanhe seu plano atual, situacao de pagamento e beneficiarios vinculados.
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Assinatura"
+          subtitle="Acompanhe seu plano atual, situacao de pagamento e beneficiarios vinculados."
+        />
 
         {isLoading ? (
           <Card className="p-10">

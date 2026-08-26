@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ClipboardList, Search, FileText, Calendar, CheckCircle, AlertCircle, ArrowLeft, User } from 'lucide-react';
 import { Layout } from '../../layout';
-import { Card, Input, Badge } from '../../components';
+import { Card, Input, Badge, PageHeader } from '../../components';
 import { beneficiaryService } from '../../services/beneficiaryService';
 import { RecordDetail, medicalRecordApiService } from '../../modules/prontuario';
 import type { Beneficiary } from '../../types/api';
@@ -111,24 +111,17 @@ export function AdminProntuarios() {
             Voltar para lista de beneficiários
           </button>
 
-          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-            <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-
-            <div className="relative flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-display font-bold text-primary md:text-3xl">
-                  {selectedBeneficiary.name}
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  CPF: {selectedBeneficiary.cpf} | {selectedBeneficiary.type === 'TITULAR' ? 'Titular' : 'Dependente'}
-                </p>
-              </div>
-            </div>
-          </div>
+          <PageHeader
+            title={
+              <span className="inline-flex items-center gap-4">
+                <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <User className="h-7 w-7 text-primary" />
+                </span>
+                {selectedBeneficiary.name}
+              </span>
+            }
+            subtitle={`CPF: ${selectedBeneficiary.cpf} | ${selectedBeneficiary.type === 'TITULAR' ? 'Titular' : 'Dependente'}`}
+          />
 
           {recordsLoading && (
             <Card className="p-10">
@@ -207,28 +200,19 @@ export function AdminProntuarios() {
     <Layout title="Prontuários">
       <div className="space-y-6">
         {/* Header */}
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-6 md:p-8">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
-
-          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-display font-bold text-primary md:text-4xl">
-                Prontuários
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
-                Visualize os prontuários médicos dos beneficiários.
-              </p>
-            </div>
-            <div className="flex items-center gap-3 rounded-2xl bg-card/80 px-5 py-3 shadow-lg backdrop-blur-sm">
+        <PageHeader
+          title="Prontuários"
+          subtitle="Visualize os prontuários médicos dos beneficiários."
+          actions={
+            <div className="flex items-center gap-3 rounded-2xl bg-muted/60 px-5 py-3">
               <ClipboardList className="h-8 w-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold text-foreground">{beneficiaries.length}</p>
                 <p className="text-xs text-muted-foreground">Beneficiários</p>
               </div>
             </div>
-          </div>
-        </div>
+          }
+        />
 
         {/* Search */}
         <Card className="p-4">

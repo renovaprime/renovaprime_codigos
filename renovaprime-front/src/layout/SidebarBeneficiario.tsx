@@ -5,8 +5,10 @@ import {
   Calendar,
   History,
   FileText,
+  ClipboardList,
   Users,
   CreditCard,
+  BookOpen,
   User,
   LogOut,
   X,
@@ -28,8 +30,10 @@ const navigation = [
   { id: 'nav-beneficiary-appointments', name: 'Minhas consultas', href: '/beneficiario/consultas', icon: Calendar },
   { id: 'nav-beneficiary-history', name: 'Historico', href: '/beneficiario/historico', icon: History },
   { id: 'nav-beneficiary-prescriptions', name: 'Minhas receitas', href: '/beneficiario/receitas', icon: FileText },
+  { id: 'nav-beneficiary-records', name: 'Meu prontuário', href: '/beneficiario/prontuario', icon: ClipboardList },
   { id: 'nav-beneficiary-dependents', name: 'Dependentes', href: '/beneficiario/dependentes', icon: Users },
   { id: 'nav-beneficiary-subscription', name: 'Assinatura', href: '/beneficiario/assinatura', icon: CreditCard },
+  { id: 'nav-beneficiary-manual', name: 'Manual', href: '/beneficiario/manual', icon: BookOpen },
   { id: 'nav-beneficiary-profile', name: 'Meu Perfil', href: '/beneficiario/perfil', icon: User },
 ];
 
