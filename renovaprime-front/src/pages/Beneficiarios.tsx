@@ -5,7 +5,9 @@ import { Card, EmptyState, Button, Input, Badge, Switch, ConfirmModal, Beneficia
 import { TitularFormModal } from '../components/TitularFormModal';
 import { DependenteFormModal } from '../components/DependenteFormModal';
 import { beneficiaryService, type BeneficiaryFilters, type FaceScanListFilter } from '../services/beneficiaryService';
+import { companyService } from '../services/companyService';
 import type { Beneficiary } from '../types/api';
+import type { CompanyRecord } from '../types/company';
 
 export function Beneficiarios() {
   const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([]);
@@ -15,6 +17,8 @@ export function Beneficiarios() {
   const [typeFilter, setTypeFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [faceScanFilter, setFaceScanFilter] = useState<FaceScanListFilter | ''>('');
+  const [companyFilter, setCompanyFilter] = useState<string>('');
+  const [companies, setCompanies] = useState<CompanyRecord[]>([]);
 
   const [titularModalOpen, setTitularModalOpen] = useState(false);
   const [dependenteModalOpen, setDependenteModalOpen] = useState(false);
@@ -39,7 +43,11 @@ export function Beneficiarios() {
 
   useEffect(() => {
     loadBeneficiaries();
-  }, [searchTerm, typeFilter, statusFilter, faceScanFilter]);
+  }, [searchTerm, typeFilter, statusFilter, faceScanFilter, companyFilter]);
+
+  useEffect(() => {
+    companyService.list().then(setCompanies).catch(() => setCompanies([]));
+  }, []);
 
   const loadBeneficiaries = async () => {
     try {
@@ -51,6 +59,7 @@ export function Beneficiarios() {
       if (typeFilter) filters.type = typeFilter;
       if (statusFilter) filters.status = statusFilter;
       if (faceScanFilter) filters.faceScan = faceScanFilter;
+      if (companyFilter) filters.company_id = Number(companyFilter);
 
       const data = await beneficiaryService.list(filters);
       setBeneficiaries(data);
@@ -222,6 +231,16 @@ export function Beneficiarios() {
                 <option value="">Todos os status</option>
                 <option value="ACTIVE">Ativo</option>
                 <option value="INACTIVE">Inativo</option>
+              </select>
+              <select
+                value={companyFilter}
+                onChange={(e) => setCompanyFilter(e.target.value)}
+                className="px-3 py-2 border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Todas as empresas</option>
+                {companies.map((c) => (
+                  <option key={c.id} value={c.id}>{c.trade_name}</option>
+                ))}
               </select>
               <select
                 value={faceScanFilter}

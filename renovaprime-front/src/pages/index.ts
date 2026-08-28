@@ -51,3 +51,13 @@ export { ParceiroManual } from './parceiro/Manual';
 // Páginas do Admin (extras)
 export { AdminManual } from './admin/Manual';
 export { AdminProntuarios } from './admin/Prontuarios';
+export { Empresas } from './admin/Empresas';
+export { PlanosEmpresariais } from './admin/PlanosEmpresariais';
+export { RelatoriosEmpresas } from './admin/RelatoriosEmpresas';
+
+// Portal Empresa
+export { LoginEmpresa } from './empresa/LoginEmpresa';
+export { EmpresaBeneficiarios } from './empresa/Beneficiarios';
+export { EmpresaFaturas } from './empresa/Faturas';
+export { EmpresaConfiguracoes } from './empresa/Configuracoes';
+export { EmpresaManual } from './empresa/Manual';

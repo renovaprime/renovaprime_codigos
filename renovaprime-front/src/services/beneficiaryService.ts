@@ -11,6 +11,7 @@ export interface BeneficiaryFilters {
   status?: string;
   /** Filtra pela situação do Face Scan (mesmos estados da coluna na lista) */
   faceScan?: FaceScanListFilter;
+  company_id?: number;
 }
 
 class BeneficiaryService {
@@ -22,6 +23,7 @@ class BeneficiaryService {
     if (filters?.type) params.append('type', filters.type);
     if (filters?.status) params.append('status', filters.status);
     if (filters?.faceScan) params.append('faceScan', filters.faceScan);
+    if (filters?.company_id) params.append('company_id', String(filters.company_id));
     
     const queryString = params.toString();
     const url = queryString ? `/admin/beneficiaries?${queryString}` : '/admin/beneficiaries';

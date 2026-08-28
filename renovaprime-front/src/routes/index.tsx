@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { ProtectedRoute, ProtectedPartnerRoute } from '../components';
+import { ProtectedRoute, ProtectedPartnerRoute, ProtectedCompanyRoute } from '../components';
 import {
   Login,
   LoginProfissional,
@@ -46,6 +46,14 @@ import {
   ParceiroRevendedores,
   ParceiroManual,
   AdminManual,
+  Empresas,
+  PlanosEmpresariais,
+  RelatoriosEmpresas,
+  LoginEmpresa,
+  EmpresaBeneficiarios,
+  EmpresaConfiguracoes,
+  EmpresaFaturas,
+  EmpresaManual,
 } from '../pages';
 import { TeleconsultaMedico, TeleconsultaPaciente } from '../modules/teleconsult';
 
@@ -71,6 +79,30 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
         <Parceiros />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/empresas',
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <Empresas />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/planos-empresariais',
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <PlanosEmpresariais />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/relatorios-empresas',
+    element: (
+      <ProtectedRoute allowedRoles={['admin']}>
+        <RelatoriosEmpresas />
       </ProtectedRoute>
     ),
   },
@@ -424,6 +456,43 @@ export const router = createBrowserRouter([
       <ProtectedPartnerRoute>
         <ParceiroManual />
       </ProtectedPartnerRoute>
+    ),
+  },
+  // Rotas da Empresa
+  {
+    path: '/empresa/login',
+    element: <LoginEmpresa />,
+  },
+  {
+    path: '/empresa/beneficiarios',
+    element: (
+      <ProtectedCompanyRoute>
+        <EmpresaBeneficiarios />
+      </ProtectedCompanyRoute>
+    ),
+  },
+  {
+    path: '/empresa/faturas',
+    element: (
+      <ProtectedCompanyRoute>
+        <EmpresaFaturas />
+      </ProtectedCompanyRoute>
+    ),
+  },
+  {
+    path: '/empresa/configuracoes',
+    element: (
+      <ProtectedCompanyRoute>
+        <EmpresaConfiguracoes />
+      </ProtectedCompanyRoute>
+    ),
+  },
+  {
+    path: '/empresa/manual',
+    element: (
+      <ProtectedCompanyRoute>
+        <EmpresaManual />
+      </ProtectedCompanyRoute>
     ),
   },
 ]);

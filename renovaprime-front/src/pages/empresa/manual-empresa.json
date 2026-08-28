@@ -1,0 +1,274 @@
+{
+  "title": "Manual da Empresa",
+  "subtitle": "Guia para cadastrar colaboradores, consultar faturas e manter os dados de acesso.",
+  "categories": [
+    {
+      "id": "acesso",
+      "title": "Acesso",
+      "description": "Entrar no portal da empresa com o e-mail do responsável.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "login-empresa",
+          "title": "Entrar no portal",
+          "description": "Como fazer login e o que acontece se a empresa estiver inativa.",
+          "sections": [
+            {
+              "title": "Onde entrar",
+              "paragraphs": [
+                "Abra o endereço do portal da empresa (/empresa/login). Não use o login de administrador, de médico nem de beneficiário."
+              ]
+            },
+            {
+              "title": "Como entrar",
+              "steps": [
+                {
+                  "title": "Informar o e-mail",
+                  "text": "Use o e-mail do responsável, o mesmo cadastrado pelo administrador. Não é o e-mail corporativo da empresa, se eles forem diferentes."
+                },
+                {
+                  "title": "Informar a senha",
+                  "text": "Digite a senha inicial recebida do administrador ou a senha que você já tiver alterado em Configurações."
+                },
+                {
+                  "title": "Acessar",
+                  "text": "Depois do login, a tela inicial é Beneficiários."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Há um único login por empresa: o do responsável. Não existe perfil por colaborador neste portal.",
+                "Empresa inativa não entra. Nesse caso, fale com o administrador da plataforma.",
+                "Titulares e dependentes não usam este portal. Se tiverem acesso liberado, entram em /beneficiario/login."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beneficiarios",
+      "title": "Beneficiários",
+      "description": "Cadastrar colaboradores e dependentes, inativar vidas e liberar acesso ao painel do beneficiário.",
+      "icon": "Users",
+      "items": [
+        {
+          "id": "cadastrar-colaborador",
+          "title": "Cadastrar colaborador",
+          "description": "Incluir um titular (funcionário) na cobertura da empresa.",
+          "route": "/empresa/beneficiarios",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Beneficiários. Colaborador, nesta tela, é o titular da vida."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Colaborador."
+                },
+                {
+                  "title": "Preencher os dados",
+                  "text": "Informe nome, CPF e data de nascimento. Telefone, e-mail e senha são opcionais neste cadastro."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "O colaborador aparece na lista como ativo e passa a contar nas vidas da empresa."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Você só vê e altera as vidas da sua empresa.",
+                "O CPF precisa ser único no sistema.",
+                "Vida ativa entra no cálculo da próxima fatura mensal."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cadastrar-dependente",
+          "title": "Cadastrar dependente",
+          "description": "Vincular um familiar a um colaborador já cadastrado.",
+          "route": "/empresa/beneficiarios",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Beneficiários, clique em Dependente. É preciso ter pelo menos um colaborador (titular) cadastrado."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Escolher o titular",
+                  "text": "Selecione o colaborador ao qual o dependente pertence."
+                },
+                {
+                  "title": "Informar parentesco e dados",
+                  "text": "Escolha o grau (cônjuge, filho, enteado, pai, mãe, irmão ou outro) e preencha nome, CPF e data de nascimento."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "O dependente aparece abaixo do titular e também conta como vida na fatura, enquanto estiver ativo."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Dependente sempre exige um titular da empresa.",
+                "Grau de parentesco é obrigatório.",
+                "O CPF do dependente também precisa ser único."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "inativar-liberar-acesso",
+          "title": "Inativar e liberar acesso",
+          "description": "Tirar a vida da cobertura e, se quiser, criar login no painel do beneficiário.",
+          "route": "/empresa/beneficiarios",
+          "sections": [
+            {
+              "title": "Como inativar",
+              "steps": [
+                {
+                  "title": "Localizar a vida",
+                  "text": "Use a busca por nome ou CPF, se a lista for grande."
+                },
+                {
+                  "title": "Inativar",
+                  "text": "Clique em Inativar e confirme. A vida deixa de contar na próxima fatura. Competências já fechadas não mudam."
+                }
+              ]
+            },
+            {
+              "title": "Como liberar o painel do beneficiário",
+              "steps": [
+                {
+                  "title": "Abrir Liberar acesso",
+                  "text": "Na linha da vida, clique em Liberar acesso."
+                },
+                {
+                  "title": "Informar e-mail e senha",
+                  "text": "Cadastre o e-mail e a senha. A pessoa entra em /beneficiario/login para consultas, não neste portal da empresa."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Liberar acesso é opcional. A cobertura e a telemedicina não dependem desse login.",
+                "Este portal não tem usuário por colaborador: só o responsável opera o cadastro das vidas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faturas",
+      "title": "Faturas",
+      "description": "Consultar o histórico mensal e pagar pelo link, quando disponível.",
+      "icon": "CreditCard",
+      "items": [
+        {
+          "id": "consultar-faturas",
+          "title": "Ver e pagar faturas",
+          "description": "Acompanhar competências, valores, vencimento e o link de pagamento.",
+          "route": "/empresa/faturas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Faturas. Cada card mostra o mês (competência), quantidade de vidas, vencimento, valor e o status."
+              ]
+            },
+            {
+              "title": "Como pagar",
+              "steps": [
+                {
+                  "title": "Abrir a fatura",
+                  "text": "Quando existir o link, clique em Pagar fatura. A cobrança abre no meio de pagamento (ASAAS), em outra aba."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Nesta tela você só consulta. Quem gera a fatura é o administrador ou o fechamento automático no dia 1 de cada mês.",
+                "O valor é o snapshot do mês: incluir ou inativar vidas depois do fechamento não muda aquela competência.",
+                "O link de pagamento aparece quando a cobrança já foi emitida. Se não houver fatura, aguarde o fechamento ou fale com o administrador."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conta",
+      "title": "Conta",
+      "description": "Atualizar dados do responsável e trocar a senha do portal.",
+      "icon": "User",
+      "items": [
+        {
+          "id": "configuracoes",
+          "title": "Configurações",
+          "description": "Alterar contato do responsável, telefone da empresa e senha.",
+          "route": "/empresa/configuracoes",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu, clique em Configurações."
+              ]
+            },
+            {
+              "title": "Como atualizar os dados",
+              "steps": [
+                {
+                  "title": "Editar o responsável e o telefone",
+                  "text": "Altere nome, e-mail e telefone do responsável e o telefone da empresa. O e-mail do responsável é o login: se mudar, use o novo e-mail no próximo acesso."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Clique em salvar. Razão social, fantasia e CNPJ não se editam aqui: peça ao administrador."
+                }
+              ]
+            },
+            {
+              "title": "Como trocar a senha",
+              "steps": [
+                {
+                  "title": "Preencher senha atual e nova",
+                  "text": "Informe a senha atual, a nova e a confirmação. As duas novas precisam ser iguais."
+                },
+                {
+                  "title": "Confirmar",
+                  "text": "Salve. Use a senha nova no próximo login."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Esta tela altera só a conta da sua empresa.",
+                "Não é por aqui que se cadastram planos, contrato ou faturas.",
+                "Mantenha o e-mail do responsável atualizado: ele é o acesso ao portal."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

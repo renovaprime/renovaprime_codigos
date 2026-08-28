@@ -23,3 +23,4 @@ export { PartnerFormModal } from './PartnerFormModal';
 export { BranchFormModal } from './BranchFormModal';
 export { ResellerFormModal } from './ResellerFormModal';
 export { ProtectedPartnerRoute } from './ProtectedPartnerRoute';
+export { ProtectedCompanyRoute } from './ProtectedCompanyRoute';

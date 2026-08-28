@@ -128,6 +128,8 @@ export interface Beneficiary {
   user_id?: number | null;
   type: BeneficiaryType;
   titular_id?: number;
+  company_id?: number | null;
+  kinship?: string | null;
   name: string;
   cpf: string;
   birth_date: string;

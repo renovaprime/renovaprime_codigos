@@ -1,6 +1,6 @@
 {
   "title": "Manual do Sistema",
-  "subtitle": "Guia do administrador para cadastros, aprovações, atendimento e relatórios.",
+  "subtitle": "Guia do administrador para cadastros, empresas, aprovações, atendimento e relatórios.",
   "categories": [
     {
       "id": "cadastros",
@@ -74,7 +74,7 @@
             {
               "title": "Busca e filtros",
               "paragraphs": [
-                "Use a busca por nome ou CPF. Os filtros permitem ver só titulares ou só dependentes, ativos ou inativos, e o status do Face Scan (desativado, solicitado ou ativo)."
+                "Use a busca por nome ou CPF. Os filtros permitem ver só titulares ou só dependentes, ativos ou inativos, o status do Face Scan (desativado, solicitado ou ativo) e a empresa, quando a vida é empresarial. Vidas de empresas também se gerenciam em Empresas → botão Vidas, no módulo B2B."
               ]
             },
             {
@@ -364,6 +364,359 @@
                 "O conteúdo precisa ser um JSON válido.",
                 "Nesta tela, criar uma entrada nova só aparece quando a lista está vazia (Criar Primeira Entrada). Depois disso, edite ou exclua as existentes.",
                 "Alterações passam a valer no site institucional após o salvamento."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "empresas-b2b",
+      "title": "Empresas (B2B)",
+      "description": "Cadastre empresas clientes, planos, contrato, vidas e acompanhe faturas e o relatório consolidado.",
+      "icon": "Building2",
+      "items": [
+        {
+          "id": "b2b-visao-geral",
+          "title": "O que é o módulo",
+          "description": "Como o B2B se encaixa no sistema e o que cada ator faz.",
+          "route": "/empresas",
+          "sections": [
+            {
+              "title": "Para que serve",
+              "paragraphs": [
+                "O módulo de empresas atende clientes PJ: a empresa cadastra colaboradores (titulares) e dependentes, o sistema sincroniza as vidas com a telemedicina e cobra uma fatura mensal única, com preço definido pelo plano e pelo volume de vidas."
+              ]
+            },
+            {
+              "title": "Fluxo operacional",
+              "steps": [
+                {
+                  "title": "Cadastrar a empresa",
+                  "text": "Em Empresas, crie o cadastro PJ e o responsável (e-mail e senha de acesso ao portal)."
+                },
+                {
+                  "title": "Definir o plano",
+                  "text": "Em Planos empresariais, cadastre o catálogo (tipo de cobrança, faixas de preço e pacote de telemedicina)."
+                },
+                {
+                  "title": "Vincular o contrato",
+                  "text": "Na listagem de Empresas, use Plano para ligar a empresa a um plano, com dia de vencimento e vigência."
+                },
+                {
+                  "title": "Cadastrar as vidas",
+                  "text": "Use Vidas na empresa ou o portal da empresa para incluir titulares e dependentes."
+                },
+                {
+                  "title": "Faturar e acompanhar",
+                  "text": "No dia 1 de cada mês o sistema gera a fatura, ou você gera em Faturas. A empresa consulta e paga no portal. Relatórios B2B mostra o resumo."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Este módulo é independente da venda individual (B2C) e da rede de parceiro, filial e revendedor.",
+                "Só o responsável da empresa entra no portal da empresa. Titular e dependente não usam esse painel.",
+                "Colaborador, no dia a dia, é o titular. Dependente fica vinculado a um titular.",
+                "Opcionalmente, o titular pode receber e-mail e senha para o painel do beneficiário (/beneficiario/login)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2b-empresas",
+          "title": "Cadastro de empresas",
+          "description": "Criar, editar, ativar e excluir a empresa e o acesso do responsável.",
+          "route": "/empresas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Empresas. Cada card mostra fantasia, razão social, CNPJ e o e-mail de login do responsável."
+              ]
+            },
+            {
+              "title": "Como cadastrar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Nova Empresa."
+                },
+                {
+                  "title": "Aba Dados PJ",
+                  "text": "Informe razão social, nome fantasia, CNPJ, telefone, e-mail corporativo, CEP e endereço. O e-mail corporativo não é o login do portal."
+                },
+                {
+                  "title": "Aba Responsável",
+                  "text": "Informe o nome do responsável, o e-mail de login e a senha inicial. Telefone do responsável é opcional. Esse e-mail é o que a empresa usa em /empresa/login."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "Depois de salvar, a empresa aparece na lista. O próximo passo operacional é vincular o plano (botão Plano)."
+                }
+              ]
+            },
+            {
+              "title": "Editar, ativar ou excluir",
+              "steps": [
+                {
+                  "title": "Buscar",
+                  "text": "Use a busca por nome, CNPJ ou e-mail do responsável."
+                },
+                {
+                  "title": "Editar",
+                  "text": "Use o ícone de lápis. Na edição, deixe a senha em branco para não alterá-la."
+                },
+                {
+                  "title": "Ativar ou inativar",
+                  "text": "Use o interruptor e confirme. Empresa inativa não entra no portal e não entra no faturamento."
+                },
+                {
+                  "title": "Excluir",
+                  "text": "Use a lixeira e confirme. Se já existirem vidas ou faturas, a exclusão é recusada: inative a empresa."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "CNPJ e e-mail do responsável são únicos no sistema.",
+                "E-mail corporativo e e-mail de login são campos diferentes.",
+                "Inativar é o caminho certo quando a empresa já tem histórico; excluir só vale sem vidas e sem faturas."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2b-planos",
+          "title": "Planos empresariais",
+          "description": "Montar o catálogo de planos, faixas de preço e tipo de cobrança.",
+          "route": "/planos-empresariais",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Planos empresariais. O catálogo é global: não é um plano por empresa."
+              ]
+            },
+            {
+              "title": "Como cadastrar ou editar",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Novo plano, ou no lápis para editar um existente."
+                },
+                {
+                  "title": "Definir cobrança e serviço",
+                  "text": "Informe o nome. Escolha cobrança por vida ou por família e o tipo Clínico, Premium ou Familiar. Familiar combina com cobrança por família; os demais, por vida."
+                },
+                {
+                  "title": "Montar as faixas",
+                  "text": "Cada faixa tem vidas de, vidas até e preço unitário. As faixas não podem se sobrepor. Inclua faixas que cubram o volume esperado da empresa."
+                },
+                {
+                  "title": "Salvar",
+                  "text": "O plano passa a aparecer na lista e pode ser vinculado no contrato da empresa."
+                }
+              ]
+            },
+            {
+              "title": "Ativar ou inativar",
+              "paragraphs": [
+                "Use o interruptor na linha do plano. Não é possível inativar um plano que esteja em um contrato ativo: troque o contrato das empresas antes."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Plano sem faixa de preço impede o vínculo ou o faturamento depois.",
+                "O volume de vidas da empresa precisa caber em alguma faixa ativa na hora de faturar.",
+                "Editar um plano substitui as faixas: as antigas saem de uso e as novas entram."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2b-contrato",
+          "title": "Vincular contrato",
+          "description": "Ligar a empresa a um plano, com dia de vencimento e vigência.",
+          "route": "/empresas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Empresas, no card da empresa, clique em Plano."
+              ]
+            },
+            {
+              "title": "Como vincular ou alterar",
+              "steps": [
+                {
+                  "title": "Escolher o plano",
+                  "text": "Selecione um plano ativo da lista. Sem plano cadastrado, cadastre-o antes em Planos empresariais."
+                },
+                {
+                  "title": "Dia de vencimento e vigência",
+                  "text": "Informe o dia de vencimento (1 a 28; o padrão é 5), a data de início e, se quiser, a data de fim."
+                },
+                {
+                  "title": "Confirmar a troca",
+                  "text": "Se já existir contrato, o sistema pede confirmação para substituir o anterior. Só então o novo contrato fica ativo."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Só um contrato ativo por empresa.",
+                "Sem contrato ativo, o administrador não consegue cadastrar vida e o faturamento não fecha.",
+                "O dia de vencimento entra no cálculo da fatura de cada competência."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2b-vidas",
+          "title": "Vidas da empresa",
+          "description": "Cadastrar colaboradores (titulares) e dependentes, inativar e liberar acesso.",
+          "route": "/empresas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Empresas, clique em Vidas no card da empresa. Também é possível filtrar por empresa na tela Beneficiários do menu."
+              ]
+            },
+            {
+              "title": "Como cadastrar um colaborador",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Colaborador."
+                },
+                {
+                  "title": "Preencher e salvar",
+                  "text": "Informe nome, CPF e data de nascimento. Telefone, e-mail e senha são opcionais neste cadastro. O colaborador é o titular da vida."
+                }
+              ]
+            },
+            {
+              "title": "Como cadastrar um dependente",
+              "steps": [
+                {
+                  "title": "Abrir o formulário",
+                  "text": "Clique em Dependente."
+                },
+                {
+                  "title": "Vincular ao titular",
+                  "text": "Escolha o colaborador (titular), o grau de parentesco, nome, CPF e data de nascimento. Salve."
+                }
+              ]
+            },
+            {
+              "title": "Inativar e liberar acesso",
+              "steps": [
+                {
+                  "title": "Inativar",
+                  "text": "Use Inativar na linha. Vida inativa deixa de contar no faturamento da próxima competência."
+                },
+                {
+                  "title": "Liberar acesso",
+                  "text": "Em Liberar acesso, informe e-mail e senha para o titular ou dependente entrar em /beneficiario/login (consultas no painel do beneficiário). Isso é opcional."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Dependente sempre exige um titular da mesma empresa e o grau de parentesco.",
+                "O administrador só cadastra vida se a empresa tiver contrato ativo.",
+                "As vidas são sincronizadas periodicamente com a telemedicina. Isso não depende de um clique nesta tela."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2b-faturamento",
+          "title": "Faturamento",
+          "description": "Ver a prévia, gerar a competência e acompanhar as faturas da empresa.",
+          "route": "/empresas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "Em Empresas, clique em Faturas no card da empresa. A janela mostra a prévia da competência atual e o histórico."
+              ]
+            },
+            {
+              "title": "Como gerar",
+              "steps": [
+                {
+                  "title": "Conferir a prévia",
+                  "text": "Veja vidas, tipo de cobrança e valor calculado pela faixa do plano."
+                },
+                {
+                  "title": "Gerar a fatura",
+                  "text": "Use a ação de gerar. O sistema congela o snapshot do mês e cria a cobrança. Se a competência já existir, a geração é idempotente (não duplica)."
+                }
+              ]
+            },
+            {
+              "title": "O que acontece depois",
+              "paragraphs": [
+                "No dia 1 de cada mês (horário de Brasília) um job também tenta gerar a fatura automaticamente. O status (paga, vencida, cancelada) atualiza conforme o retorno do meio de pagamento. A empresa vê as faturas no portal e paga pelo link, quando houver."
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Para fechar com sucesso: empresa ativa, contrato vigente com faixa que cubra o volume, e pelo menos uma vida ativa.",
+                "Mudança de vidas depois do fechamento não altera a competência já gerada.",
+                "A empresa não gera fatura: só consulta e paga no portal."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "b2b-relatorios",
+          "title": "Relatórios B2B",
+          "description": "Ver o resumo de empresas, vidas ativas e a última fatura.",
+          "route": "/relatorios-empresas",
+          "sections": [
+            {
+              "title": "Onde encontrar",
+              "paragraphs": [
+                "No menu lateral, clique em Relatórios B2B."
+              ]
+            },
+            {
+              "title": "Como usar",
+              "steps": [
+                {
+                  "title": "Ler o resumo",
+                  "text": "Os cards no topo somam empresas, vidas ativas e titulares ativos da lista exibida. Cada linha mostra plano, vidas, titulares e a última fatura."
+                },
+                {
+                  "title": "Filtrar e buscar",
+                  "text": "Busque por nome ou CNPJ. O seletor Todas / Ativas / Inativas filtra na hora, sem recarregar a tela."
+                },
+                {
+                  "title": "Ver detalhes",
+                  "text": "Clique na linha para expandir. As abas Vidas e Faturas carregam o detalhe daquela empresa."
+                },
+                {
+                  "title": "Exportar",
+                  "text": "Use Exportar CSV para baixar o resumo filtrado (abre no Excel)."
+                }
+              ]
+            },
+            {
+              "title": "Regras importantes",
+              "bullets": [
+                "Este relatório é só do administrador. A empresa não vê o consolidado das outras.",
+                "A busca e o filtro de status atuam sobre a lista já carregada.",
+                "O detalhe de vidas e faturas só é buscado ao expandir a linha."
               ]
             }
           ]

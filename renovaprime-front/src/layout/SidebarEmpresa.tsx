@@ -1,32 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import {
-  LayoutDashboard,
-  UserCheck,
-  Clock,
-  Calendar,
-  History,
-  Stethoscope,
-  Users,
-  X,
-  Handshake,
-  Building2,
-  UserPlus,
-  LogOut,
-  User,
-  FileText,
-  ShoppingCart,
-  Percent,
-  ChevronsLeft,
-  ChevronsRight,
-  ClipboardList,
-  Package,
-  BarChart3,
-} from 'lucide-react';
+import { Users, Settings, LogOut, X, ChevronsLeft, ChevronsRight, Receipt, BookOpen } from 'lucide-react';
+import { useCompanyAuth } from '../contexts/CompanyAuthContext';
 import logoImage from '../assets/images/logo.png';
 
-interface SidebarProps {
+interface SidebarEmpresaProps {
   isOpen: boolean;
   onClose: () => void;
   collapsed: boolean;
@@ -34,38 +12,21 @@ interface SidebarProps {
 }
 
 const navigation = [
-  { id: 'nav-admin-dashboard', name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { id: 'nav-admin-beneficiaries', name: 'Beneficiários', href: '/beneficiarios', icon: Users },
-  { id: 'nav-admin-companies', name: 'Empresas', href: '/empresas', icon: Building2 },
-  { id: 'nav-admin-company-plans', name: 'Planos empresariais', href: '/planos-empresariais', icon: Package },
-  { id: 'nav-admin-company-reports', name: 'Relatórios B2B', href: '/relatorios-empresas', icon: BarChart3 },
-  { id: 'nav-admin-partners', name: 'Parceiros', href: '/parceiros', icon: Handshake },
-  { id: 'nav-admin-branches', name: 'Filiais', href: '/filiais', icon: Building2 },
-  { id: 'nav-admin-resellers', name: 'Revendedores', href: '/revendedores', icon: UserPlus },
-  { id: 'nav-admin-professionals', name: 'Profissionais', href: '/profissionais', icon: UserCheck },
-  { id: 'nav-admin-pending-requests', name: 'Solicitações Pendentes', href: '/solicitacoes-pendentes', icon: Clock },
-  { id: 'nav-admin-appointments', name: 'Consultas', href: '/consultas', icon: Calendar },
-  { id: 'nav-admin-history', name: 'Histórico de Atendimentos', href: '/historico', icon: History },
-  { id: 'nav-admin-medical-records', name: 'Prontuários', href: '/prontuarios', icon: ClipboardList },
-  { id: 'nav-admin-specialties', name: 'Especialidades', href: '/especialidades', icon: Stethoscope },
-  { id: 'nav-admin-sales', name: 'Vendas', href: '/vendas', icon: ShoppingCart },
-  { id: 'nav-admin-commissions', name: 'Comissões', href: '/comissoes', icon: Percent },
-  { id: 'nav-admin-cms', name: 'Gestão de Conteúdo', href: '/cms', icon: FileText },
-  // No app, essa área e logada com `ADMIN`. "Superadmin" aqui significa admin da area principal.
-  { id: 'nav-admin-manual', name: 'Manual', href: '/admin/manual', icon: FileText },
-  { id: 'nav-admin-profile', name: 'Meu Perfil', href: '/admin/perfil', icon: User },
+  { id: 'nav-company-beneficiaries', name: 'Beneficiários', href: '/empresa/beneficiarios', icon: Users },
+  { id: 'nav-company-billing', name: 'Faturas', href: '/empresa/faturas', icon: Receipt },
+  { id: 'nav-company-settings', name: 'Configurações', href: '/empresa/configuracoes', icon: Settings },
+  { id: 'nav-company-manual', name: 'Manual', href: '/empresa/manual', icon: BookOpen },
 ];
 
-export function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }: SidebarProps) {
+export function SidebarEmpresa({ isOpen, onClose, collapsed, onToggleCollapse }: SidebarEmpresaProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const userRole = user?.role?.toUpperCase();
-  const canSeeManual = userRole === 'ADMIN' || userRole === 'SUPERADMIN';
+  const { logout } = useCompanyAuth();
 
   const handleLogout = () => {
     onClose();
-    navigate('/login');
+    logout();
+    navigate('/empresa/login');
   };
 
   const sidebarContent = (isCollapsed: boolean) => (
@@ -88,7 +49,6 @@ export function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }: Sideba
 
       <nav className={`flex-1 py-4 space-y-1 overflow-y-auto ${isCollapsed ? 'px-2' : 'px-3'}`}>
         {navigation.map((item) => {
-          if (item.id === 'nav-admin-manual' && !canSeeManual) return null;
           const isActive = location.pathname === item.href;
           return (
             <NavLink
@@ -109,13 +69,6 @@ export function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }: Sideba
             >
               <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : ''}`} />
               {!isCollapsed && <span className="truncate">{item.name}</span>}
-              {isActive && (
-                <motion.div
-                  layoutId="sidebar-indicator"
-                  className="absolute right-0 w-1 h-6 bg-white rounded-l-full"
-                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                />
-              )}
             </NavLink>
           );
         })}
@@ -123,7 +76,7 @@ export function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }: Sideba
 
       <div className={`py-4 border-t border-border/50 space-y-3 ${isCollapsed ? 'px-2' : 'px-4'}`}>
         <button
-          data-testid="nav-admin-logout"
+          data-testid="nav-company-logout"
           onClick={handleLogout}
           title={isCollapsed ? 'Sair' : undefined}
           className={`w-full flex items-center gap-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors ${isCollapsed ? 'justify-center px-2' : 'px-3'}`}
