@@ -47,7 +47,7 @@ export function Beneficiarios() {
       setError(null);
 
       const filters: BeneficiaryFilters = {};
-      if (searchTerm) filters.name = searchTerm;
+      if (searchTerm) filters.search = searchTerm;
       if (typeFilter) filters.type = typeFilter;
       if (statusFilter) filters.status = statusFilter;
       if (faceScanFilter) filters.faceScan = faceScanFilter;

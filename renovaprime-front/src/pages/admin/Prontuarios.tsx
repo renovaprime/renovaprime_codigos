@@ -29,7 +29,7 @@ export function AdminProntuarios() {
       setError(null);
 
       const filters: Record<string, string> = {};
-      if (searchTerm) filters.name = searchTerm;
+      if (searchTerm) filters.search = searchTerm;
 
       const data = await beneficiaryService.list(filters);
       setBeneficiaries(data);

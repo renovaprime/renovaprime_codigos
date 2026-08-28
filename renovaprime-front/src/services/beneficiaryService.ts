@@ -6,6 +6,7 @@ export type FaceScanListFilter = 'disabled' | 'pending' | 'active';
 export interface BeneficiaryFilters {
   name?: string;
   cpf?: string;
+  search?: string;
   type?: string;
   status?: string;
   /** Filtra pela situação do Face Scan (mesmos estados da coluna na lista) */
@@ -17,6 +18,7 @@ class BeneficiaryService {
     const params = new URLSearchParams();
     if (filters?.name) params.append('name', filters.name);
     if (filters?.cpf) params.append('cpf', filters.cpf);
+    if (filters?.search) params.append('search', filters.search);
     if (filters?.type) params.append('type', filters.type);
     if (filters?.status) params.append('status', filters.status);
     if (filters?.faceScan) params.append('faceScan', filters.faceScan);
