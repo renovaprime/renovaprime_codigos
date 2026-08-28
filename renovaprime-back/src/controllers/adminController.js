@@ -362,6 +362,7 @@ class AdminController {
       const filters = {
         name: req.query.name,
         cpf: req.query.cpf,
+        search: req.query.search,
         type: req.query.type,
         status: req.query.status,
         faceScan: req.query.faceScan

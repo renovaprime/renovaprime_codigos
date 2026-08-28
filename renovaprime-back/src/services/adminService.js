@@ -1098,11 +1098,27 @@ class AdminService {
       }
     }
 
-    if (filters.name) {
-      where.name = { [Op.like]: `%${filters.name}%` };
-    }
-    if (filters.cpf) {
-      where.cpf = { [Op.like]: `%${filters.cpf}%` };
+    if (filters.search) {
+      const searchTerm = filters.search.replace(/\D/g, '');
+      const orConditions = [
+        { name: { [Op.like]: `%${filters.search}%` } }
+      ];
+      if (searchTerm.length > 0) {
+        orConditions.push(
+          sequelize.where(
+            sequelize.fn('REPLACE', sequelize.fn('REPLACE', sequelize.col('cpf'), '.', ''), '-', ''),
+            { [Op.like]: `%${searchTerm}%` }
+          )
+        );
+      }
+      where[Op.or] = orConditions;
+    } else {
+      if (filters.name) {
+        where.name = { [Op.like]: `%${filters.name}%` };
+      }
+      if (filters.cpf) {
+        where.cpf = { [Op.like]: `%${filters.cpf}%` };
+      }
     }
     if (filters.type) {
       where.type = filters.type;
@@ -1151,11 +1167,27 @@ class AdminService {
       ]
     });
 
-    // Se há busca por nome ou CPF, também buscar titulares que possuem dependentes correspondentes
-    if (filters.name || filters.cpf) {
+    // Se há busca por nome, CPF ou search, também buscar titulares que possuem dependentes correspondentes
+    if (filters.name || filters.cpf || filters.search) {
       const depWhere = { type: 'DEPENDENTE' };
-      if (filters.name) depWhere.name = { [Op.like]: `%${filters.name}%` };
-      if (filters.cpf) depWhere.cpf = { [Op.like]: `%${filters.cpf}%` };
+      if (filters.search) {
+        const searchTerm = filters.search.replace(/\D/g, '');
+        const orConditions = [
+          { name: { [Op.like]: `%${filters.search}%` } }
+        ];
+        if (searchTerm.length > 0) {
+          orConditions.push(
+            sequelize.where(
+              sequelize.fn('REPLACE', sequelize.fn('REPLACE', sequelize.col('cpf'), '.', ''), '-', ''),
+              { [Op.like]: `%${searchTerm}%` }
+            )
+          );
+        }
+        depWhere[Op.or] = orConditions;
+      } else {
+        if (filters.name) depWhere.name = { [Op.like]: `%${filters.name}%` };
+        if (filters.cpf) depWhere.cpf = { [Op.like]: `%${filters.cpf}%` };
+      }
       if (filters.status) depWhere.status = filters.status;
       if (faceScanWhere) Object.assign(depWhere, faceScanWhere);
 
