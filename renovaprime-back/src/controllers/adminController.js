@@ -365,7 +365,8 @@ class AdminController {
         search: req.query.search,
         type: req.query.type,
         status: req.query.status,
-        faceScan: req.query.faceScan
+        faceScan: req.query.faceScan,
+        company_id: req.query.company_id
       };
       
       const beneficiaries = await adminService.listBeneficiaries(filters);

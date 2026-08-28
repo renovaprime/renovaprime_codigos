@@ -7,6 +7,7 @@ const path = require("path");
 const sequelize = require("./config/database");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/errorHandler");
+const { startCompanyBillingJob } = require("./jobs/companyBillingJob");
 const { teleconsultRoutes } = require("./modules/teleconsult");
 
 const app = express();
@@ -66,6 +67,7 @@ async function startServer() {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV}`);
       console.log(`API available at http://localhost:${PORT}/api/v1`);
+      startCompanyBillingJob();
     });
   } catch (error) {
     console.error("Unable to start server:", error);

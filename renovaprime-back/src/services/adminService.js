@@ -1126,6 +1126,9 @@ class AdminService {
     if (filters.status) {
       where.status = filters.status;
     }
+    if (filters.company_id && Beneficiary.rawAttributes.company_id) {
+      where.company_id = parseInt(filters.company_id, 10);
+    }
 
     // Se filtrar por tipo DEPENDENTE, buscar todos
     if (filters.type === 'DEPENDENTE') {

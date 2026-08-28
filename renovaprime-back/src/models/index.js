@@ -24,6 +24,12 @@ const MedicalRecord = require('./MedicalRecord');
 const RecordAttachment = require('./RecordAttachment');
 const RecordAuditLog = require('./RecordAuditLog');
 const Consent = require('./Consent');
+const Company = require('./Company');
+const CompanyPlan = require('./CompanyPlan');
+const CompanyPlanPriceTier = require('./CompanyPlanPriceTier');
+const CompanyContract = require('./CompanyContract');
+const CompanyBilling = require('./CompanyBilling');
+const CompanyBillingWebhookEvent = require('./CompanyBillingWebhookEvent');
 
 Role.hasMany(User, { foreignKey: 'role_id' });
 User.belongsTo(Role, { foreignKey: 'role_id' });
@@ -145,6 +151,25 @@ Consent.belongsTo(Beneficiary, { foreignKey: 'beneficiary_id' });
 Appointment.hasOne(Consent, { foreignKey: 'appointment_id' });
 Consent.belongsTo(Appointment, { foreignKey: 'appointment_id' });
 
+// B2B company plans and contracts
+CompanyPlan.hasMany(CompanyPlanPriceTier, { foreignKey: 'company_plan_id' });
+CompanyPlanPriceTier.belongsTo(CompanyPlan, { foreignKey: 'company_plan_id' });
+
+Company.hasMany(CompanyContract, { foreignKey: 'company_id' });
+CompanyContract.belongsTo(Company, { foreignKey: 'company_id' });
+
+CompanyPlan.hasMany(CompanyContract, { foreignKey: 'company_plan_id' });
+CompanyContract.belongsTo(CompanyPlan, { foreignKey: 'company_plan_id' });
+
+Company.hasMany(Beneficiary, { foreignKey: 'company_id', as: 'beneficiaries' });
+Beneficiary.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
+
+Company.hasMany(CompanyBilling, { foreignKey: 'company_id', as: 'billings' });
+CompanyBilling.belongsTo(Company, { foreignKey: 'company_id' });
+
+CompanyBilling.hasMany(CompanyBillingWebhookEvent, { foreignKey: 'company_billing_id', as: 'webhookEvents' });
+CompanyBillingWebhookEvent.belongsTo(CompanyBilling, { foreignKey: 'company_billing_id' });
+
 module.exports = {
   Role,
   User,
@@ -171,5 +196,11 @@ module.exports = {
   MedicalRecord,
   RecordAttachment,
   RecordAuditLog,
-  Consent
+  Consent,
+  Company,
+  CompanyPlan,
+  CompanyPlanPriceTier,
+  CompanyContract,
+  CompanyBilling,
+  CompanyBillingWebhookEvent
 };

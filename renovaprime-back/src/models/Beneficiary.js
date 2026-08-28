@@ -21,6 +21,14 @@ const Beneficiary = sequelize.define('Beneficiary', {
     type: DataTypes.INTEGER,
     allowNull: true
   },
+  company_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  kinship: {
+    type: DataTypes.ENUM('conjuge', 'filho', 'enteado', 'pai', 'mae', 'irmao', 'outro'),
+    allowNull: true
+  },
   name: {
     type: DataTypes.STRING(150),
     allowNull: false

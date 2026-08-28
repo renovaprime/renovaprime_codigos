@@ -16,6 +16,10 @@ const salesRoutes = require('./salesRoutes');
 const partnerAreaRoutes = require('./partnerAreaRoutes');
 const medicalRecordRoutes = require('./medicalRecordRoutes');
 const rapidocRoutes = require('./rapidocRoutes');
+const adminCompanyRoutes = require('./adminCompanyRoutes');
+const adminCompanyReportRoutes = require('./adminCompanyReportRoutes');
+const adminCompanyPlanRoutes = require('./adminCompanyPlanRoutes');
+const companyAreaRoutes = require('./companyAreaRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/me', meRoutes);
@@ -33,5 +37,9 @@ router.use('/cms', cmsRoutes);
 router.use('/sales', salesRoutes);
 router.use('/partner-area', partnerAreaRoutes);
 router.use('/medical-records', medicalRecordRoutes);
+router.use('/admin/companies', adminCompanyRoutes);
+router.use('/admin/company-reports', adminCompanyReportRoutes);
+router.use('/admin/company-plans', adminCompanyPlanRoutes);
+router.use('/company-area', companyAreaRoutes);
 
 module.exports = router;
