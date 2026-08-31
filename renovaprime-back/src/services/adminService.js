@@ -1106,7 +1106,7 @@ class AdminService {
       if (searchTerm.length > 0) {
         orConditions.push(
           sequelize.where(
-            sequelize.fn('REPLACE', sequelize.fn('REPLACE', sequelize.col('cpf'), '.', ''), '-', ''),
+            sequelize.fn('REPLACE', sequelize.fn('REPLACE', sequelize.col('Beneficiary.cpf'), '.', ''), '-', ''),
             { [Op.like]: `%${searchTerm}%` }
           )
         );
@@ -1181,7 +1181,7 @@ class AdminService {
         if (searchTerm.length > 0) {
           orConditions.push(
             sequelize.where(
-              sequelize.fn('REPLACE', sequelize.fn('REPLACE', sequelize.col('cpf'), '.', ''), '-', ''),
+              sequelize.fn('REPLACE', sequelize.fn('REPLACE', sequelize.col('Beneficiary.cpf'), '.', ''), '-', ''),
               { [Op.like]: `%${searchTerm}%` }
             )
           );
