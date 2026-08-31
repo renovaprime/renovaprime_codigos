@@ -432,6 +432,17 @@ interface DocumentPreviewProps {
 }
 
 function DocumentPreview({ label, url, isImage }: DocumentPreviewProps) {
+  // Detectar se a URL é de uma imagem pela extensão
+  const isImageUrl = (fileUrl: string | undefined): boolean => {
+    if (!fileUrl) return false;
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const lowerUrl = fileUrl.toLowerCase();
+    return imageExtensions.some(ext => lowerUrl.includes(ext));
+  };
+
+  // Usar isImage prop se fornecido, senão detectar automaticamente pela URL
+  const shouldShowImage = isImage ?? isImageUrl(url);
+
   if (!url) {
     return (
       <div className="border border-border rounded-lg p-4">
@@ -455,7 +466,7 @@ function DocumentPreview({ label, url, isImage }: DocumentPreviewProps) {
           <ExternalLink className="w-4 h-4 text-primary" />
         </a>
       </div>
-      {isImage ? (
+      {shouldShowImage ? (
         <img
           src={url}
           alt={label}

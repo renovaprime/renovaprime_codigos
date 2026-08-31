@@ -141,31 +141,43 @@ export function CadastroMedico() {
         acceptance_term_url: doctor.acceptance_term_url
       });
 
+      // Função auxiliar para verificar se a URL é de uma imagem
+      const isImageUrl = (url: string | null | undefined): boolean => {
+        if (!url) return false;
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const lowerUrl = url.toLowerCase();
+        return imageExtensions.some(ext => lowerUrl.includes(ext));
+      };
+
       // Preencher uploads com URLs existentes e URLs assinadas
+      // Preview é definido para arquivos de imagem em todos os campos
       const uploadStates: Record<DocumentType, UploadState> = {
         'photo': {
           url: doctor.photo_url || '',
           signedUrl: signedUrls.photo_url,
           uploading: false,
-          preview: signedUrls.photo_url,
+          preview: isImageUrl(doctor.photo_url) ? signedUrls.photo_url : undefined,
           fileName: doctor.photo_url ? 'Arquivo existente' : undefined
         },
         'council-doc': {
           url: doctor.council_doc_url || '',
           signedUrl: signedUrls.council_doc_url,
           uploading: false,
+          preview: isImageUrl(doctor.council_doc_url) ? signedUrls.council_doc_url : undefined,
           fileName: doctor.council_doc_url ? 'Arquivo existente' : undefined
         },
         'specialization-doc': {
           url: doctor.specialization_doc_url || '',
           signedUrl: signedUrls.specialization_doc_url,
           uploading: false,
+          preview: isImageUrl(doctor.specialization_doc_url) ? signedUrls.specialization_doc_url : undefined,
           fileName: doctor.specialization_doc_url ? 'Arquivo existente' : undefined
         },
         'acceptance-term': {
           url: doctor.acceptance_term_url || '',
           signedUrl: signedUrls.acceptance_term_url,
           uploading: false,
+          preview: isImageUrl(doctor.acceptance_term_url) ? signedUrls.acceptance_term_url : undefined,
           fileName: doctor.acceptance_term_url ? 'Arquivo existente' : undefined
         }
       };
