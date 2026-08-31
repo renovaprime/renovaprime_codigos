@@ -116,7 +116,7 @@ export function EmpresaConfiguracoes() {
 
   return (
     <LayoutEmpresa title="Configurações">
-      <div className="space-y-6 max-w-3xl">
+      <div className="space-y-6">
         <PageHeader
           title="Configurações"
           subtitle="Atualize os dados do responsável e a senha de acesso."

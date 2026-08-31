@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { Button } from './Button';
 import { Input } from './Input';
+import { ModalOverlay } from './ModalOverlay';
 import type { CompanyPlanFormData, CompanyPlanRecord, PriceTier, BillingType, CompanyServiceType } from '../types/companyPlan';
 
 interface CompanyPlanFormModalProps {
@@ -112,7 +113,7 @@ export function CompanyPlanFormModal({ isOpen, onClose, onSave, editingPlan }: C
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <ModalOverlay>
       <div className="bg-card rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-border">
           <h2 className="text-xl font-semibold">{editingPlan ? 'Editar Plano' : 'Novo Plano'}</h2>
@@ -224,6 +225,6 @@ export function CompanyPlanFormModal({ isOpen, onClose, onSave, editingPlan }: C
           </div>
         </form>
       </div>
-    </div>
+    </ModalOverlay>
   );
 }

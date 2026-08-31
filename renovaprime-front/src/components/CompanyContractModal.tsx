@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Button } from './Button';
 import { Input } from './Input';
+import { ModalOverlay } from './ModalOverlay';
 import { companyPlanService } from '../services/companyPlanService';
 import type { CompanyRecord } from '../types/company';
 import type { CompanyPlanRecord, CompanyContractFormData } from '../types/companyPlan';
@@ -108,7 +109,7 @@ export function CompanyContractModal({ isOpen, onClose, company, onSaved }: Comp
   const selectedPlan = plans.find((p) => p.id === formData.company_plan_id);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <ModalOverlay>
       <div className="bg-card rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-border">
           <div>
@@ -209,6 +210,6 @@ export function CompanyContractModal({ isOpen, onClose, company, onSaved }: Comp
           </div>
         </form>
       </div>
-    </div>
+    </ModalOverlay>
   );
 }

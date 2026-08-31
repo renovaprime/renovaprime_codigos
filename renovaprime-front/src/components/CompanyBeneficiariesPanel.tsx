@@ -7,6 +7,7 @@ import {
 } from '../services/companyBeneficiaryService';
 import type { Beneficiary } from '../types/api';
 import { Badge, Button, Card, EmptyState, Input } from './index';
+import { ModalOverlay } from './ModalOverlay';
 
 const KINSHIP_OPTIONS: { value: KinshipType; label: string }[] = [
   { value: 'conjuge', label: 'Cônjuge' },
@@ -285,7 +286,7 @@ export function CompanyBeneficiariesPanel({ companyId, mode }: CompanyBeneficiar
       )}
 
       {formMode && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <ModalOverlay>
           <div className="bg-background rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">
@@ -370,7 +371,7 @@ export function CompanyBeneficiariesPanel({ companyId, mode }: CompanyBeneficiar
               </form>
             )}
           </div>
-        </div>
+        </ModalOverlay>
       )}
     </div>
   );

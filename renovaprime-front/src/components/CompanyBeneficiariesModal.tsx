@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { Button } from './Button';
+import { ModalOverlay } from './ModalOverlay';
 import { CompanyBeneficiariesPanel } from './CompanyBeneficiariesPanel';
 import type { CompanyRecord } from '../types/company';
 
@@ -13,7 +14,7 @@ export function CompanyBeneficiariesModal({ isOpen, onClose, company }: CompanyB
   if (!isOpen || !company) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <ModalOverlay>
       <div className="bg-background rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-background">
           <div>
@@ -28,6 +29,6 @@ export function CompanyBeneficiariesModal({ isOpen, onClose, company }: CompanyB
           <CompanyBeneficiariesPanel companyId={company.id} mode="admin" />
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 }

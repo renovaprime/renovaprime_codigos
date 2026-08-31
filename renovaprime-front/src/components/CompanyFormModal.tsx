@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Button } from './Button';
 import { Input } from './Input';
+import { ModalOverlay } from './ModalOverlay';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
 import type { CompanyFormData, CompanyRecord } from '../types/company';
 
@@ -92,7 +93,7 @@ export function CompanyFormModal({ isOpen, onClose, onSave, editingCompany }: Co
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <ModalOverlay>
       <div className="bg-card rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-border">
           <h2 className="text-xl font-semibold">{editingCompany ? 'Editar Empresa' : 'Nova Empresa'}</h2>
@@ -111,27 +112,110 @@ export function CompanyFormModal({ isOpen, onClose, onSave, editingCompany }: Co
             </TabsList>
 
             <TabsContent value="pj" className="space-y-4 pt-4">
-              <Input placeholder="Razão social" value={formData.legal_name} onChange={(e) => handleChange('legal_name', e.target.value)} required />
-              <Input placeholder="Nome fantasia" value={formData.trade_name} onChange={(e) => handleChange('trade_name', e.target.value)} required />
-              <Input placeholder="CNPJ" value={formData.cnpj} onChange={(e) => handleChange('cnpj', e.target.value)} required />
-              <Input placeholder="Telefone" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)} required />
-              <Input type="email" placeholder="E-mail corporativo" value={formData.email} onChange={(e) => handleChange('email', e.target.value)} required />
-              <Input placeholder="CEP" value={formData.zip_code} onChange={(e) => handleChange('zip_code', e.target.value)} required />
-              <Input placeholder="Endereço" value={formData.address} onChange={(e) => handleChange('address', e.target.value)} required />
+              <Input
+                label="Razão social *"
+                placeholder="Razão social da empresa"
+                value={formData.legal_name}
+                onChange={(e) => handleChange('legal_name', e.target.value)}
+                required
+              />
+              <Input
+                label="Nome fantasia *"
+                placeholder="Nome fantasia"
+                value={formData.trade_name}
+                onChange={(e) => handleChange('trade_name', e.target.value)}
+                required
+              />
+              <Input
+                label="CNPJ *"
+                placeholder="00.000.000/0000-00"
+                value={formData.cnpj}
+                onChange={(e) => handleChange('cnpj', e.target.value)}
+                required
+              />
+              <Input
+                label="Telefone *"
+                placeholder="(00) 00000-0000"
+                value={formData.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+                required
+              />
+              <Input
+                label="E-mail corporativo *"
+                type="email"
+                placeholder="contato@empresa.com"
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                required
+              />
+              <Input
+                label="CEP *"
+                placeholder="00000-000"
+                value={formData.zip_code}
+                onChange={(e) => handleChange('zip_code', e.target.value)}
+                required
+              />
+              <Input
+                label="Endereço *"
+                placeholder="Rua, número, bairro"
+                value={formData.address}
+                onChange={(e) => handleChange('address', e.target.value)}
+                required
+              />
               <div className="grid grid-cols-2 gap-3">
-                <Input placeholder="Cidade" value={formData.city} onChange={(e) => handleChange('city', e.target.value)} required />
-                <Input placeholder="UF" maxLength={2} value={formData.state} onChange={(e) => handleChange('state', e.target.value.toUpperCase())} required />
+                <Input
+                  label="Cidade *"
+                  placeholder="Cidade"
+                  value={formData.city}
+                  onChange={(e) => handleChange('city', e.target.value)}
+                  required
+                />
+                <Input
+                  label="UF *"
+                  placeholder="SP"
+                  maxLength={2}
+                  value={formData.state}
+                  onChange={(e) => handleChange('state', e.target.value.toUpperCase())}
+                  required
+                />
               </div>
-              <Input placeholder="Inscrição estadual (opcional)" value={formData.state_registration} onChange={(e) => handleChange('state_registration', e.target.value)} />
+              <Input
+                label="Inscrição estadual"
+                placeholder="Número da inscrição"
+                hint="Opcional"
+                value={formData.state_registration}
+                onChange={(e) => handleChange('state_registration', e.target.value)}
+              />
             </TabsContent>
 
             <TabsContent value="responsavel" className="space-y-4 pt-4">
-              <Input placeholder="Nome do responsável" value={formData.responsible_name} onChange={(e) => handleChange('responsible_name', e.target.value)} required />
-              <Input type="email" placeholder="E-mail de login" value={formData.responsible_email} onChange={(e) => handleChange('responsible_email', e.target.value)} required />
-              <Input placeholder="Telefone do responsável (opcional)" value={formData.responsible_phone} onChange={(e) => handleChange('responsible_phone', e.target.value)} />
               <Input
+                label="Nome do responsável *"
+                placeholder="Nome completo"
+                value={formData.responsible_name}
+                onChange={(e) => handleChange('responsible_name', e.target.value)}
+                required
+              />
+              <Input
+                label="E-mail de login *"
+                type="email"
+                placeholder="responsavel@empresa.com"
+                value={formData.responsible_email}
+                onChange={(e) => handleChange('responsible_email', e.target.value)}
+                required
+              />
+              <Input
+                label="Telefone do responsável"
+                placeholder="(00) 00000-0000"
+                hint="Opcional"
+                value={formData.responsible_phone}
+                onChange={(e) => handleChange('responsible_phone', e.target.value)}
+              />
+              <Input
+                label={editingCompany ? 'Nova senha' : 'Senha inicial *'}
                 type="password"
-                placeholder={editingCompany ? 'Nova senha (deixe em branco para manter)' : 'Senha inicial'}
+                placeholder={editingCompany ? 'Nova senha' : 'Mínimo 6 caracteres'}
+                hint={editingCompany ? 'Deixe em branco para manter a senha atual' : undefined}
                 value={formData.password}
                 onChange={(e) => handleChange('password', e.target.value)}
                 required={!editingCompany}
@@ -146,6 +230,6 @@ export function CompanyFormModal({ isOpen, onClose, onSave, editingCompany }: Co
           </div>
         </form>
       </div>
-    </div>
+    </ModalOverlay>
   );
 }

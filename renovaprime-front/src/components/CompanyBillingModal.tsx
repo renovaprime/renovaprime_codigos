@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Receipt, RefreshCw, Zap } from 'lucide-react';
 import { Button, Badge, Card } from './';
+import { ModalOverlay } from './ModalOverlay';
 import { companyBillingService } from '../services/companyBillingService';
 import type { CompanyRecord } from '../types/company';
 import type {
@@ -80,7 +81,7 @@ export function CompanyBillingModal({ isOpen, onClose, company }: CompanyBilling
   if (!isOpen || !company) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <ModalOverlay>
       <div className="bg-background rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-background">
           <div>
@@ -194,6 +195,6 @@ export function CompanyBillingModal({ isOpen, onClose, company }: CompanyBilling
           </div>
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 }
