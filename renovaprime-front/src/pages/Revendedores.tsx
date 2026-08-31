@@ -7,6 +7,8 @@ import { resellerService } from '../services/resellerService';
 import { branchService } from '../services/branchService';
 import type { Reseller, ResellerFormData, PartnerBranch } from '../types/api';
 
+const normalizeDocument = (value: string): string => value.replace(/\D/g, '');
+
 export function Revendedores() {
   const [resellers, setResellers] = useState<Reseller[]>([]);
   const [filteredResellers, setFilteredResellers] = useState<Reseller[]>([]);
@@ -35,11 +37,13 @@ export function Revendedores() {
     let filtered = resellers;
 
     if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      const normalizedTerm = normalizeDocument(searchTerm);
       filtered = filtered.filter(
         (r) =>
-          r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          r.cpf.includes(searchTerm) ||
-          (r.email && r.email.toLowerCase().includes(searchTerm.toLowerCase()))
+          r.name.toLowerCase().includes(term) ||
+          (r.cpf && (r.cpf.includes(searchTerm) || normalizeDocument(r.cpf).includes(normalizedTerm))) ||
+          (r.email && r.email.toLowerCase().includes(term))
       );
     }
 

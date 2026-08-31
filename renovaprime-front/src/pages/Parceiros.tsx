@@ -6,6 +6,8 @@ import { PartnerFormModal } from '../components/PartnerFormModal';
 import { partnerService } from '../services/partnerService';
 import type { Partner, PartnerFormData } from '../types/api';
 
+const normalizeDocument = (value: string): string => value.replace(/\D/g, '');
+
 export function Parceiros() {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [filteredPartners, setFilteredPartners] = useState<Partner[]>([]);
@@ -32,11 +34,13 @@ export function Parceiros() {
     if (searchTerm.trim() === '') {
       setFilteredPartners(partners);
     } else {
+      const term = searchTerm.toLowerCase();
+      const normalizedTerm = normalizeDocument(searchTerm);
       const filtered = partners.filter(
         (p) =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (p.cnpj && p.cnpj.includes(searchTerm))
+          p.name.toLowerCase().includes(term) ||
+          p.email.toLowerCase().includes(term) ||
+          (p.cnpj && (p.cnpj.includes(searchTerm) || normalizeDocument(p.cnpj).includes(normalizedTerm)))
       );
       setFilteredPartners(filtered);
     }
